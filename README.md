@@ -98,13 +98,13 @@ District Research Briefs are currently produced through manual review: a researc
 - 2.1 Gather sample RCE PDFs and codebooks — **DONE** (Amanda lead)
 - 2.2 Confirm tech stack (Python) — **DONE**
 - 2.3 Confirm API access (Claude, Gemini Enterprise) — **DONE**
-- 2.4 Set up Claude API key in env variable and test basic call (Oluwaseun lead, Sherman backup)
-- 2.5 Stand up shared Git repo; confirm all members can push — *In progress* (Sherman lead, Annia backup)
+- 2.4 Set up Claude API key in env variable and test basic call (Oluwaseun lead, Sherman backup) — **DONE**
+- 2.5 Stand up shared Git repo; confirm all members can push — *In progress* (Sherman lead, Annia backup) — **DONE**
 
 **Phase 3 — PDF → Structured Data** *(Sherman lead)*
 - 3.1 Build PDF-to-text parsing script with pdfplumber/PyMuPDF; handle OCR if needed (Sherman lead, Annia backup)
-- 3.2 Design and iterate LLM extraction prompt; target variables → structured JSON (Sherman lead, All)
-- 3.3 Build extraction automation script: loop over PDFs, call LLM, collect output (Sherman lead, Annia backup)
+- 3.2 Design and iterate LLM extraction skill; target variables → structured JSON (Sherman lead, All) — *Started* 
+- 3.3 Build extraction automation script: loop over PDFs, call LLM, collect output (Sherman lead, Annia backup) — *Started* 
 - 3.4 Run quick LLM extraction trial on one report to test feasibility (Sherman lead, All)
 - 3.5 Validate extracted data against source reports; spot-check 5–10; log discrepancies (Amanda lead, Oluwaseun backup)
 - 3.6 Aggregate JSON outputs into master CSV/dataframe (Sherman lead, Annia backup)
