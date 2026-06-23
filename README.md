@@ -21,7 +21,7 @@ Two experimental branches extend the MVP in different directions (see [Branch St
 | Name | Personal Goals | Can Help With | Role |
 |------|---------------|---------------|------|
 | Kyle Sherman | Build end-to-end extraction pipeline; apply systematic review methods to AI-assisted synthesis | Python engineering, Pydantic schema design, pipeline architecture, Git/GitHub | Data Engineer / AI-Prompt Engineer |
-| Oluwaseun Farotimi | Develop gold-standard validation study; apply meta-analytic methods | Meta-analysis methods, inter-rater reliability, effect size interpretation | Research / Methods Analyst |
+| Oluwaseun Farotimi | Develop gold-standard validation study; apply meta-analytic methods, and support synthesis | Meta-analysis methods, inter-rater reliability, effect size interpretation | Research / Methods Analyst |
 | Annia Yoshizumi | Generalist data work; support extraction, synthesis, and edge-case handling | Data processing, exploratory analysis, documentation | Data Analyst / Generalist |
 | Amanda Cadran | Stakeholder guidance; domain expertise on RCE report structure and research brief format | LearnPlatform domain knowledge, variable scoping, QA (virtual) | Project Lead / PM / Domain Expert |
 
