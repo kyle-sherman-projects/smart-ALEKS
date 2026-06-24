@@ -1,0 +1,18 @@
+# Environment / secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+
+# Data (PDFs stay off the repo)
+data/sample_reports/
+data/annotations/*.json
+
+# macOS
+.DS_Store
