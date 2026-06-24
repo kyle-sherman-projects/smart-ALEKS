@@ -103,13 +103,6 @@ const STATE = {};
 RECORD.fields.forEach((f,i)=>STATE["f"+i]={status:"unreviewed",corrected:"",note:""});
 RECORD.subgroups.forEach((s,i)=>STATE["s"+i]={status:"unreviewed",corrected:"",note:""});
 let reviewer = "";
-let saveFilename = "";
-
-function defaultFilename(){
-  const p = (RECORD.meta.product||'RCE').replace(/[^a-zA-Z0-9]/g,'_');
-  const d = new Date().toISOString().slice(0,10);
-  return p + '_verified_' + d + '.json';
-}
 
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const ROOT = document.getElementById('root');
@@ -265,27 +258,6 @@ function render(){
     </div>
   </div>
 
-  <!-- Save As -->
-  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px 18px;margin-top:12px;">
-    <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px;">
-      <i class="ti ti-folder-down" style="font-size:18px;color:var(--color-text-info);"></i>
-      <span style="font-size:15px;font-weight:600;">Save As</span>
-    </div>
-    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:12px;line-height:1.5;">
-      Rename the export to keep files organized across districts and report periods. The file saves to your browser's default Downloads folder.
-    </div>
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">
-      <input class="fld-input" id="saveas-name" style="max-width:420px;flex:1;" placeholder="filename.json" value="${esc(saveFilename||defaultFilename())}" />
-      <button id="saveas-btn" style="display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-size:14px;font-weight:500;padding:10px 16px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);white-space:nowrap;">
-        <i class="ti ti-download" style="font-size:17px;"></i>Download as…</button>
-    </div>
-    <div style="font-size:11px;color:var(--color-text-tertiary);display:flex;align-items:center;gap:5px;line-height:1.5;">
-      <i class="ti ti-bulb" style="font-size:13px;flex:none;"></i>
-      Tip: include the district name and report window so the file is easy to find later —
-      e.g. <em style="margin-left:3px;">SampleSD_ALEKS_BOY-MOY_verified_2026-06-24.json</em>
-    </div>
-  </div>
-
   <div style="text-align:center;font-size:11px;color:var(--color-text-tertiary);margin-top:18px;line-height:1.6;">
     ISEA Phase 3 → 4 handoff · the human gate between automated harvesting and the executive deliverable.
   </div>`;
@@ -303,18 +275,9 @@ function render(){
   });
   const rv=document.getElementById('reviewer'); if(rv) rv.oninput=()=>{reviewer=rv.value;};
   document.getElementById('export').onclick=()=>doExport();
-
-  // Save As wiring
-  const saName=document.getElementById('saveas-name');
-  if(saName){
-    if(!saveFilename){ saveFilename=defaultFilename(); saName.value=saveFilename; }
-    saName.oninput=e=>{saveFilename=e.target.value;};
-  }
-  const saBtn=document.getElementById('saveas-btn');
-  if(saBtn){ saBtn.onclick=()=>doExport(saveFilename||defaultFilename()); }
 }
 
-function doExport(customFilename){
+function doExport(){
   const c=counts();
   const review = { reviewer: reviewer||null, reviewed_at: new Date().toISOString(),
     source_filename: RECORD.meta.source_filename, extraction_model: RECORD.meta.model,
@@ -333,7 +296,7 @@ function doExport(customFilename){
   const blob=new Blob([JSON.stringify(review,null,2)],{type:"application/json"});
   const url=URL.createObjectURL(blob); const a=document.createElement('a');
   a.href=url;
-  a.download = customFilename || defaultFilename();
+  a.download = (RECORD.meta.product||'RCE').replace(/[^a-zA-Z0-9]/g,'_') + '_verified.json';
   document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
   const m=document.getElementById('exmsg');
   if(m) m.textContent = `Exported · ${c.v}/${c.tot} verified${c.fl?` · ${c.fl} flag(s) still open`:''}`;
