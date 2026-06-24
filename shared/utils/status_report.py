@@ -19,6 +19,7 @@ import argparse, json, os, subprocess, sys, datetime, urllib.request
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+ROOT = HERE.parent.parent  # repo root
 
 # ── Editable narrative ────────────────────────────────────────────────────────
 # The dynamic facts below are computed; this is the one part you maintain by hand.
@@ -32,17 +33,18 @@ PHASES = [
 STATUS_ICON = {"done": "✅", "wip": "🟡", "todo": "⬜"}
 
 EXPECTED = [
-    "rce-extraction/SKILL.md",
-    "rce-extraction/references/rce_schema.py",
-    "rce-extraction/references/field_source_map.md",
-    "rce-extraction/references/aleks_worked_example.json",
-    "spot_check.html",
+    "shared/prompts/SKILL.md",
+    "deliverables/rce_schema.py",
+    "shared/prompts/field_source_map.md",
+    "data/annotations/aleks_worked_example.json",
+    "deliverables/spot_check.html",
+    "deliverables/artifact.html",
 ]
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 def sh(args: list[str]) -> str | None:
     try:
-        return subprocess.run(args, cwd=HERE, capture_output=True, text=True,
+        return subprocess.run(args, cwd=ROOT, capture_output=True, text=True,
                               timeout=10).stdout.strip() or None
     except Exception:
         return None
@@ -61,11 +63,11 @@ def git_state() -> dict:
     }
 
 def inventory() -> list[tuple[str, bool]]:
-    return [(rel, (HERE / rel).exists()) for rel in EXPECTED]
+    return [(rel, (ROOT / rel).exists()) for rel in EXPECTED]
 
 def schema_health() -> tuple[str, dict]:
     """Validate the worked example against RCEReport; count subgroups + flags."""
-    ex = HERE / "rce-extraction/references/aleks_worked_example.json"
+    ex = ROOT / "data/annotations/aleks_worked_example.json"
     if not ex.exists():
         return ("missing", {})
     data = json.loads(ex.read_text())
@@ -77,7 +79,7 @@ def schema_health() -> tuple[str, dict]:
     counts = {"subgroups": len(subs), "open_flags": flags,
               "effect_size": data.get("effect_size_value"),
               "n": data.get("sample_size_max")}
-    schema_dir = str(HERE / "rce-extraction/references")
+    schema_dir = str(ROOT / "deliverables")
     try:
         sys.path.insert(0, schema_dir)
         from rce_schema import RCEReport  # type: ignore

@@ -33,22 +33,22 @@ pip install pydantic>=2.0 pdfplumber anthropic pandas jupyter pytest
 ```bash
 python3 -c "
 import json, sys
-base='contributors/sherman/rce-extraction/references'; sys.path.insert(0, base)
+sys.path.insert(0, 'deliverables')
 from rce_schema import RCEReport
-d = json.load(open(base+'/aleks_worked_example.json')); d.pop('_comment', None)
+d = json.load(open('data/annotations/aleks_worked_example.json')); d.pop('_comment', None)
 print('SCHEMA OK' if RCEReport(**d) else 'FAIL')
 "
 ```
 
 **Run the schema directly** (prints worked-example JSON):
 ```bash
-python3 contributors/sherman/rce-extraction/references/rce_schema.py
+python3 deliverables/rce_schema.py
 ```
 
 **Project status digest:**
 ```bash
-python3 contributors/sherman/status_report.py         # print to terminal
-python3 contributors/sherman/status_report.py --post  # post to Slack (requires SLACK_WEBHOOK_URL)
+python3 shared/utils/status_report.py         # print to terminal
+python3 shared/utils/status_report.py --post  # post to Slack (requires SLACK_WEBHOOK_URL)
 ```
 
 **Tests** (once populated):
@@ -79,19 +79,18 @@ Key enums: `ESSATier` (1–4), `EffectivenessDirection`, `StatisticalSignificanc
 
 Current version: **DRAFT v0.1**. Bump the version string when adding fields.
 
-## Where Things Live Now vs. Where They're Going
+## Where Things Live
 
-Phase 3 assets are under `contributors/sherman/` pending Amanda's review sign-off. Their canonical homes:
+Phase 3 assets are in their canonical homes:
 
-| Current path | Canonical home |
+| File | Location |
 |---|---|
-| `contributors/sherman/rce-extraction/references/rce_schema.py` | `deliverables/rce_schema.py` |
-| `contributors/sherman/rce-extraction/references/aleks_worked_example.json` | `data/annotations/` |
-| `contributors/sherman/rce-extraction/SKILL.md` + `references/field_source_map.md` | `shared/prompts/` |
-| `contributors/sherman/spot_check.html` | `deliverables/spot_check.html` |
-| `contributors/sherman/status_report.py` | `shared/utils/` |
-
-Do not move them until Amanda confirms — the `→` arrows in `contributors/sherman/CLAUDE.md` track this.
+| Pydantic extraction schema | `deliverables/rce_schema.py` |
+| Gold fixture (worked example) | `data/annotations/aleks_worked_example.json` |
+| Extraction skill + field source map | `shared/prompts/SKILL.md`, `shared/prompts/field_source_map.md` |
+| QA gate (spot-check tool) | `deliverables/spot_check.html` |
+| Leader-facing evidence brief | `deliverables/artifact.html` |
+| Status report script | `shared/utils/status_report.py` |
 
 ## Engineering Conventions
 
