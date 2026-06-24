@@ -36,7 +36,7 @@ EXPECTED = [
     "rce-extraction/references/rce_schema.py",
     "rce-extraction/references/field_source_map.md",
     "rce-extraction/references/aleks_worked_example.json",
-    "ISEA_RCE_SpotCheck.html",
+    "spot_check.html",
 ]
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
