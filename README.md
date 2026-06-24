@@ -134,6 +134,7 @@ District Research Briefs are currently produced through manual review: a researc
 ```
 meta-analysis-automation/
 ├── contributors/
+│   ├── amanda/           # Amanda's scratch notebooks and explorations
 │   ├── sherman/          # Sherman's scratch notebooks and explorations
 │   ├── oluwaseun/        # Oluwaseun's validation study design and IRR work
 │   └── annia/            # Annia's data processing and synthesis explorations
