@@ -103,6 +103,13 @@ const STATE = {};
 RECORD.fields.forEach((f,i)=>STATE["f"+i]={status:"unreviewed",corrected:"",note:""});
 RECORD.subgroups.forEach((s,i)=>STATE["s"+i]={status:"unreviewed",corrected:"",note:""});
 let reviewer = "";
+let saveFilename = "";
+
+function defaultFilename(){
+  const p = (RECORD.meta.product||'RCE').replace(/[^a-zA-Z0-9]/g,'_');
+  const d = new Date().toISOString().slice(0,10);
+  return p + '_verified_' + d + '.json';
+}
 
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const ROOT = document.getElementById('root');
@@ -178,7 +185,6 @@ function subRow(s,i){
 }
 
 function priorityIds(){
-  // flags first, then any chart-read item still unreviewed
   const out=[];
   RECORD.fields.forEach((f,i)=>{ if(f[4]==="flag") out.push(["f"+i, fieldRow(f,i)]); });
   RECORD.subgroups.forEach((s,i)=>{ if(s.tier==="flag") out.push(["s"+i, subRow(s,i)]); });
@@ -190,7 +196,6 @@ function render(){
   const pct = Math.round((c.v)/c.tot*100);
   const pri = priorityIds();
 
-  // group fields
   const groups = {};
   RECORD.fields.forEach((f,i)=>{ (groups[f[0]] = groups[f[0]]||[]).push(fieldRow(f,i)); });
   const groupHtml = Object.entries(groups).map(([g,rows])=>`
@@ -213,7 +218,6 @@ function render(){
     <div style="margin-top:14px;padding:12px 14px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:13px;line-height:1.55;color:var(--color-text-secondary);">
       Verify each harvested value against the source report before it flows to the leader view. <strong style="color:var(--color-text-primary);">Chart-read</strong> and <strong style="color:var(--color-text-danger);">visual-ambiguity</strong> items carry drift risk — confirm those against the bar/dot they came from. Source: <span style="color:var(--color-text-primary);">${esc(RECORD.meta.source_filename)}</span> · extracted by ${esc(RECORD.meta.model)} · ${esc(RECORD.meta.schema)}.
     </div>
-    <!-- progress -->
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">
       <span class="pill" style="background:var(--color-background-success);color:var(--color-text-success);"><i class="ti ti-check"></i>${c.v} verified</span>
       <span class="pill" style="background:var(--color-background-warning);color:var(--color-text-warning);"><i class="ti ti-pencil"></i>${c.fx} needs fix</span>
@@ -225,7 +229,6 @@ function render(){
     <div style="font-size:12px;color:var(--color-text-tertiary);margin-top:5px;">${pct}% signed off</div>
   </div>
 
-  <!-- Priority: check these first -->
   ${pri.length?`
   <div style="display:flex;align-items:center;gap:7px;margin:0 2px 6px;">
     <i class="ti ti-alert-triangle" style="font-size:18px;color:var(--color-text-danger);"></i>
@@ -234,14 +237,12 @@ function render(){
   </div>
   <div style="margin-bottom:22px;">${pri.map(p=>p[1]).join('')}</div>`:''}
 
-  <!-- All fields -->
   <div style="display:flex;align-items:center;gap:7px;margin:0 2px 2px;">
     <i class="ti ti-list-details" style="font-size:18px;color:var(--color-text-info);"></i>
     <span style="font-size:15px;font-weight:600;">Report-level fields</span>
   </div>
   ${groupHtml}
 
-  <!-- Subgroups -->
   <div style="display:flex;align-items:center;gap:7px;margin:22px 2px 8px;">
     <i class="ti ti-users-group" style="font-size:18px;color:var(--color-text-info);"></i>
     <span style="font-size:15px;font-weight:600;">Subgroup findings</span>
@@ -264,26 +265,56 @@ function render(){
     </div>
   </div>
 
+  <!-- Save As -->
+  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px 18px;margin-top:12px;">
+    <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px;">
+      <i class="ti ti-folder-down" style="font-size:18px;color:var(--color-text-info);"></i>
+      <span style="font-size:15px;font-weight:600;">Save As</span>
+    </div>
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:12px;line-height:1.5;">
+      Rename the export to keep files organized across districts and report periods. The file saves to your browser's default Downloads folder.
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">
+      <input class="fld-input" id="saveas-name" style="max-width:420px;flex:1;" placeholder="filename.json" value="${esc(saveFilename||defaultFilename())}" />
+      <button id="saveas-btn" style="display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-size:14px;font-weight:500;padding:10px 16px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);white-space:nowrap;">
+        <i class="ti ti-download" style="font-size:17px;"></i>Download as…</button>
+    </div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);display:flex;align-items:center;gap:5px;line-height:1.5;">
+      <i class="ti ti-bulb" style="font-size:13px;flex:none;"></i>
+      Tip: include the district name and report window so the file is easy to find later —
+      e.g. <em style="margin-left:3px;">SampleSD_ALEKS_BOY-MOY_verified_2026-06-24.json</em>
+    </div>
+  </div>
+
   <div style="text-align:center;font-size:11px;color:var(--color-text-tertiary);margin-top:18px;line-height:1.6;">
     ISEA Phase 3 → 4 handoff · the human gate between automated harvesting and the executive deliverable.
   </div>`;
 
-  // wire status segments
+  // Wire status segments
   ROOT.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>{
     const id=b.dataset.id, act=b.dataset.act;
     STATE[id].status = (act==="verify")?(STATE[id].status==="verified"?"unreviewed":"verified")
                                        :(STATE[id].status==="fix"?"unreviewed":"fix");
     render();
   });
-  // wire inputs (preserve focus by not re-rendering on input)
+  // Wire inputs without re-rendering (preserves focus)
   ROOT.querySelectorAll('[data-field]').forEach(inp=>inp.oninput=()=>{
     STATE[inp.dataset.id][inp.dataset.field]=inp.value;
   });
   const rv=document.getElementById('reviewer'); if(rv) rv.oninput=()=>{reviewer=rv.value;};
-  document.getElementById('export').onclick=doExport;
+  document.getElementById('export').onclick=()=>doExport();
+
+  // Save As wiring
+  const saName=document.getElementById('saveas-name');
+  if(saName){
+    if(!saveFilename){ saveFilename=defaultFilename(); saName.value=saveFilename; }
+    saName.oninput=e=>{saveFilename=e.target.value;};
+  }
+  const saBtn=document.getElementById('saveas-btn');
+  if(saBtn){ saBtn.onclick=()=>doExport(saveFilename||defaultFilename()); }
 }
 
-function doExport(){
+function doExport(customFilename){
   const c=counts();
   const review = { reviewer: reviewer||null, reviewed_at: new Date().toISOString(),
     source_filename: RECORD.meta.source_filename, extraction_model: RECORD.meta.model,
@@ -301,10 +332,11 @@ function doExport(){
   });
   const blob=new Blob([JSON.stringify(review,null,2)],{type:"application/json"});
   const url=URL.createObjectURL(blob); const a=document.createElement('a');
-  a.href=url; a.download="ALEKS_RCE_verified_"+(new Date().toISOString().slice(0,10))+".json";
+  a.href=url;
+  a.download = customFilename || defaultFilename();
   document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
   const m=document.getElementById('exmsg');
-  m.textContent = `Exported · ${c.v}/${c.tot} verified${c.fl?` · ${c.fl} flag(s) still open`:''}`;
+  if(m) m.textContent = `Exported · ${c.v}/${c.tot} verified${c.fl?` · ${c.fl} flag(s) still open`:''}`;
 }
 
 render();
