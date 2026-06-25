@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RCE Extraction — Spot-Check &amp; Sign-off (ISEA)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.1.0/dist/tabler-icons.min.css" />
+<style>
+  :root{
+    --color-background-primary:#ffffff; --color-background-secondary:#f4f2ec; --color-background-tertiary:#ece9e1;
+    --color-background-info:#E6F1FB; --color-background-success:#E1F5EE; --color-background-warning:#FAEEDA; --color-background-danger:#FCEBEB;
+    --color-text-primary:#1b1b19; --color-text-secondary:#5F5E5A; --color-text-tertiary:#888780;
+    --color-text-info:#185FA5; --color-text-success:#0F6E56; --color-text-warning:#854F0B; --color-text-danger:#A32D2D;
+    --color-border-tertiary:rgba(0,0,0,.12); --color-border-secondary:rgba(0,0,0,.22); --color-border-info:#85B7EB;
+    --border-radius-md:8px; --border-radius-lg:12px;
+    --font-sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--color-background-tertiary);font-family:var(--font-sans);color:var(--color-text-primary);}
+  .wrap{max-width:920px;margin:0 auto;padding:24px 18px 60px;}
+  input,textarea,button{font-family:inherit;}
+  textarea{resize:vertical;}
+  .pill{font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;}
+  .seg{display:inline-flex;border:0.5px solid var(--color-border-secondary);border-radius:999px;overflow:hidden;}
+  .seg button{border:0;background:var(--color-background-primary);color:var(--color-text-secondary);font-size:12px;font-weight:500;padding:5px 11px;cursor:pointer;}
+  .seg button.on-v{background:var(--color-text-success);color:#fff;}
+  .seg button.on-f{background:var(--color-text-warning);color:#fff;}
+  .corr{display:none;margin-top:8px;}
+  .corr.show{display:block;}
+  .fld-input{width:100%;font-size:13px;padding:7px 9px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);}
+  #dropzone{border:2px dashed var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:52px 24px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;background:var(--color-background-primary);}
+  #dropzone:hover,#dropzone.over{border-color:var(--color-text-info);background:var(--color-background-info);}
+  #file-input{display:none;}
+</style>
+</head>
+<body>
+<div class="wrap" id="root"></div>
+<script>
+/* ────────────────────────────────────────────────────────────────────────────
+   EXTRACTED RECORD  — output of the `rce-extraction` skill on the ALEKS Full
+   Report PDF. Each field carries a confidence tier and a source citation so the
+   reviewer knows exactly where to look. Tier meaning:
+     text  → printed as plain text on the page (high confidence)
+     chart → read from a labeled chart callout (medium — drift-checkable)
+     flag  → unresolved visual ambiguity (low — must be resolved by a human)
+   ──────────────────────────────────────────────────────────────────────────── */
+const DEMO_RECORD = {
+  meta:{ source_filename:"ALEKS 1–5.pdf", product:"ALEKS", district:"Sample School District",
+         period:"08/25/2025 – 02/20/2026", model:"claude-opus-4-8", schema:"rce_schema.py v0.1" },
+  fields:[
+    // group, label, path, value, tier, source
+    ["Report identity","Product name","product_name","ALEKS","text","Header card → \"Product:\" (p.1)"],
+    ["Report identity","District","district_name","Sample School District","text","Report title / cover"],
+    ["Report identity","Academic year","academic_year","2025-2026","text","Derived from Timeframe (p.1)"],
+    ["Report identity","Report period","report_period","08/25/2025-02/20/2026","text","Header card → \"Timeframe:\" (p.1)"],
+    ["Report identity","Period label","report_period_label","BOY-MOY","chart","Derived (Aug→Feb window)"],
+    ["Report identity","Author","author","Amanda Cadran, PhD","text","Brief byline"],
+
+    ["Study design","ESSA tier","essa_tier","3 (Level III)","chart","Demographics & Methods tab — \"Promising Evidence\""],
+    ["Study design","Analysis method","analysis_method","partial_correlation","chart","Demographics & Methods tab"],
+    ["Study design","Number of RCEs","number_of_rces","1","chart","Methods / Table 1"],
+    ["Study design","Covariates","covariates","school, grade_level","chart","Method description"],
+
+    ["Sample","Grade levels","grade_levels","6","chart","Outcome chart x-axis (\"6th grade\")"],
+    ["Sample","Total students (n)","sample_size_max","572","text","Header card → \"Total Students:\" (p.1)"],
+    ["Sample","Sample note","sample_size_notes","Outcomes ran for Grade 6 only; not enough data for other grades","text","Brief, Table 2 footnote"],
+
+    ["Outcomes","Outcome measure","outcome_measure","MOY Fastbridge aMath Scores","text","Header card → \"Outcome:\" + MOY timing"],
+    ["Outcomes","Overall effect size","effect_size_raw","+0.20","text","Header gauge \"Overall Effect Size\" (p.1)"],
+    ["Outcomes","Effect size (parsed)","effect_size_value","0.20","text","Parsed from gauge / Overall dot ES:0.20"],
+    ["Outcomes","Effect size type","effect_size_type","partial correlation r","chart","Methods"],
+    ["Outcomes","Overall effectiveness","overall_effectiveness","positive","chart","Gauge color (green) / Overall dot"],
+    ["Outcomes","Overall significance","overall_statistical_significance","significant","text","Narrative \"statistically significant\""],
+
+    ["Usage","Usage metric","usage.usage_metric","total_time (Minutes on system)","text","Header card → \"Usage Metric:\" (p.1)"],
+    ["Usage","Recommended dosage","usage.usage_compliance_threshold","665 Minutes on system (≈30 min/wk)","text","Header card → \"Recommended Dosage:\""],
+    ["Usage","Compliance rate","usage.usage_compliance_rate","0.27 (27%)","chart","Benchmark chart — green \"met\" bar/banner"],
+    ["Usage","Usage period (weeks)","usage.usage_period_weeks","25","chart","Usage-distribution banner (\"across 25 weeks\")"],
+    ["Usage","Avg minutes on system","usage.usage_notes","486 minutes; 97% used","text","\"On average, how many minutes…\" (p.1)"]
+  ],
+  /* Subgroup findings come from the Outcome Analysis effect-size DOT PLOT — the
+     highest drift risk. Each row cites its dot. */
+  subgroups:[
+    {cat:"ethnicity", val:"Black or African American", eff:"positive", es:"0.25", ci:"(0.15, 0.34)", n:"374", sig:"significant", tier:"chart", note:"Green dot; CI excludes 0."},
+    {cat:"ethnicity", val:"White", eff:"positive", es:"0.33", ci:"(0.02, 0.59)", n:"41", sig:"significant", tier:"chart", note:"Green dot; small n (41) — confirm."},
+    {cat:"ethnicity", val:"Hispanic/Latino", eff:"neutral", es:"0.19", ci:"(-0.07, 0.42)", n:"64", sig:"not_significant", tier:"chart", note:"Yellow dot; CI includes 0."},
+    {cat:"ethnicity", val:"American Indian or Alaska Native", eff:"neutral", es:"0.12", ci:"(-0.13, 0.36)", n:"73", sig:"not_significant", tier:"chart", note:"Yellow dot; CI includes 0."},
+    {cat:"ethnicity", val:"Asian / Native Hawaiian-OPI / Two or more races", eff:"not_reported", es:"—", ci:"—", n:"—", sig:"not_reported", tier:"flag", note:"VISUAL AMBIGUITY: dots present but callouts not legible / leader lines unresolved. Resolve against ALEKS 3.pdf p.3 before use."}
+  ]
+};
+
+const TIER = {
+  text:{cls:"",bg:"var(--color-background-info)",fg:"var(--color-text-info)",ic:"ti-typography",label:"Printed text"},
+  chart:{cls:"",bg:"var(--color-background-warning)",fg:"var(--color-text-warning)",ic:"ti-chart-bar",label:"Chart-read"},
+  flag:{cls:"",bg:"var(--color-background-danger)",fg:"var(--color-text-danger)",ic:"ti-alert-triangle",label:"Visual ambiguity"}
+};
+const EFF = {
+  positive:{bg:"var(--color-background-success)",fg:"var(--color-text-success)"},
+  neutral:{bg:"var(--color-background-tertiary)",fg:"var(--color-text-secondary)"},
+  negative:{bg:"var(--color-background-danger)",fg:"var(--color-text-danger)"},
+  not_reported:{bg:"var(--color-background-danger)",fg:"var(--color-text-danger)"}
+};
+
+// ── JSON loader: field metadata (mirrors populate_spot_check.py FIELD_META) ──
+const FIELD_META = [
+  ["Report identity","Report title",        "report_title",                    "text",  "Dashboard header / report cover"],
+  ["Report identity","Product name",         "product_name",                    "text",  'Header card → "Product:" (p.1)'],
+  ["Report identity","District",             "district_name",                   "text",  "Report title / cover"],
+  ["Report identity","Academic year",        "academic_year",                   "text",  "Derived from Timeframe (p.1)"],
+  ["Report identity","Report period",        "report_period",                   "text",  'Header card → "Timeframe:" (p.1)'],
+  ["Report identity","Period label",         "report_period_label",             "chart", "Derived (Aug→Feb = BOY-MOY)"],
+  ["Report identity","Author",               "author",                          "text",  "Report byline"],
+  ["Study design",   "ESSA tier",            "essa_tier_label",                 "chart", 'Demographics & Methods tab'],
+  ["Study design",   "Analysis method",      "analysis_method",                 "chart", "Demographics & Methods tab"],
+  ["Study design",   "Number of RCEs",       "number_of_rces",                  "chart", "Methods / Table 1"],
+  ["Study design",   "Covariates",           "covariates",                      "chart", "Method description"],
+  ["Sample",         "Grade levels",         "grade_levels",                    "chart", "Outcome chart x-axis"],
+  ["Sample",         "Total students (n)",   "sample_size_max",                 "text",  'Header card → "Total Students:" (p.1)'],
+  ["Sample",         "Sample note",          "sample_size_notes",               "text",  "Brief footnote / Table 2"],
+  ["Outcomes",       "Outcome measure",      "outcome_measure",                 "text",  'Header card → "Outcome:" (p.1)'],
+  ["Outcomes",       "Overall effect size",  "effect_size_raw",                 "text",  'Header gauge "Overall Effect Size" (p.1)'],
+  ["Outcomes",       "Effect size (parsed)", "effect_size_value",               "text",  "Parsed from header gauge / Overall dot"],
+  ["Outcomes",       "Effect size type",     "effect_size_type",                "chart", "Methods"],
+  ["Outcomes",       "Overall effectiveness","overall_effectiveness",           "chart", "Gauge color / Overall dot color"],
+  ["Outcomes",       "Overall significance", "overall_statistical_significance","text",  'Narrative / Overall dot CI excludes 0'],
+  ["Usage",          "Usage metric",         "usage.usage_metric",              "text",  'Header card → "Usage Metric:" (p.1)'],
+  ["Usage",          "Recommended dosage",   "usage.usage_compliance_threshold","text",  'Header card → "Recommended Dosage:" (p.1)'],
+  ["Usage",          "Compliance rate",      "usage.usage_compliance_rate",     "chart", 'Benchmark chart — green "met" bar/banner'],
+  ["Usage",          "Usage period (weeks)", "usage.usage_period_weeks",        "chart", 'Usage-distribution banner ("across N weeks")'],
+  ["Usage",          "Usage notes",          "usage.usage_notes",               "text",  '"On average, how many minutes…" card'],
+];
+const OPTIONAL_PATHS = new Set(["author","sample_size_notes","usage.usage_notes"]);
+
+function getNested(d, path){
+  return path.split('.').reduce((o,k)=>(o && o[k]!==undefined ? o[k] : null), d);
+}
+function fmtVal(v){
+  if(v===null||v===undefined) return '—';
+  if(Array.isArray(v)) return v.join(', ');
+  if(typeof v==='number') return v%1===0 ? String(v) : v.toFixed(2);
+  return String(v);
+}
+function buildRecord(data){
+  const fields=[];
+  for(const [group,label,path,tier,source] of FIELD_META){
+    const val=getNested(data,path);
+    if(val===null && !OPTIONAL_PATHS.has(path)) continue;
+    fields.push([group,label,path,fmtVal(val),tier,source]);
+  }
+  const subgroups=(data.subgroup_findings||[]).map(sf=>{
+    const lo=sf.confidence_interval_lower, hi=sf.confidence_interval_upper;
+    const ci=(lo!=null&&hi!=null)?`(${lo}, ${hi})`:'—';
+    const notes=sf.notes||'';
+    const ambiguous=notes.includes('Visual Ambiguity')||sf.effect_size_raw==null;
+    const cat=sf.subgroup_category_custom||sf.subgroup_category||'';
+    const eff=sf.effectiveness||'not_reported';
+    return{
+      cat, val:sf.subgroup_value||'', eff, es:sf.effect_size_raw||'—', ci,
+      n:sf.sample_size!=null?String(sf.sample_size):'—',
+      sig:sf.statistical_significance||'not_reported',
+      tier:ambiguous?'flag':'chart',
+      note:notes||(eff==='positive'?'Green dot; CI excludes 0.':'Yellow dot; CI includes 0.'),
+    };
+  });
+  return{
+    meta:{
+      source_filename:data.source_filename||'',
+      product:data.product_name||'',
+      district:data.district_name||'',
+      period:data.report_period||'',
+      model:data.extraction_model||'',
+      schema:`rce_schema.py v${data.extraction_schema_version||'0.1'}`,
+    },
+    fields, subgroups,
+  };
+}
+
+// ── Runtime state ──────────────────────────────────────────────────────────────
+let RECORD = null; // null until a file is loaded
+let STATE  = {};
+let reviewer = "";
+
+function resetState(){
+  STATE = {};
+  (RECORD.fields||[]).forEach((_,i)=>STATE["f"+i]={status:"unreviewed",corrected:"",note:""});
+  (RECORD.subgroups||[]).forEach((_,i)=>STATE["s"+i]={status:"unreviewed",corrected:"",note:""});
+  reviewer = "";
+}
+
+function loadFromJson(data){
+  try{
+    RECORD = buildRecord(data);
+  }catch(e){
+    alert("Could not parse this file as an RCEReport.\n\n"+e.message);
+    return;
+  }
+  resetState();
+  render();
+}
+
+// ── Drop zone ─────────────────────────────────────────────────────────────────
+function renderDropzone(){
+  ROOT.innerHTML=`
+  <div style="max-width:560px;margin:60px auto 0;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;">
+      <span style="width:38px;height:38px;border-radius:10px;background:var(--color-background-info);color:var(--color-text-info);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="ti ti-clipboard-check" style="font-size:22px;"></i></span>
+      <div>
+        <div style="font-size:18px;font-weight:600;">RCE Spot-Check &amp; Sign-off</div>
+        <div style="font-size:12px;color:var(--color-text-tertiary);">ISEA Phase 3 → 4 QA gate</div>
+      </div>
+    </div>
+
+    <div id="dropzone" tabindex="0" role="button" aria-label="Drop RCEReport JSON file here">
+      <i class="ti ti-file-type-json" style="font-size:40px;color:var(--color-text-tertiary);margin-bottom:12px;display:block;"></i>
+      <div style="font-size:15px;font-weight:500;margin-bottom:6px;">Drop your RCEReport JSON here</div>
+      <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;">or click to browse for a file</div>
+      <button onclick="document.getElementById('file-input').click()" style="font-size:13px;font-weight:500;padding:8px 16px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer;">
+        <i class="ti ti-upload" style="vertical-align:-2px;margin-right:5px;"></i>Browse file
+      </button>
+    </div>
+    <input type="file" id="file-input" accept=".json,application/json" />
+
+    <div style="margin-top:16px;padding:12px 14px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:12px;color:var(--color-text-secondary);line-height:1.55;">
+      Expects an <strong>RCEReport</strong> JSON — the output of the <code>rce-extraction</code> skill or the <code>extract_rce.py</code> pipeline script. The tool will map every field to its confidence tier and source citation automatically.
+    </div>
+
+    <div style="margin-top:12px;text-align:center;">
+      <button id="demo-btn" style="font-size:12px;color:var(--color-text-tertiary);background:none;border:none;cursor:pointer;text-decoration:underline;padding:4px;">
+        Use built-in sample data instead
+      </button>
+    </div>
+  </div>`;
+
+  const dz=document.getElementById('dropzone');
+  const fi=document.getElementById('file-input');
+
+  dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over');});
+  dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
+  dz.addEventListener('drop',e=>{
+    e.preventDefault(); dz.classList.remove('over');
+    const file=e.dataTransfer.files[0];
+    if(file) readFile(file);
+  });
+  dz.addEventListener('click',()=>fi.click());
+  dz.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')fi.click();});
+  fi.addEventListener('change',()=>{if(fi.files[0]) readFile(fi.files[0]);});
+  document.getElementById('demo-btn').onclick=()=>{
+    RECORD = DEMO_RECORD;
+    resetState();
+    render();
+  };
+}
+
+function readFile(file){
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      loadFromJson(data);
+    }catch(err){
+      alert("Could not read file as JSON.\n\n"+err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+// review state keyed by row id; status: 'unreviewed' | 'verified' | 'fix'
+// (STATE is now initialised by resetState() after a file loads)
+
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const ROOT = document.getElementById('root');
+
+function counts(){
+  let v=0,fx=0,fl=0,tot=0;
+  Object.entries(STATE).forEach(([k,s])=>{ tot++; if(s.status==="verified")v++; if(s.status==="fix")fx++; });
+  RECORD.fields.forEach((f,i)=>{ if(f[4]==="flag")fl++; });
+  RECORD.subgroups.forEach((s,i)=>{ if(s.tier==="flag")fl++; });
+  return {v,fx,fl,tot};
+}
+
+function tierPill(t){ const x=TIER[t]; return `<span class="pill" style="background:${x.bg};color:${x.fg};"><i class="ti ${x.ic}"></i>${x.label}</span>`; }
+
+function statusSeg(id){
+  const st=STATE[id].status;
+  return `<span class="seg">
+    <button data-act="verify" data-id="${id}" class="${st==='verified'?'on-v':''}"><i class="ti ti-check"></i> Verified</button>
+    <button data-act="fix" data-id="${id}" class="${st==='fix'?'on-f':''}"><i class="ti ti-pencil"></i> Needs fix</button>
+  </span>`;
+}
+
+function fieldRow(f,i){
+  const id="f"+i, st=STATE[id];
+  const accent = f[4]==="flag"?"border-left:3px solid var(--color-text-danger);":(st.status==="verified"?"border-left:3px solid var(--color-text-success);":(st.status==="fix"?"border-left:3px solid var(--color-text-warning);":"border-left:3px solid var(--color-border-tertiary);"));
+  return `<div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);${accent}border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:8px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;">
+      <div style="min-width:200px;flex:1;">
+        <div style="font-size:12px;color:var(--color-text-tertiary);margin-bottom:2px;">${esc(f[2])}</div>
+        <div style="font-size:14px;font-weight:500;">${esc(f[1])}</div>
+        <div style="font-size:15px;margin-top:4px;">${esc(f[3])}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+        ${tierPill(f[4])}
+        ${statusSeg(id)}
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--color-text-tertiary);margin-top:8px;display:flex;align-items:center;gap:6px;"><i class="ti ti-map-pin"></i>${esc(f[5])}</div>
+    <div class="corr ${st.status==='fix'?'show':''}" id="corr-${id}">
+      <input class="fld-input" data-field="corrected" data-id="${id}" placeholder="Corrected value" value="${esc(st.corrected)}" style="margin-bottom:6px;" />
+      <input class="fld-input" data-field="note" data-id="${id}" placeholder="Reviewer note (why / what to recheck)" value="${esc(st.note)}" />
+    </div>
+  </div>`;
+}
+
+function subRow(s,i){
+  const id="s"+i, st=STATE[id]; const e=EFF[s.eff]||EFF.neutral;
+  const accent = s.tier==="flag"?"border-left:3px solid var(--color-text-danger);":(st.status==="verified"?"border-left:3px solid var(--color-text-success);":(st.status==="fix"?"border-left:3px solid var(--color-text-warning);":"border-left:3px solid var(--color-border-tertiary);"));
+  return `<div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);${accent}border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:8px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;">
+      <div style="min-width:220px;flex:1;">
+        <div style="font-size:12px;color:var(--color-text-tertiary);margin-bottom:2px;">${esc(s.cat)}</div>
+        <div style="font-size:14px;font-weight:500;">${esc(s.val)}</div>
+        <div style="font-size:13px;margin-top:5px;display:flex;gap:14px;flex-wrap:wrap;">
+          <span><span style="color:var(--color-text-tertiary);">ES</span> ${esc(s.es)}</span>
+          <span><span style="color:var(--color-text-tertiary);">CI</span> ${esc(s.ci)}</span>
+          <span><span style="color:var(--color-text-tertiary);">n</span> ${esc(s.n)}</span>
+          <span class="pill" style="background:${e.bg};color:${e.fg};">${esc(s.eff)}</span>
+          <span style="color:var(--color-text-tertiary);">${esc(s.sig)}</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+        ${tierPill(s.tier)}
+        ${statusSeg(id)}
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--color-text-tertiary);margin-top:8px;display:flex;align-items:center;gap:6px;"><i class="ti ti-info-circle"></i>${esc(s.note)}</div>
+    <div class="corr ${st.status==='fix'?'show':''}" id="corr-${id}">
+      <input class="fld-input" data-field="corrected" data-id="${id}" placeholder="Corrected ES / n / direction" value="${esc(st.corrected)}" style="margin-bottom:6px;" />
+      <input class="fld-input" data-field="note" data-id="${id}" placeholder="Reviewer note" value="${esc(st.note)}" />
+    </div>
+  </div>`;
+}
+
+function priorityIds(){
+  const out=[];
+  RECORD.fields.forEach((f,i)=>{ if(f[4]==="flag") out.push(["f"+i, fieldRow(f,i)]); });
+  RECORD.subgroups.forEach((s,i)=>{ if(s.tier==="flag") out.push(["s"+i, subRow(s,i)]); });
+  return out;
+}
+
+function render(){
+  const c = counts();
+  const pct = Math.round((c.v)/c.tot*100);
+  const pri = priorityIds();
+
+  const groups = {};
+  RECORD.fields.forEach((f,i)=>{ (groups[f[0]] = groups[f[0]]||[]).push(fieldRow(f,i)); });
+  const groupHtml = Object.entries(groups).map(([g,rows])=>`
+    <div style="font-size:13px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--color-text-tertiary);margin:18px 2px 8px;">${esc(g)}</div>
+    ${rows.join('')}`).join('');
+
+  const subHtml = RECORD.subgroups.map((s,i)=>subRow(s,i)).join('');
+
+  ROOT.innerHTML = `
+  <!-- Header -->
+  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:18px 20px;margin-bottom:16px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="width:34px;height:34px;border-radius:9px;background:var(--color-background-info);color:var(--color-text-info);display:inline-flex;align-items:center;justify-content:center;"><i class="ti ti-clipboard-check" style="font-size:20px;"></i></span>
+        <div><div style="font-size:17px;font-weight:600;">RCE Extraction — Spot-Check &amp; Sign-off</div>
+        <div style="font-size:12px;color:var(--color-text-tertiary);">${esc(RECORD.meta.product)} · ${esc(RECORD.meta.district)} · ${esc(RECORD.meta.period)} · <button id="reload-btn" style="font-size:12px;color:var(--color-text-info);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline;">load new file</button></div></div>
+      </div>
+      <span style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--color-text-warning);background:var(--color-background-warning);padding:5px 10px;border-radius:999px;">QA gate · before deliverable</span>
+    </div>
+    <div style="margin-top:14px;padding:12px 14px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:13px;line-height:1.55;color:var(--color-text-secondary);">
+      Verify each harvested value against the source report before it flows to the leader view. <strong style="color:var(--color-text-primary);">Chart-read</strong> and <strong style="color:var(--color-text-danger);">visual-ambiguity</strong> items carry drift risk — confirm those against the bar/dot they came from. Source: <span style="color:var(--color-text-primary);">${esc(RECORD.meta.source_filename)}</span> · extracted by ${esc(RECORD.meta.model)} · ${esc(RECORD.meta.schema)}.
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">
+      <span class="pill" style="background:var(--color-background-success);color:var(--color-text-success);"><i class="ti ti-check"></i>${c.v} verified</span>
+      <span class="pill" style="background:var(--color-background-warning);color:var(--color-text-warning);"><i class="ti ti-pencil"></i>${c.fx} needs fix</span>
+      <span class="pill" style="background:var(--color-background-danger);color:var(--color-text-danger);"><i class="ti ti-alert-triangle"></i>${c.fl} ambiguity flags</span>
+      <span class="pill" style="background:var(--color-background-tertiary);color:var(--color-text-secondary);">${c.tot} fields total</span>
+    </div>
+    <div style="height:7px;background:var(--color-background-tertiary);border-radius:999px;overflow:hidden;margin-top:10px;">
+      <div style="height:100%;width:${pct}%;background:var(--color-text-success);border-radius:999px;transition:width .2s;"></div></div>
+    <div style="font-size:12px;color:var(--color-text-tertiary);margin-top:5px;">${pct}% signed off</div>
+  </div>
+
+  ${pri.length?`
+  <div style="display:flex;align-items:center;gap:7px;margin:0 2px 6px;">
+    <i class="ti ti-alert-triangle" style="font-size:18px;color:var(--color-text-danger);"></i>
+    <span style="font-size:15px;font-weight:600;">Check these first</span>
+    <span style="font-size:12px;color:var(--color-text-tertiary);">— low-confidence reads the model could not resolve</span>
+  </div>
+  <div style="margin-bottom:22px;">${pri.map(p=>p[1]).join('')}</div>`:''}
+
+  <div style="display:flex;align-items:center;gap:7px;margin:0 2px 2px;">
+    <i class="ti ti-list-details" style="font-size:18px;color:var(--color-text-info);"></i>
+    <span style="font-size:15px;font-weight:600;">Report-level fields</span>
+  </div>
+  ${groupHtml}
+
+  <div style="display:flex;align-items:center;gap:7px;margin:22px 2px 8px;">
+    <i class="ti ti-users-group" style="font-size:18px;color:var(--color-text-info);"></i>
+    <span style="font-size:15px;font-weight:600;">Subgroup findings</span>
+    <span style="font-size:12px;color:var(--color-text-tertiary);">— from the effect-size dot plot (highest drift risk)</span>
+  </div>
+  ${subHtml}
+
+  <!-- Sign-off / export -->
+  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px 18px;margin-top:22px;">
+    <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px;">
+      <i class="ti ti-file-export" style="font-size:18px;color:var(--color-text-info);"></i>
+      <span style="font-size:15px;font-weight:600;">Sign off &amp; export verified record</span>
+    </div>
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:10px;line-height:1.5;">Exports the approved/corrected <code>RCEReport</code> as JSON, plus a review log (status + notes per field). This is the clean record that feeds the leader view — only verified data should pass this gate.</div>
+    <input class="fld-input" id="reviewer" placeholder="Reviewer name (e.g., Amanda Cadran)" style="max-width:340px;margin-bottom:10px;" value="${esc(reviewer)}" />
+    <div>
+      <button id="export" style="display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-size:14px;font-weight:500;padding:10px 16px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-text-info);color:#fff;">
+        <i class="ti ti-download" style="font-size:18px;"></i>Export verified JSON + notes</button>
+      <span id="exmsg" style="font-size:12px;color:var(--color-text-success);margin-left:10px;"></span>
+    </div>
+  </div>
+
+  <div style="text-align:center;font-size:11px;color:var(--color-text-tertiary);margin-top:18px;line-height:1.6;">
+    ISEA Phase 3 → 4 handoff · the human gate between automated harvesting and the executive deliverable.
+  </div>`;
+
+  // Wire status segments
+  ROOT.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>{
+    const id=b.dataset.id, act=b.dataset.act;
+    STATE[id].status = (act==="verify")?(STATE[id].status==="verified"?"unreviewed":"verified")
+                                       :(STATE[id].status==="fix"?"unreviewed":"fix");
+    render();
+  });
+  // Wire inputs without re-rendering (preserves focus)
+  ROOT.querySelectorAll('[data-field]').forEach(inp=>inp.oninput=()=>{
+    STATE[inp.dataset.id][inp.dataset.field]=inp.value;
+  });
+  const rv=document.getElementById('reviewer'); if(rv) rv.oninput=()=>{reviewer=rv.value;};
+  document.getElementById('export').onclick=()=>doExport();
+  const rb=document.getElementById('reload-btn'); if(rb) rb.onclick=()=>renderDropzone();
+}
+
+function doExport(){
+  const c=counts();
+  const review = { reviewer: reviewer||null, reviewed_at: new Date().toISOString(),
+    source_filename: RECORD.meta.source_filename, extraction_model: RECORD.meta.model,
+    summary:{verified:c.v, needs_fix:c.fx, ambiguity_flags:c.fl, total:c.tot},
+    fields:[], subgroup_findings:[] };
+  RECORD.fields.forEach((f,i)=>{ const s=STATE["f"+i];
+    review.fields.push({path:f[2], label:f[1], extracted_value:f[3], tier:f[4], source:f[5],
+      status:s.status, corrected_value:s.corrected||null, note:s.note||null,
+      final_value: s.status==="fix" && s.corrected ? s.corrected : f[3]});
+  });
+  RECORD.subgroups.forEach((s,i)=>{ const st=STATE["s"+i];
+    review.subgroup_findings.push({subgroup_category:s.cat, subgroup_value:s.val, effectiveness:s.eff,
+      effect_size:s.es, ci:s.ci, n:s.n, significance:s.sig, tier:s.tier, source_note:s.note,
+      status:st.status, corrected_value:st.corrected||null, reviewer_note:st.note||null});
+  });
+  const blob=new Blob([JSON.stringify(review,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a');
+  a.href=url;
+  a.download = (RECORD.meta.product||'RCE').replace(/[^a-zA-Z0-9]/g,'_') + '_verified.json';
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  const m=document.getElementById('exmsg');
+  if(m) m.textContent = `Exported · ${c.v}/${c.tot} verified${c.fl?` · ${c.fl} flag(s) still open`:''}`;
+}
+
+renderDropzone();
+</script>
+</body>
+</html>
