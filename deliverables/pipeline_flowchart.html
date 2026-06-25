@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>smart-ALEKS Pipeline Flowchart</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3352;
+      --accent: #5b8dee;
+      --accent2: #a78bfa;
+      --success: #34d399;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --text: #e2e8f0;
+      --muted: #8892b0;
+      --tooltip-bg: #1e2235;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 80px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 48px;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Flowchart canvas ── */
+    .chart {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      width: 100%;
+      max-width: 820px;
+      position: relative;
+    }
+
+    /* ── Rows & columns ── */
+    .row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+      position: relative;
+    }
+
+    .col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* ── Nodes ── */
+    .node {
+      position: relative;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+      border: 2px solid transparent;
+      line-height: 1.35;
+      user-select: none;
+      min-width: 160px;
+      max-width: 200px;
+    }
+
+    .node:hover, .node.active {
+      transform: translateY(-2px);
+      box-shadow: 0 0 0 3px rgba(91, 141, 238, 0.35), 0 8px 24px rgba(0,0,0,0.4);
+      border-color: var(--accent);
+      z-index: 10;
+    }
+
+    /* Node color themes */
+    .node.input    { background: #1b2638; border-color: #2e4a6e; color: #7eb8f7; }
+    .node.process  { background: #1e2340; border-color: var(--border); color: var(--text); }
+    .node.agent    { background: #231b38; border-color: #4a3280; color: var(--accent2); }
+    .node.gate     { background: #1f2a1e; border-color: #2d5a2a; color: var(--success); }
+    .node.output   { background: #2a2010; border-color: #5a4010; color: var(--warning); }
+    .node.error    { background: #2a1818; border-color: #5a2020; color: var(--danger); }
+    .node.diamond  {
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      border-radius: 0;
+      padding: 24px 30px;
+      font-size: 0.72rem;
+      background: #1c2530;
+      border-color: #3a5a7a;
+      color: #7eb8f7;
+    }
+    .node.diamond:hover, .node.diamond.active {
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      border-radius: 0;
+    }
+
+    .node-label {
+      display: block;
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-top: 4px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ── Connectors ── */
+    .arrow {
+      width: 2px;
+      background: var(--border);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .arrow::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 7px solid var(--border);
+    }
+
+    .arrow.h {
+      width: auto;
+      height: 2px;
+      flex-direction: row;
+      min-width: 24px;
+    }
+    .arrow.h::after {
+      bottom: auto;
+      left: auto;
+      right: -1px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-left: 7px solid var(--border);
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-right: none;
+    }
+
+    .arrow-label {
+      font-size: 0.62rem;
+      color: var(--muted);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      background: var(--bg);
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+
+    /* branch arrows for Y/N */
+    .branch-row {
+      display: flex;
+      width: 100%;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0;
+    }
+    .branch-line {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── Tooltip panel ── */
+    #tooltip {
+      position: fixed;
+      top: 0; right: 0;
+      width: 300px;
+      height: 100vh;
+      background: var(--tooltip-bg);
+      border-left: 1px solid var(--border);
+      padding: 32px 24px;
+      transform: translateX(100%);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 100;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    #tooltip.open { transform: translateX(0); }
+
+    #tooltip .tip-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1.3;
+    }
+    #tooltip .tip-type {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+    #tooltip .tip-body {
+      font-size: 0.78rem;
+      color: var(--text);
+      line-height: 1.65;
+    }
+    #tooltip .tip-body code {
+      background: var(--surface2);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 0.72rem;
+      color: var(--accent2);
+    }
+    #tooltip .tip-file {
+      font-size: 0.68rem;
+      color: var(--muted);
+      padding: 8px 10px;
+      background: var(--surface2);
+      border-radius: 6px;
+      border-left: 3px solid var(--accent);
+    }
+    #tooltip .close-btn {
+      position: absolute;
+      top: 12px; right: 16px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    #tooltip .close-btn:hover { color: var(--text); background: var(--surface2); }
+
+    /* ── Click hint ── */
+    .hint {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Legend ── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 48px;
+      justify-content: center;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.68rem;
+      color: var(--muted);
+    }
+    .legend-dot {
+      width: 10px; height: 10px;
+      border-radius: 3px;
+    }
+
+    /* ── SVG connector overlay ── */
+    #svg-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .connector-path {
+      fill: none;
+      stroke: var(--border);
+      stroke-width: 2;
+      marker-end: url(#arrowhead);
+    }
+    .connector-path.feedback {
+      stroke: var(--danger);
+      stroke-dasharray: 5 4;
+      marker-end: url(#arrowhead-red);
+    }
+    .connector-path.training {
+      stroke: var(--warning);
+      stroke-dasharray: 3 4;
+      marker-end: url(#arrowhead-yellow);
+    }
+  </style>
+</head>
+<body>
+
+<h1>smart-ALEKS Pipeline</h1>
+<p class="subtitle">ALEKS RCE Report → Extraction → QA Gate → Leader Brief</p>
+<p class="hint">Click any node for details →</p>
+
+<div class="chart" id="chart">
+
+  <!-- Row 1: Data origins -->
+  <div class="row" style="gap:48px; margin-bottom:0;">
+    <div class="col">
+      <div class="node input" id="n-raw" data-id="raw">
+        Raw District Data
+        <span class="node-label">Input</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col"><div class="arrow" style="height:28px;"></div></div>
+
+  <!-- Row 2: Person 1 + 2 -->
+  <div class="row" style="gap:40px;">
+    <div class="col">
+      <div class="node process" id="n-p1" data-id="p1">
+        P1: RCE File Builder
+        <span class="node-label">Team Role</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col"><div class="arrow" style="height:28px;"></div></div>
+
+  <div class="row" style="gap:40px;">
+    <div class="col">
+      <div class="node process" id="n-p2" data-id="p2">
+        P2: LearnPlatform Uploader
+        <span class="node-label">Team Role</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col"><div class="arrow" style="height:28px;"></div></div>
+
+  <!-- Row 3: PDFs -->
+  <div class="row">
+    <div class="col">
+      <div class="node input" id="n-pdfs" data-id="pdfs">
+        RCE Dashboard PDFs
+        <span class="node-label">Chart-Heavy Reports</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col"><div class="arrow" style="height:28px;"></div></div>
+
+  <!-- Row 4: Amanda + Gemini -->
+  <div class="row">
+    <div class="col">
+      <div class="node agent" id="n-agent1" data-id="agent1">
+        Agent 1: Amanda + Gemini Enterprise
+        <span class="node-label">LLM Extraction</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col"><div class="arrow" style="height:28px;"></div></div>
+
+  <!-- Row 5: XLSX -->
+  <div class="row">
+    <div class="col">
+      <div class="node input" id="n-xlsx" data-id="xlsx">
+        Gemini XLSX Export
+        <span class="node-label">Structured Extraction</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col"><div class="arrow" style="height:28px;"></div></div>
+
+  <!-- Row 6: Converter -->
+  <div class="row">
+    <div class="col">
+      <div class="node process" id="n-converter" data-id="converter">
+        xlsx_to_rce.py
+        <span class="node-label">Schema Conversion</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col"><div class="arrow" style="height:28px;"></div></div>
+
+  <!-- Row 7: RCEReport JSON -->
+  <div class="row">
+    <div class="col">
+      <div class="node process" id="n-json" data-id="json">
+        RCEReport JSON
+        <span class="node-label">Pydantic-Validated</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col"><div class="arrow" style="height:28px;"></div></div>
+
+  <!-- Row 8: Agent 2 -->
+  <div class="row">
+    <div class="col">
+      <div class="node agent" id="n-agent2" data-id="agent2">
+        Agent 2: Data Curator
+        <span class="node-label">Interactive Preview</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col"><div class="arrow" style="height:28px;"></div></div>
+
+  <!-- Row 9: spot_check.html -->
+  <div class="row">
+    <div class="col">
+      <div class="node gate" id="n-spotcheck" data-id="spotcheck">
+        spot_check.html
+        <span class="node-label">Amanda QA Gate</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col"><div class="arrow" style="height:28px;"></div></div>
+
+  <!-- Row 10: Decision diamond -->
+  <div class="row">
+    <div class="col">
+      <div class="node diamond" id="n-qa" data-id="qa">
+        Approved?
+      </div>
+    </div>
+  </div>
+
+  <!-- Y / N branch row -->
+  <div class="row" style="align-items:flex-start; gap:0; width:100%; justify-content:center; margin-top:0;">
+
+    <!-- N branch (left) -->
+    <div class="col" style="align-items:center; margin-right:60px;">
+      <div class="arrow" style="height:30px; background: var(--danger);"></div>
+      <div style="font-size:0.65rem; color:var(--danger); margin-bottom:4px;">N</div>
+      <div class="node error" id="n-errreport" data-id="errreport">
+        Error Report JSON
+        <span class="node-label">Failure Feedback</span>
+      </div>
+      <div class="arrow" style="height:20px; background: var(--danger);"></div>
+      <div class="node error" id="n-training" data-id="training">
+        Training Corpus
+        <span class="node-label">Model Improvement</span>
+      </div>
+      <div style="font-size:0.62rem; color:var(--muted); margin-top:6px; text-align:center; max-width:140px;">Amanda re-prompts Gemini ↑</div>
+    </div>
+
+    <!-- Y branch (right) -->
+    <div class="col" style="align-items:center; margin-left:60px;">
+      <div class="arrow" style="height:30px; background: var(--success);"></div>
+      <div style="font-size:0.65rem; color:var(--success); margin-bottom:4px;">Y</div>
+      <div class="node gate" id="n-approved" data-id="approved">
+        Approved JSON
+        <span class="node-label">Verified Data</span>
+      </div>
+      <div class="arrow" style="height:20px;"></div>
+      <div class="node agent" id="n-agent3" data-id="agent3">
+        Agent 3: Client Deliverable
+        <span class="node-label">Report Producer</span>
+      </div>
+      <div class="arrow" style="height:20px;"></div>
+      <div class="node output" id="n-artifact" data-id="artifact">
+        artifact.html
+        <span class="node-label">Leader Brief + Questions</span>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /chart -->
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#1b2638; border:1px solid #2e4a6e;"></div> Data / Input</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#1e2340; border:1px solid #2e3352;"></div> Process / Script</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#231b38; border:1px solid #4a3280;"></div> Agent / LLM Step</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#1f2a1e; border:1px solid #2d5a2a;"></div> QA Gate / Verified</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#2a2010; border:1px solid #5a4010;"></div> Final Output</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#2a1818; border:1px solid #5a2020;"></div> Error / Feedback</div>
+</div>
+
+<!-- Tooltip panel -->
+<div id="tooltip">
+  <button class="close-btn" id="close-tip">✕</button>
+  <div class="tip-type" id="tip-type"></div>
+  <div class="tip-title" id="tip-title"></div>
+  <div class="tip-body" id="tip-body"></div>
+  <div class="tip-file" id="tip-file" style="display:none;"></div>
+</div>
+
+<script>
+const INFO = {
+  raw: {
+    type: "Input",
+    title: "Raw District Data",
+    body: "Anonymized student assessment and usage records from a school district — the raw inputs before any ALEKS-specific formatting. Batch processing handles multiple reports (RCE T1…Tn) in parallel.",
+    file: null
+  },
+  p1: {
+    type: "Team Role — Person 1",
+    title: "RCE File Builder",
+    body: "A team member who takes the raw district data and structures it into the RCE (Rapid Cycle Evaluation) file format required by LearnPlatform. This person hands the completed RCE file to P2.",
+    file: null
+  },
+  p2: {
+    type: "Team Role — Person 2",
+    title: "LearnPlatform Uploader",
+    body: "Takes the RCE file from P1 and inputs it into the LearnPlatform platform. LearnPlatform runs its analytics engine and produces the chart-heavy dashboard PDFs that the rest of the pipeline consumes.",
+    file: null
+  },
+  pdfs: {
+    type: "Data — Chart-Heavy Reports",
+    title: "RCE Dashboard PDFs",
+    body: "One PDF per RCE report — dense visual dashboards with bar charts, usage metrics, and subgroup breakdowns. The core engineering challenge here is <em>spatial drift</em>: callout labels on bar charts are visually offset from their bars, causing LLMs to assign values to the wrong bar.",
+    file: "data/sample_reports/  (gitignored — PDFs stay off repo)"
+  },
+  agent1: {
+    type: "Agent 1 — LLM Extraction",
+    title: "Amanda + Gemini Enterprise",
+    body: "Amanda (senior researcher) runs Gemini Enterprise to extract structured data from the chart-heavy PDF pages. Gemini Enterprise was chosen over Claude Vision because ALEKS PDFs are image-only and Claude had too many spatial drift errors. Amanda controls this step manually.",
+    file: "Extraction skill: shared/prompts/SKILL.md"
+  },
+  xlsx: {
+    type: "Data — Intermediate File",
+    title: "Gemini XLSX Export",
+    body: "The structured output from Gemini's extraction, delivered as an Excel workbook. Contains effect sizes (overall + 17 subgroup findings), usage compliance stats, fidelity threshold, and effect size type (Pearson's r for ALEKS). This is Amanda's artifact, not a JSON.",
+    file: "contributors/sherman/  (working files during development)"
+  },
+  converter: {
+    type: "Script — Schema Conversion",
+    title: "xlsx_to_rce.py",
+    body: "Converts Amanda's Gemini XLSX into a Pydantic-valid <code>RCEReport</code> JSON automatically. Handles 17 subgroup findings, the overall effect size (+0.20), usage compliance (28.3%), and the fidelity threshold (665 min). Runs without user input.",
+    file: "contributors/sherman/xlsx_to_rce.py"
+  },
+  json: {
+    type: "Data — Schema-Validated",
+    title: "RCEReport JSON",
+    body: "The canonical data model for one RCE. Validated by <code>rce_schema.py</code> (Pydantic v2). Three nested models: <code>RCEReport</code> → <code>UsageAnalysis</code> + <code>List[SubgroupFinding]</code>.\n\nField tiers:\n• CORE — required; validation fails without these\n• EXT — optional; None if absent\n• META — provenance (filename, model, timestamp, schema version)",
+    file: "deliverables/rce_schema.py · data/annotations/aleks_worked_example.json"
+  },
+  agent2: {
+    type: "Agent 2 — Data Curator",
+    title: "Interactive Preview Builder",
+    body: "Consumes the <code>RCEReport</code> JSON and produces the <code>spot_check.html</code> interactive preview for Amanda's QA review. Confidence-tiers every value, surfaces ambiguity flags, and shows the structured data in a human-readable layout for spot-checking.",
+    file: "deliverables/spot_check.html"
+  },
+  spotcheck: {
+    type: "QA Gate",
+    title: "spot_check.html",
+    body: "A self-contained browser page (no Python required). Amanda drag-drops the RCEReport JSON, reviews all fields with confidence tiers and ambiguity flags, then either approves or rejects.\n\nOn approve: exports a verified JSON + review log.\nOn reject: generates an Error Report JSON pinpointing which fields failed.",
+    file: "deliverables/spot_check.html"
+  },
+  qa: {
+    type: "Decision",
+    title: "Amanda's Approval Gate",
+    body: "The human-in-the-loop checkpoint. Only verified data progresses to the client-facing artifact. Amanda is the decision gate — her approval is the signal that extraction quality is sufficient for leadership consumption.",
+    file: null
+  },
+  errreport: {
+    type: "Error Path — N Branch",
+    title: "Error Report JSON",
+    body: "Generated when Amanda rejects the spot-check. Contains a structured log of which fields failed, flagging spatial drift errors or extraction mismatches. Amanda uses this to re-prompt Gemini Enterprise directly and produce a corrected XLSX.",
+    file: "contributors/sherman/  (error report format TBD)"
+  },
+  training: {
+    type: "Error Path — Model Improvement",
+    title: "Training Corpus",
+    body: "Failed extractions are logged as training examples (status: open question / under design). This gives the N-path double duty: it corrects the immediate extraction <em>and</em> captures failure cases for future Gemini fine-tuning, improving spatial drift handling over time.",
+    file: null
+  },
+  approved: {
+    type: "Data — Verified",
+    title: "Approved JSON",
+    body: "The <code>RCEReport</code> JSON after Amanda's QA gate passes. This is the only version that flows into the client-facing output — unverified data never reaches school leadership.",
+    file: null
+  },
+  agent3: {
+    type: "Agent 3 — Client Deliverable Producer",
+    title: "Client Report Builder",
+    body: "Receives the approved JSON only. Produces the final client artifact: an interactive HTML with embedded data visualizations, a PDF print feature for leadership, and contextual questions designed to elicit actionable next steps from school leadership teams.",
+    file: "deliverables/artifact.html  (Phase 4 — next phase)"
+  },
+  artifact: {
+    type: "Final Output — Phase 4",
+    title: "artifact.html — Leader Brief",
+    body: "The client-facing deliverable. A single HTML file containing:\n• Interactive ALEKS evidence summary\n• Subgroup findings with effect sizes\n• Embedded contextual questions to guide leadership discussion\n• PDF print layout for district leadership meetings\n\nConfigurable per client/product via Client Specific Agent (Strategy 1 / AI).",
+    file: "deliverables/artifact.html"
+  }
+};
+
+let activeNode = null;
+
+document.querySelectorAll('.node').forEach(node => {
+  node.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const id = node.dataset.id;
+    const info = INFO[id];
+    if (!info) return;
+
+    // toggle active style
+    if (activeNode) activeNode.classList.remove('active');
+    if (activeNode === node) {
+      activeNode = null;
+      closeTooltip();
+      return;
+    }
+    node.classList.add('active');
+    activeNode = node;
+
+    document.getElementById('tip-type').textContent = info.type;
+    document.getElementById('tip-title').textContent = info.title;
+    document.getElementById('tip-body').innerHTML = info.body.replace(/\n/g, '<br>');
+
+    const fileEl = document.getElementById('tip-file');
+    if (info.file) {
+      fileEl.textContent = info.file;
+      fileEl.style.display = 'block';
+    } else {
+      fileEl.style.display = 'none';
+    }
+
+    document.getElementById('tooltip').classList.add('open');
+  });
+});
+
+document.getElementById('close-tip').addEventListener('click', () => {
+  closeTooltip();
+  if (activeNode) { activeNode.classList.remove('active'); activeNode = null; }
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.node') && !e.target.closest('#tooltip')) {
+    closeTooltip();
+    if (activeNode) { activeNode.classList.remove('active'); activeNode = null; }
+  }
+});
+
+function closeTooltip() {
+  document.getElementById('tooltip').classList.remove('open');
+}
+</script>
+</body>
+</html>
