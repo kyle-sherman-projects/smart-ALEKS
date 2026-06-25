@@ -1,0 +1,80 @@
+[
+  {
+    "Subgroup Category": "Grade Level",
+    "Subgroup": "6th Grade",
+    "Average Minutes": 486,
+    "Difference from Goal (in minutes)": "-179"
+  },
+  {
+    "Subgroup Category": "Gender",
+    "Subgroup": "Female",
+    "Average Minutes": 502,
+    "Difference from Goal (in minutes)": "-163"
+  },
+  {
+    "Subgroup Category": "",
+    "Subgroup": "Male",
+    "Average Minutes": 471,
+    "Difference from Goal (in minutes)": "-194"
+  },
+  {
+    "Subgroup Category": "Ethnicity",
+    "Subgroup": "Native Hawaiian or Other Pacific Islander",
+    "Average Minutes": 740,
+    "Difference from Goal (in minutes)": "+75"
+  },
+  {
+    "Subgroup Category": "",
+    "Subgroup": "Black or African American",
+    "Average Minutes": 690,
+    "Difference from Goal (in minutes)": "+25"
+  },
+  {
+    "Subgroup Category": "",
+    "Subgroup": "Asian",
+    "Average Minutes": 585,
+    "Difference from Goal (in minutes)": "-80"
+  },
+  {
+    "Subgroup Category": "",
+    "Subgroup": "Two or more races",
+    "Average Minutes": 494,
+    "Difference from Goal (in minutes)": "-171"
+  },
+  {
+    "Subgroup Category": "",
+    "Subgroup": "White",
+    "Average Minutes": 491,
+    "Difference from Goal (in minutes)": "-174"
+  },
+  {
+    "Subgroup Category": "",
+    "Subgroup": "American Indian or Alaska Native",
+    "Average Minutes": 453,
+    "Difference from Goal (in minutes)": "-212"
+  },
+  {
+    "Subgroup Category": "",
+    "Subgroup": "Hispanic/Latino",
+    "Average Minutes": 440,
+    "Difference from Goal (in minutes)": "-225"
+  },
+  {
+    "Subgroup Category": "School",
+    "Subgroup": "Southeast Polk Middle School",
+    "Average Minutes": 486,
+    "Difference from Goal (in minutes)": "-179"
+  },
+  {
+    "Subgroup Category": "SpEd Status",
+    "Subgroup": "No (General Education)",
+    "Average Minutes": 507,
+    "Difference from Goal (in minutes)": "-158"
+  },
+  {
+    "Subgroup Category": "",
+    "Subgroup": "Yes (Special Education)",
+    "Average Minutes": 332,
+    "Difference from Goal (in minutes)": "-333"
+  }
+]
