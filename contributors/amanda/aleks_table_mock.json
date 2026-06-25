@@ -1,0 +1,29 @@
+[
+  {
+    "grade_level": "Grade 3",
+    "outcome_measure": "ALEKS",
+    "sample_size_treatment": 164,
+    "sample_size_control": 331,
+    "effect_size": 0.28,
+    "statistical_significance": "p < 0.05",
+    "notes": "Statistically significant positive effect"
+  },
+  {
+    "grade_level": "Grade 4",
+    "outcome_measure": "ALEKS",
+    "sample_size_treatment": 211,
+    "sample_size_control": 395,
+    "effect_size": 0.15,
+    "statistical_significance": "ns",
+    "notes": "Positive direction, not statistically significant"
+  },
+  {
+    "grade_level": "Grade 5",
+    "outcome_measure": "ALEKS",
+    "sample_size_treatment": 189,
+    "sample_size_control": 412,
+    "effect_size": 0.32,
+    "statistical_significance": "p < 0.01",
+    "notes": "Highly statistically significant positive effect"
+  }
+]
