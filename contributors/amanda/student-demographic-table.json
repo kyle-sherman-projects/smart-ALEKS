@@ -1,0 +1,86 @@
+[
+  {
+    "Demographic Category": "Gender",
+    "Subgroup": "Female",
+    "Active User N-Count": 272,
+    "Non-Diluted Core User %": "49.28%"
+  },
+  {
+    "Demographic Category": "Gender",
+    "Subgroup": "Male",
+    "Active User N-Count": 280,
+    "Non-Diluted Core User %": "50.72%"
+  },
+  {
+    "Demographic Category": "Category Total",
+    "Subgroup": "",
+    "Active User N-Count": 552,
+    "Non-Diluted Core User %": "100.00%"
+  },
+  {
+    "Demographic Category": "Ethnicity",
+    "Subgroup": "White",
+    "Active User N-Count": 367,
+    "Non-Diluted Core User %": "66.49%"
+  },
+  {
+    "Demographic Category": "Ethnicity",
+    "Subgroup": "Black African American",
+    "Active User N-Count": 65,
+    "Non-Diluted Core User %": "11.78%"
+  },
+  {
+    "Demographic Category": "Ethnicity",
+    "Subgroup": "Hispanic Latino",
+    "Active User N-Count": 61,
+    "Non-Diluted Core User %": "11.05%"
+  },
+  {
+    "Demographic Category": "Ethnicity",
+    "Subgroup": "Two More Races",
+    "Active User N-Count": 39,
+    "Non-Diluted Core User %": "7.07%"
+  },
+  {
+    "Demographic Category": "Ethnicity",
+    "Subgroup": "Asian",
+    "Active User N-Count": 14,
+    "Non-Diluted Core User %": "2.54%"
+  },
+  {
+    "Demographic Category": "Ethnicity",
+    "Subgroup": "Native Hawaiian Other Pacific Islan",
+    "Active User N-Count": 4,
+    "Non-Diluted Core User %": "0.72%"
+  },
+  {
+    "Demographic Category": "Ethnicity",
+    "Subgroup": "American Indian Alaska Native",
+    "Active User N-Count": 2,
+    "Non-Diluted Core User %": "0.36%"
+  },
+  {
+    "Demographic Category": "Category Total",
+    "Subgroup": "",
+    "Active User N-Count": 552,
+    "Non-Diluted Core User %": "100.00%"
+  },
+  {
+    "Demographic Category": "Special Education Status",
+    "Subgroup": "General Ed (No)",
+    "Active User N-Count": 486,
+    "Non-Diluted Core User %": "88.04%"
+  },
+  {
+    "Demographic Category": "Special Education Status",
+    "Subgroup": "Special Ed (Yes)",
+    "Active User N-Count": 66,
+    "Non-Diluted Core User %": "11.96%"
+  },
+  {
+    "Demographic Category": "Category Total",
+    "Subgroup": "",
+    "Active User N-Count": 552,
+    "Non-Diluted Core User %": "100.00%"
+  }
+]
