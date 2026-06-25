@@ -58,7 +58,7 @@ ALEKS RCE PDFs are image-only exports (each page is an embedded JPEG with no tex
 
 - **Gemini Enterprise** (Amanda): primary chart/dot-plot reader; exports verified results as XLSX
 - **`xlsx_to_rce.py`**: converts the Gemini XLSX into a `RCEReport` JSON validated against the Pydantic v2 schema
-- **Claude** (Kyle): drives narrative synthesis, QA tooling, schema design, and the Phase 4+ artifact
+- **Claude** (Sherman): drives narrative synthesis, QA tooling, schema design, and the Phase 4+ artifact
 
 The spatial-drift protocol in `shared/prompts/SKILL.md` documents the sequential transcription rules both models follow when reading bar charts and effect-size dot plots.
 
