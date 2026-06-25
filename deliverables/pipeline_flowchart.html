@@ -394,17 +394,51 @@
 
   <div class="col"><div class="arrow" style="height:28px;"></div></div>
 
-  <!-- Row 5b: P2 QA of XLSX -->
+  <!-- Row 5b: P2 Reviews XLSX -->
   <div class="row">
     <div class="col">
-      <div class="node gate" id="n-p2qa" data-id="p2qa">
-        P2 QA — XLSX Review
-        <span class="node-label">Manual Correction</span>
+      <div class="node process" id="n-p2qa" data-id="p2qa">
+        P2 Reviews XLSX
+        <span class="node-label">Validation Check</span>
       </div>
     </div>
   </div>
 
   <div class="col"><div class="arrow" style="height:28px;"></div></div>
+
+  <!-- Row 5c: XLSX decision diamond -->
+  <div class="row">
+    <div class="col">
+      <div class="node diamond" id="n-xlsxgate" data-id="xlsxgate">
+        XLSX Correct?
+      </div>
+    </div>
+  </div>
+
+  <!-- XLSX Y / N branch -->
+  <div class="row" style="align-items:flex-start; gap:0; width:100%; justify-content:center; margin-top:0;">
+
+    <!-- N branch (left) -->
+    <div class="col" style="align-items:center; margin-right:80px;">
+      <div class="arrow" style="height:30px; background: var(--danger);"></div>
+      <div style="font-size:0.65rem; color:var(--danger); margin-bottom:4px;">N</div>
+      <div class="node error" id="n-manualfix" data-id="manualfix">
+        Manual Corrections
+        <span class="node-label">P2 Edits XLSX</span>
+      </div>
+      <div style="font-size:0.62rem; color:var(--muted); margin-top:8px; text-align:center; max-width:140px;">corrected XLSX ↓ re-enters</div>
+    </div>
+
+    <!-- Y branch (right) -->
+    <div class="col" style="align-items:center; margin-left:80px;">
+      <div class="arrow" style="height:30px; background: var(--success);"></div>
+      <div style="font-size:0.65rem; color:var(--success); margin-bottom:4px;">Y</div>
+      <div style="height:62px;"></div>
+    </div>
+
+  </div>
+
+  <div class="col"><div class="arrow" style="height:16px;"></div></div>
 
   <!-- Row 6: Converter -->
   <div class="row">
@@ -564,9 +598,21 @@ const INFO = {
     file: "contributors/sherman/  (working files during development)"
   },
   p2qa: {
-    type: "QA Step — Person 2",
-    title: "P2 XLSX Review & Manual Correction",
-    body: "After Gemini produces the raw XLSX, Person 2 manually reviews every extracted value against the source PDFs to catch translation errors — misread bar values, spatial drift, missing subgroups. Any incorrect fields are corrected directly in the XLSX before it is passed to <code>xlsx_to_rce.py</code>. This is the human quality gate on extraction accuracy.",
+    type: "Validation Step — Person 2",
+    title: "P2 Reviews XLSX",
+    body: "After Gemini produces the raw XLSX, Person 2 reviews every extracted value against the source PDFs to check for translation errors — misread bar values, spatial drift, wrong subgroup assignments. This review determines whether the XLSX is accepted as-is or needs manual corrections before moving downstream.",
+    file: null
+  },
+  xlsxgate: {
+    type: "Decision",
+    title: "XLSX Correct?",
+    body: "The human validation gate on Gemini's extraction. Person 2 checks whether all extracted values in the XLSX accurately reflect the source PDFs.\n\n• <strong style='color:var(--success)'>Y</strong> — XLSX is accurate; passes directly to <code>xlsx_to_rce.py</code> for schema conversion.\n• <strong style='color:var(--danger)'>N</strong> — One or more values are wrong; P2 manually corrects the XLSX, then re-enters the converter.",
+    file: null
+  },
+  manualfix: {
+    type: "Error Path — N Branch",
+    title: "Manual Corrections",
+    body: "When the XLSX fails P2's review, Person 2 directly edits the Excel workbook to fix the incorrect values — correcting misread effect sizes, swapped subgroup rows, or missing data points. The corrected XLSX then re-enters <code>xlsx_to_rce.py</code> for schema conversion.",
     file: null
   },
   converter: {
