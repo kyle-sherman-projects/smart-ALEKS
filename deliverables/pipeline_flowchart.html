@@ -370,11 +370,11 @@
 
   <div class="col"><div class="arrow" style="height:28px;"></div></div>
 
-  <!-- Row 4: Amanda + Gemini -->
+  <!-- Row 4: P2 + Gemini -->
   <div class="row">
     <div class="col">
       <div class="node agent" id="n-agent1" data-id="agent1">
-        Agent 1: Amanda + Gemini Enterprise
+        P2 + Gemini Enterprise
         <span class="node-label">LLM Extraction</span>
       </div>
     </div>
@@ -388,6 +388,18 @@
       <div class="node input" id="n-xlsx" data-id="xlsx">
         Gemini XLSX Export
         <span class="node-label">Structured Extraction</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col"><div class="arrow" style="height:28px;"></div></div>
+
+  <!-- Row 5b: P2 QA of XLSX -->
+  <div class="row">
+    <div class="col">
+      <div class="node gate" id="n-p2qa" data-id="p2qa">
+        P2 QA — XLSX Review
+        <span class="node-label">Manual Correction</span>
       </div>
     </div>
   </div>
@@ -529,8 +541,8 @@ const INFO = {
   },
   p2: {
     type: "Team Role — Person 2",
-    title: "LearnPlatform Uploader",
-    body: "Takes the RCE file from P1 and inputs it into the LearnPlatform platform. LearnPlatform runs its analytics engine and produces the chart-heavy dashboard PDFs that the rest of the pipeline consumes.",
+    title: "LearnPlatform Uploader + Gemini Operator",
+    body: "Takes the RCE file from P1 and inputs it into LearnPlatform to produce the chart-heavy dashboard PDFs. P2 then feeds those PDFs directly into Gemini Enterprise to extract structured metrics, QA-checks the resulting XLSX for translation errors, and makes manual corrections before passing the verified XLSX downstream.",
     file: null
   },
   pdfs: {
@@ -541,15 +553,21 @@ const INFO = {
   },
   agent1: {
     type: "Agent 1 — LLM Extraction",
-    title: "Amanda + Gemini Enterprise",
-    body: "Amanda (senior researcher) runs Gemini Enterprise to extract structured data from the chart-heavy PDF pages. Gemini Enterprise was chosen over Claude Vision because ALEKS PDFs are image-only and Claude had too many spatial drift errors. Amanda controls this step manually.",
+    title: "P2 runs Gemini Enterprise on PDFs",
+    body: "Person 2 feeds the LearnPlatform PDFs into Gemini Enterprise to extract structured metrics. Gemini Enterprise was chosen over Claude Vision because ALEKS PDFs are image-only and Claude had too many spatial drift errors on bar charts. Output is a raw XLSX that still needs P2's QA review.",
     file: "Extraction skill: shared/prompts/SKILL.md"
   },
   xlsx: {
     type: "Data — Intermediate File",
-    title: "Gemini XLSX Export",
-    body: "The structured output from Gemini's extraction, delivered as an Excel workbook. Contains effect sizes (overall + 17 subgroup findings), usage compliance stats, fidelity threshold, and effect size type (Pearson's r for ALEKS). This is Amanda's artifact, not a JSON.",
+    title: "Gemini XLSX Export (Raw)",
+    body: "The raw structured output from Gemini's extraction, delivered as an Excel workbook. Contains effect sizes (overall + 17 subgroup findings), usage compliance stats, fidelity threshold, and effect size type (Pearson's r for ALEKS). This is unverified at this stage — P2 QA review comes next.",
     file: "contributors/sherman/  (working files during development)"
+  },
+  p2qa: {
+    type: "QA Step — Person 2",
+    title: "P2 XLSX Review & Manual Correction",
+    body: "After Gemini produces the raw XLSX, Person 2 manually reviews every extracted value against the source PDFs to catch translation errors — misread bar values, spatial drift, missing subgroups. Any incorrect fields are corrected directly in the XLSX before it is passed to <code>xlsx_to_rce.py</code>. This is the human quality gate on extraction accuracy.",
+    file: null
   },
   converter: {
     type: "Script — Schema Conversion",
