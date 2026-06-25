@@ -1,0 +1,164 @@
+[
+  {
+    "Subgroup Category": "Grade Level",
+    "Subgroup": "6th grade",
+    "Effect Size (ES)": 0.2,
+    "Confidence Interval (CI)": "(0.12, 0.28)",
+    "Sample Size (n)": 572,
+    "Statistical Significance": "Statistically Significant (Positive)",
+    "Outcome Context": "Students had better learning outcomes"
+  },
+  {
+    "Subgroup Category": "Gender",
+    "Subgroup": "Male",
+    "Effect Size (ES)": 0.25,
+    "Confidence Interval (CI)": "(0.14, 0.36)",
+    "Sample Size (n)": 290,
+    "Statistical Significance": "Statistically Significant (Positive)",
+    "Outcome Context": "Students had better learning outcomes"
+  },
+  {
+    "Subgroup Category": "Gender",
+    "Subgroup": "Female",
+    "Effect Size (ES)": 0.14,
+    "Confidence Interval (CI)": "(0.02, 0.26)",
+    "Sample Size (n)": 282,
+    "Statistical Significance": "Statistically Significant (Positive)",
+    "Outcome Context": "Students had better learning outcomes"
+  },
+  {
+    "Subgroup Category": "Ethnicity",
+    "Subgroup": "Hispanic/Latino",
+    "Effect Size (ES)": 0.19,
+    "Confidence Interval (CI)": "(-0.07, 0.42)",
+    "Sample Size (n)": 64,
+    "Statistical Significance": "Undetermined / Not Statistically Significant",
+    "Outcome Context": "All students had similar learning outcomes"
+  },
+  {
+    "Subgroup Category": "Ethnicity",
+    "Subgroup": "American Indian or Alaska Native",
+    "Effect Size (ES)": "Not Plotted",
+    "Confidence Interval (CI)": "Not Plotted",
+    "Sample Size (n)": "Not Plotted",
+    "Statistical Significance": "Not Plotted",
+    "Outcome Context": "NA - Sample size below statistical threshold (<30) to generate stable effect size"
+  },
+  {
+    "Subgroup Category": "",
+    "Subgroup": "Asian",
+    "Effect Size (ES)": "Not Plotted",
+    "Confidence Interval (CI)": "Not Plotted",
+    "Sample Size (n)": "Not Plotted",
+    "Statistical Significance": "Not Plotted",
+    "Outcome Context": "NA - Sample size below statistical threshold (<30) to generate stable effect size"
+  },
+  {
+    "Subgroup Category": "Ethnicity",
+    "Subgroup": "Black or African American",
+    "Effect Size (ES)": 0.12,
+    "Confidence Interval (CI)": "(-0.13, 0.36)",
+    "Sample Size (n)": 73,
+    "Statistical Significance": "Undetermined / Not Statistically Significant",
+    "Outcome Context": "All students had similar learning outcomes"
+  },
+  {
+    "Subgroup Category": "Ethnicity",
+    "Subgroup": "Native Hawaiian or Other Pacific Islander",
+    "Effect Size (ES)": "Not Plotted",
+    "Confidence Interval (CI)": "Not Plotted",
+    "Sample Size (n)": "Not Plotted",
+    "Statistical Significance": "Not Plotted",
+    "Outcome Context": "NA - Sample size below statistical threshold (<30) to generate stable effect size"
+  },
+  {
+    "Subgroup Category": "Ethnicity",
+    "Subgroup": "White",
+    "Effect Size (ES)": 0.25,
+    "Confidence Interval (CI)": "(0.15, 0.34)",
+    "Sample Size (n)": 374,
+    "Statistical Significance": "Statistically Significant (Positive)",
+    "Outcome Context": "Students had better learning outcomes"
+  },
+  {
+    "Subgroup Category": "Ethnicity",
+    "Subgroup": "Two or more races",
+    "Effect Size (ES)": 0.33,
+    "Confidence Interval (CI)": "(0.02, 0.59)",
+    "Sample Size (n)": 41,
+    "Statistical Significance": "Statistically Significant (Positive)",
+    "Outcome Context": "Students had better learning outcomes"
+  },
+  {
+    "Subgroup Category": "School",
+    "Subgroup": "Southeast Polk Middle School",
+    "Effect Size (ES)": 0.2,
+    "Confidence Interval (CI)": "(0.12, 0.28)",
+    "Sample Size (n)": 572,
+    "Statistical Significance": "Statistically Significant (Positive)",
+    "Outcome Context": "Students had better learning outcomes"
+  },
+  {
+    "Subgroup Category": "SpEd Status",
+    "Subgroup": "No",
+    "Effect Size (ES)": 0.21,
+    "Confidence Interval (CI)": "(0.12, 0.30)",
+    "Sample Size (n)": 501,
+    "Statistical Significance": "Statistically Significant (Positive)",
+    "Outcome Context": "Students had better learning outcomes"
+  },
+  {
+    "Subgroup Category": "SpEd Status",
+    "Subgroup": "Yes",
+    "Effect Size (ES)": 0,
+    "Confidence Interval (CI)": "(-0.25, 0.25)",
+    "Sample Size (n)": 71,
+    "Statistical Significance": "Undetermined / Not Statistically Significant",
+    "Outcome Context": "All students had similar learning outcomes"
+  },
+  {
+    "Subgroup Category": "Prior Performance",
+    "Subgroup": "Group 1",
+    "Effect Size (ES)": 0.29,
+    "Confidence Interval (CI)": "(0.11, 0.46)",
+    "Sample Size (n)": 113,
+    "Statistical Significance": "Statistically Significant (Positive)",
+    "Outcome Context": "Students had better learning outcomes"
+  },
+  {
+    "Subgroup Category": "Prior Performance",
+    "Subgroup": "Group 2",
+    "Effect Size (ES)": 0.32,
+    "Confidence Interval (CI)": "(0.14, 0.48)",
+    "Sample Size (n)": 113,
+    "Statistical Significance": "Statistically Significant (Positive)",
+    "Outcome Context": "Students had better learning outcomes"
+  },
+  {
+    "Subgroup Category": "Prior Performance",
+    "Subgroup": "Group 3",
+    "Effect Size (ES)": 0.07,
+    "Confidence Interval (CI)": "(-0.12, 0.25)",
+    "Sample Size (n)": 113,
+    "Statistical Significance": "Undetermined / Not Statistically Significant",
+    "Outcome Context": "All students had similar learning outcomes"
+  },
+  {
+    "Subgroup Category": "Prior Performance",
+    "Subgroup": "Group 4",
+    "Effect Size (ES)": 0.15,
+    "Confidence Interval (CI)": "(-0.04, 0.33)",
+    "Sample Size (n)": 113,
+    "Statistical Significance": "Undetermined / Not Statistically Significant",
+    "Outcome Context": "All students had similar learning outcomes"
+  },
+  {
+    "Subgroup Category": "Prior Performance",
+    "Subgroup": "Group 5",
+    "Effect Size (ES)": -0.13,
+    "Confidence Interval (CI)": "(-0.30, 0.06)",
+    "Sample Size (n)": 113,
+    "Statistical Significance": "Undetermined / Not Statistically Significant",
+    "Outcome Context": "All students had similar learning outcomes"
+  }
+]
