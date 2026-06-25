@@ -13,6 +13,7 @@ __pycache__/
 # Data (PDFs stay off the repo)
 data/sample_reports/
 data/annotations/*.json
+data/reviews/
 
 # macOS
 .DS_Store
