@@ -168,6 +168,7 @@ smart-ALEKS/
 │   ├── rce_schema.py                 # Pydantic v2 extraction schema — source of truth
 │   ├── spot_check.html               # QA gate: drag-drop JSON → review → export verified JSON
 │   ├── artifact.html                 # Leader-facing interactive HTML research brief
+│   ├── pipeline_flowchart.html       # Interactive pipeline flowchart — click nodes for details
 │   └── pipeline.ipynb                # End-to-end pipeline notebook
 ├── shared/
 │   ├── prompts/
@@ -218,6 +219,8 @@ cp .env.example .env
     --period "08/25/2025 - 02/20/2026" \
     --output data/annotations/aleks_from_gemini.json
 ```
+
+**View the pipeline flowchart** — open [`deliverables/pipeline_flowchart.html`](deliverables/pipeline_flowchart.html) in any browser. Click any node for a contextual description.
 
 **Open the QA gate** — drag the JSON onto `deliverables/spot_check.html` in any browser. No server needed.
 
