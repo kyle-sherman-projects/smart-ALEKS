@@ -420,7 +420,7 @@ const INFO = {
   raw: {
     type: "Input",
     title: "Raw District Data",
-    body: "Anonymized student assessment and usage records from a school district — the raw inputs before any ALEKS-specific formatting. Batch processing handles multiple reports (RCE T1…Tn) in parallel.",
+    body: "Anonymized student assessment and usage records from a school district — the raw inputs before any specific formatting. Batch processing handles multiple reports (RCE T1…Tn) in parallel.",
     file: null
   },
   p1: {
@@ -444,13 +444,13 @@ const INFO = {
   gemini: {
     type: "Agent 1 — Initial Extraction",
     title: "P2 + Gemini Enterprise",
-    body: "Person 2 feeds the LearnPlatform PDFs into Gemini Enterprise to extract structured metrics. Gemini Enterprise was chosen over Claude Vision because ALEKS PDFs are image-only and Claude had too many spatial drift errors on bar charts.\n\nOutput is a raw XLSX containing effect sizes, usage compliance stats, subgroup findings, and effect size type (Pearson's r for ALEKS). Unverified — P2 manual review comes next.",
+    body: "Person 2 feeds the LearnPlatform PDFs into Gemini Enterprise to extract structured metrics. Gemini Enterprise was chosen over Claude Vision because LearnPlatform PDFs are image-only and Claude had too many spatial drift errors on bar charts.\n\nOutput is a raw XLSX containing effect sizes, usage compliance stats, subgroup findings, and effect size type (Pearson's r). Unverified — P2 manual review comes next.",
     file: "Extraction skill: shared/prompts/SKILL.md"
   },
   "xlsx-raw": {
     type: "Data — Unverified",
     title: "Gemini XLSX (raw)",
-    body: "The raw structured output from Gemini's extraction, delivered as an Excel workbook. Contains effect sizes (overall + subgroup findings), usage compliance stats, fidelity threshold, and effect size type (Pearson's r for ALEKS). Unverified at this stage — P2 manual review comes next.",
+    body: "The raw structured output from Gemini's extraction, delivered as an Excel workbook. Contains effect sizes (overall + subgroup findings), usage compliance stats, fidelity threshold, and effect size type (Pearson's r). Unverified at this stage — P2 manual review comes next.",
     file: null
   },
   "p2-review": {
@@ -491,8 +491,8 @@ const INFO = {
   },
   brief: {
     type: "Final Output",
-    title: "Research Brief — Google Doc",
-    body: "The client-facing deliverable for district leadership, produced as a Google Doc. Contains:\n\n• EDU tech tool evidence summary\n• Subgroup findings with effect sizes\n• Statistically significant highlights\n• Contextual questions to guide leadership discussion\n• Longitudinal comparisons where historical data supports them\n\nDelivered as a Google Doc for collaborative editing, sharing, and version history.",
+    title: "Research Brief",
+    body: "The client-facing deliverable for district leadership is produced. Contains:\n\n• EDU tech tool evidence summary\n• Subgroup findings with effect sizes\n• Statistically significant highlights\n• Contextual questions to guide leadership discussion\n• Longitudinal comparisons where historical data supports them",
     file: null
   }
 };
