@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ALEKS — Research Brief | Sample School District, 2025-26 BOY-MOY</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+/* ── Design tokens ──────────────────────────────────────────────────── */
+:root {
+  --c-bg:          #f5f4f0;
+  --c-surface:     #ffffff;
+  --c-surface-alt: #faf9f6;
+  --c-border:      rgba(0,0,0,.10);
+  --c-border-md:   rgba(0,0,0,.18);
+
+  --c-text:        #1a1a18;
+  --c-text-2:      #5a5a56;
+  --c-text-3:      #8a8a84;
+
+  --c-positive:    #1e6e3c;
+  --c-positive-bg: #e8f5ee;
+  --c-neutral:     #7a5c08;
+  --c-neutral-bg:  #fdf3d8;
+  --c-negative:    #b91c1c;
+  --c-negative-bg: #fde8e8;
+  --c-not-reported:#4b5563;
+  --c-not-reported-bg:#f3f4f6;
+
+  --c-brand:       #1d4ed8;
+  --c-brand-light: #eff3ff;
+
+  --c-essa:        #1d4ed8;
+  --c-essa-bg:     #eff3ff;
+
+  --c-accent:      #0f766e;
+  --c-accent-bg:   #f0fdfb;
+
+  --c-warn:        #b45309;
+  --c-warn-bg:     #fffbeb;
+  --c-warn-border: #fcd34d;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.05);
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", "Fira Code", Consolas, monospace;
+}
+
+/* ── Reset ────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--c-bg);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--c-text);
+  -webkit-font-smoothing: antialiased;
+}
+h1,h2,h3,h4 { margin: 0; line-height: 1.25; }
+p { margin: 0 0 .75em; }
+p:last-child { margin-bottom: 0; }
+table { border-collapse: collapse; width: 100%; }
+button { font-family: inherit; cursor: pointer; }
+a { color: var(--c-brand); }
+
+/* ── Layout ───────────────────────────────────────────────────────── */
+.page { max-width: 960px; margin: 0 auto; padding: 28px 20px 80px; }
+
+/* ── Header ───────────────────────────────────────────────────────── */
+.header-band {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  padding: 28px 32px 24px;
+  margin-bottom: 24px;
+}
+.header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.header-product-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--c-brand-light);
+  border: 1px solid #bfdbfe;
+  color: var(--c-brand);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+.header-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--c-text);
+  margin-bottom: 6px;
+}
+.header-subtitle {
+  font-size: 13px;
+  color: var(--c-text-2);
+}
+.header-meta-grid {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--c-border);
+}
+.meta-item label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--c-text-3);
+  margin-bottom: 2px;
+}
+.meta-item span {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+/* ── ESSA badge ───────────────────────────────────────────────────── */
+.essa-badge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--c-essa-bg);
+  border: 1.5px solid #93c5fd;
+  border-radius: var(--r-md);
+  padding: 12px 18px;
+  min-width: 130px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.essa-badge .essa-level {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-brand);
+  margin-bottom: 2px;
+}
+.essa-badge .essa-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-brand);
+  line-height: 1.2;
+}
+.essa-badge .essa-tier-num {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--c-brand);
+  line-height: 1;
+  margin-bottom: 0;
+}
+
+/* ── Executive summary ────────────────────────────────────────────── */
+.exec-summary {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-left: 4px solid var(--c-positive);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--c-text);
+}
+.exec-summary strong { color: var(--c-positive); }
+
+/* ── Key metrics strip ────────────────────────────────────────────── */
+.metrics-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.metric-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 18px 20px 16px;
+  text-align: center;
+}
+.metric-card .metric-value {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.metric-card .metric-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--c-text-2);
+  line-height: 1.3;
+}
+.metric-card .metric-sub {
+  font-size: 11px;
+  color: var(--c-text-3);
+  margin-top: 4px;
+}
+.metric-positive .metric-value { color: var(--c-positive); }
+.metric-brand    .metric-value { color: var(--c-brand); }
+.metric-warn     .metric-value { color: var(--c-warn); }
+.metric-neutral  .metric-value { color: var(--c-text); }
+
+/* ── Section wrapper ─────────────────────────────────────────────── */
+.section {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 24px 28px;
+  margin-bottom: 20px;
+}
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-text);
+}
+.section-subtitle {
+  font-size: 12px;
+  color: var(--c-text-3);
+}
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--c-border);
+  margin: 18px 0;
+}
+
+/* ── Effect size panel ───────────────────────────────────────────── */
+.es-panel {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.es-gauge-wrap {
+  flex-shrink: 0;
+  text-align: center;
+}
+.es-gauge {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: conic-gradient(var(--c-positive) 0deg, var(--c-positive) 72deg, #e5e7eb 72deg 360deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.es-gauge-inner {
+  width: 90px;
+  height: 90px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.es-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--c-positive);
+  line-height: 1;
+}
+.es-type {
+  font-size: 9px;
+  color: var(--c-text-3);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.es-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--c-text-2);
+  margin-top: 8px;
+}
+.es-detail {
+  flex: 1;
+  min-width: 220px;
+}
+.es-detail h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--c-positive);
+  margin-bottom: 6px;
+}
+.es-detail .ci-bar {
+  margin: 14px 0;
+}
+.ci-bar-label {
+  font-size: 11px;
+  color: var(--c-text-3);
+  margin-bottom: 4px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.ci-bar-track {
+  height: 12px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  position: relative;
+  margin-bottom: 4px;
+}
+.ci-bar-fill {
+  position: absolute;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--c-positive);
+  opacity: .7;
+  left: 42%;
+  width: 14.4%;
+}
+.ci-bar-zero {
+  position: absolute;
+  top: -3px;
+  height: 18px;
+  width: 2px;
+  background: #374151;
+  border-radius: 1px;
+  left: 42%;
+}
+.ci-bar-dot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--c-positive);
+  border: 2px solid white;
+  box-shadow: 0 0 0 2px var(--c-positive);
+  left: 49%;
+}
+.ci-bar-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--c-text-3);
+}
+.sig-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.sig-significant {
+  background: var(--c-positive-bg);
+  color: var(--c-positive);
+}
+.sig-not-significant {
+  background: var(--c-neutral-bg);
+  color: var(--c-neutral);
+}
+.sig-not-reported {
+  background: var(--c-not-reported-bg);
+  color: var(--c-not-reported);
+}
+
+/* ── Low-usage / high-impact callout ─────────────────────────────── */
+.callout-box {
+  border: 1.5px solid var(--c-warn-border);
+  background: var(--c-warn-bg);
+  border-radius: var(--r-md);
+  padding: 14px 18px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.callout-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.callout-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-warn);
+  margin-bottom: 3px;
+}
+.callout-body {
+  font-size: 13px;
+  color: var(--c-text-2);
+  line-height: 1.5;
+}
+
+/* ── Usage compliance bar ────────────────────────────────────────── */
+.compliance-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+.compliance-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-text-2);
+  min-width: 180px;
+}
+.compliance-track {
+  flex: 1;
+  height: 14px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+}
+.compliance-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width .4s ease;
+}
+.compliance-fill.met   { background: var(--c-positive); }
+.compliance-fill.unmet { background: #d1d5db; }
+.compliance-pct {
+  font-size: 12px;
+  font-weight: 700;
+  min-width: 38px;
+  text-align: right;
+}
+
+/* ── Chart containers ────────────────────────────────────────────── */
+.chart-wrap {
+  position: relative;
+  width: 100%;
+}
+.chart-wrap canvas {
+  width: 100% !important;
+}
+
+/* ── Subgroup table ──────────────────────────────────────────────── */
+.tbl-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.tbl-filter {
+  display: flex;
+  border: 1px solid var(--c-border-md);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.tbl-filter button {
+  border: 0;
+  background: transparent;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 11px;
+  color: var(--c-text-2);
+  transition: background .15s, color .15s;
+}
+.tbl-filter button.active {
+  background: var(--c-text);
+  color: #fff;
+}
+.sort-label {
+  font-size: 11px;
+  color: var(--c-text-3);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  margin-left: 8px;
+}
+.tbl-outer {
+  overflow-x: auto;
+  border-radius: var(--r-md);
+  border: 1px solid var(--c-border);
+}
+.data-table {
+  font-size: 13px;
+}
+.data-table thead th {
+  background: var(--c-surface-alt);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--c-text-2);
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--c-border);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+.data-table thead th:hover { color: var(--c-brand); }
+.data-table thead th .sort-arrow { margin-left: 4px; opacity: .4; }
+.data-table thead th.sorted .sort-arrow { opacity: 1; color: var(--c-brand); }
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--c-border);
+  vertical-align: middle;
+}
+.data-table tbody tr:hover td { background: var(--c-surface-alt); }
+.data-table tbody tr.hidden { display: none; }
+
+.dir-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.dir-positive { background: var(--c-positive-bg); color: var(--c-positive); }
+.dir-neutral  { background: var(--c-neutral-bg);  color: var(--c-neutral);  }
+.dir-negative { background: var(--c-negative-bg); color: var(--c-negative); }
+.dir-not-reported { background: var(--c-not-reported-bg); color: var(--c-not-reported); }
+
+.es-cell {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.es-positive { color: var(--c-positive); }
+.es-neutral  { color: var(--c-neutral);  }
+.es-negative { color: var(--c-negative); }
+
+.ci-text {
+  font-size: 11px;
+  color: var(--c-text-3);
+  font-family: var(--font-mono);
+}
+.n-count {
+  font-variant-numeric: tabular-nums;
+  color: var(--c-text-2);
+}
+.not-plotted {
+  font-size: 11px;
+  color: var(--c-text-3);
+  font-style: italic;
+}
+.flag-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--c-warn);
+  background: var(--c-warn-bg);
+  border: 1px solid var(--c-warn-border);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+.avg-min-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mini-bar-track {
+  height: 6px;
+  width: 60px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.mini-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+.bar-above-goal { background: var(--c-accent); }
+.bar-below-goal { background: #93c5fd; }
+.avg-min-val {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.goal-tick {
+  font-size: 10px;
+  color: var(--c-text-3);
+  white-space: nowrap;
+}
+
+/* ── Equity lens panel ───────────────────────────────────────────── */
+.equity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+.equity-card {
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  position: relative;
+}
+.equity-card-cat {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--c-text-3);
+  margin-bottom: 4px;
+}
+.equity-card-subgroup {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text);
+  margin-bottom: 8px;
+}
+.equity-card-es {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+}
+.equity-card-sig {
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+/* ── Collapsible ─────────────────────────────────────────────────── */
+.collapsible-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--c-text-2);
+  cursor: pointer;
+  text-align: left;
+  gap: 8px;
+}
+.collapsible-btn:hover { color: var(--c-text); }
+.collapsible-btn .chev {
+  font-size: 14px;
+  transition: transform .2s;
+  flex-shrink: 0;
+}
+.collapsible-btn.open .chev { transform: rotate(180deg); }
+.collapsible-body {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .3s ease;
+}
+.collapsible-body.open { max-height: 2000px; }
+
+/* ── Evidence callout ────────────────────────────────────────────── */
+.evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.evidence-item label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--c-text-3);
+  margin-bottom: 3px;
+}
+.evidence-item .ev-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text);
+}
+.evidence-item .ev-note {
+  font-size: 11px;
+  color: var(--c-text-3);
+  margin-top: 2px;
+}
+.limitation-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.limitation-list li {
+  font-size: 12px;
+  color: var(--c-text-2);
+  padding: 5px 0 5px 16px;
+  position: relative;
+  border-bottom: 1px solid var(--c-border);
+}
+.limitation-list li:last-child { border-bottom: none; }
+.limitation-list li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  color: var(--c-text-3);
+}
+
+/* ── Footer ──────────────────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--c-border);
+  padding-top: 16px;
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.footer-item label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--c-text-3);
+  margin-bottom: 2px;
+}
+.footer-item span {
+  font-size: 12px;
+  color: var(--c-text-2);
+}
+.footer-flags {
+  grid-column: 1 / -1;
+  background: var(--c-warn-bg);
+  border: 1px solid var(--c-warn-border);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--c-text-2);
+}
+.footer-flags strong { color: var(--c-warn); }
+
+/* ── Utility ─────────────────────────────────────────────────────── */
+.text-muted  { color: var(--c-text-3); }
+.text-small  { font-size: 12px; }
+.row-gap-8   { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.mt-4  { margin-top: 4px; }
+.mt-8  { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mb-4  { margin-bottom: 4px; }
+.mb-8  { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── HEADER ─────────────────────────────────────────────────────── -->
+  <div class="header-band">
+    <div class="header-top">
+      <div>
+        <div class="header-product-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          ISEA Research Brief — Edtech Evaluation
+        </div>
+        <h1 class="header-title">ALEKS: Adaptive Math Software</h1>
+        <div class="header-subtitle">
+          View Usage &amp; Outcomes — Rapid Cycle Evaluation Summary for Sample School District
+        </div>
+      </div>
+      <div class="essa-badge">
+        <div class="essa-level">ESSA Tier</div>
+        <div class="essa-tier-num">III</div>
+        <div class="essa-name">Promising<br>Evidence</div>
+      </div>
+    </div>
+    <div class="header-meta-grid">
+      <div class="meta-item"><label>District</label><span>Sample School District</span></div>
+      <div class="meta-item"><label>School</label><span>Southeast Polk Middle School</span></div>
+      <div class="meta-item"><label>Report Period</label><span>08/25/2025 – 02/20/2026 (BOY-MOY)</span></div>
+      <div class="meta-item"><label>Grade</label><span>Grade 6</span></div>
+      <div class="meta-item"><label>Outcome Measure</label><span>FastBridge aMath (MOY)</span></div>
+      <div class="meta-item"><label>Author</label><span>Amanda Cadran, PhD</span></div>
+    </div>
+  </div>
+
+  <!-- ── EXECUTIVE SUMMARY ────────────────────────────────────────── -->
+  <div class="exec-summary">
+    <strong>Grade 6 students who spent more time on ALEKS tended to score higher on the mid-year FastBridge aMath assessment</strong> — an effect size of <strong>+0.20</strong> (partial correlation, 95% CI: 0.12–0.28), which is statistically significant and consistent with ESSA Level III Promising Evidence. This positive relationship held across most student subgroups, with the strongest associations among students in the highest prior-performance tier (ES +0.32) and White students (ES +0.25). However, only <strong>27% of students met the recommended dosage</strong> of 665 minutes (≈30 min/week) over the 25-week window — a low-usage, high-impact pattern that suggests expanding access to the recommended dosage could meaningfully amplify outcomes across the student population.
+  </div>
+
+  <!-- ── KEY METRICS STRIP ─────────────────────────────────────────── -->
+  <div class="metrics-strip">
+    <div class="metric-card metric-positive">
+      <div class="metric-value">+0.20</div>
+      <div class="metric-label">Overall Effect Size</div>
+      <div class="metric-sub">Partial correlation r<br>Statistically significant</div>
+    </div>
+    <div class="metric-card metric-neutral">
+      <div class="metric-value" style="font-size:26px;">572</div>
+      <div class="metric-label">Students in Analysis</div>
+      <div class="metric-sub">Grade 6, BOY-MOY 2025-26</div>
+    </div>
+    <div class="metric-card metric-warn">
+      <div class="metric-value">27%</div>
+      <div class="metric-label">Met Recommended Dosage</div>
+      <div class="metric-sub">156 of 552 active users<br>Goal: ≥665 min over 25 weeks</div>
+    </div>
+    <div class="metric-card metric-neutral">
+      <div class="metric-value" style="font-size:26px;">486</div>
+      <div class="metric-label">Avg Minutes on System</div>
+      <div class="metric-sub">179 min below dosage goal<br>97% of students used ALEKS</div>
+    </div>
+    <div class="metric-card metric-brand">
+      <div class="metric-value" style="font-size:22px;">Level III</div>
+      <div class="metric-label">ESSA Evidence Tier</div>
+      <div class="metric-sub">Promising Evidence<br>1 RCE, partial correlation</div>
+    </div>
+  </div>
+
+  <!-- ── LOW-USAGE / HIGH-IMPACT CALLOUT ──────────────────────────── -->
+  <div class="callout-box" style="margin-bottom:20px;">
+    <div class="callout-icon">&#9888;&#65039;</div>
+    <div>
+      <div class="callout-title">Low Usage, High Impact — A Key Equity Opportunity</div>
+      <div class="callout-body">
+        Despite 97% of students logging into ALEKS at least once, only <strong>27% met the recommended dosage</strong> of 665 minutes. Yet the product shows a <strong>statistically significant positive relationship with math outcomes</strong> at this partial usage level. This pattern suggests that the product has real instructional value — and that increasing the share of students reaching dosage recommendations could substantially expand benefits, particularly for students currently using the platform below threshold. Special Education students met the dosage goal at less than half the rate of General Education students (14% vs. 30%), a gap that warrants focused attention.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── EFFECT SIZE PANEL ─────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Effectiveness Findings — Overall</div>
+      <span class="sig-badge sig-significant">&#10003; Statistically Significant</span>
+    </div>
+
+    <div class="es-panel">
+      <div class="es-gauge-wrap">
+        <div class="es-gauge">
+          <div class="es-gauge-inner">
+            <div class="es-value">+0.20</div>
+            <div class="es-type">pearson r</div>
+          </div>
+        </div>
+        <div class="es-label">Overall Effect Size</div>
+      </div>
+
+      <div class="es-detail">
+        <h3>Small-to-Moderate Positive Effect</h3>
+        <p class="text-muted text-small">
+          A partial correlation of <strong>r = +0.20</strong> means that, after accounting for school and grade level, students who used ALEKS more had higher mid-year math scores. In education research, a correlation of +0.20 is considered a meaningful, practically relevant effect.
+        </p>
+        <div class="ci-bar">
+          <div class="ci-bar-label">95% Confidence Interval (0.12, 0.28)</div>
+          <div class="ci-bar-track" style="margin-bottom:6px;">
+            <div class="ci-bar-zero" title="Zero line (no effect)"></div>
+            <div class="ci-bar-fill"></div>
+            <div class="ci-bar-dot" title="Effect size point estimate: +0.20"></div>
+          </div>
+          <div class="ci-bar-values">
+            <span>–0.50 (negative)</span>
+            <span>0 (no effect)</span>
+            <span>+0.50 (positive)</span>
+          </div>
+        </div>
+        <p class="text-small text-muted">
+          The confidence interval (0.12 to 0.28) excludes zero, confirming the result is unlikely to be due to chance. Covariates controlled: school and grade level.
+        </p>
+        <div class="row-gap-8 mt-8">
+          <span class="sig-badge sig-significant">&#10003; 95% CI excludes zero</span>
+          <span class="sig-badge" style="background:#f3f4f6;color:#374151;">n = 572 Grade 6 students</span>
+          <span class="sig-badge" style="background:#f3f4f6;color:#374151;">BOY-MOY 2025-26</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── USAGE ANALYSIS ────────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Usage Analysis</div>
+      <span class="section-subtitle">Goal: 665 minutes total (≈30 min/week over 25 weeks)</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;flex-wrap:wrap;">
+      <div>
+        <div class="text-small text-muted mb-8" style="font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:10px;">FIDELITY TO DOSAGE GOAL BY SUBGROUP</div>
+
+        <!-- Grade -->
+        <div class="compliance-row">
+          <div class="compliance-label">6th Grade (overall)</div>
+          <div class="compliance-track">
+            <div class="compliance-fill met" style="width:28.26%"></div>
+          </div>
+          <div class="compliance-pct" style="color:var(--c-warn);">28%</div>
+        </div>
+        <!-- Gender -->
+        <div class="text-small" style="color:var(--c-text-3);margin:8px 0 4px;font-weight:600;font-size:11px;">Gender</div>
+        <div class="compliance-row">
+          <div class="compliance-label">Female</div>
+          <div class="compliance-track"><div class="compliance-fill met" style="width:30.15%"></div></div>
+          <div class="compliance-pct" style="color:var(--c-warn);">30%</div>
+        </div>
+        <div class="compliance-row">
+          <div class="compliance-label">Male</div>
+          <div class="compliance-track"><div class="compliance-fill met" style="width:26.43%"></div></div>
+          <div class="compliance-pct" style="color:var(--c-warn);">26%</div>
+        </div>
+        <!-- SpEd -->
+        <div class="text-small" style="color:var(--c-text-3);margin:8px 0 4px;font-weight:600;font-size:11px;">Special Education Status</div>
+        <div class="compliance-row">
+          <div class="compliance-label">General Ed (No)</div>
+          <div class="compliance-track"><div class="compliance-fill met" style="width:30.25%"></div></div>
+          <div class="compliance-pct" style="color:var(--c-warn);">30%</div>
+        </div>
+        <div class="compliance-row">
+          <div class="compliance-label" style="color:var(--c-negative);font-weight:700;">Special Ed (Yes)</div>
+          <div class="compliance-track"><div class="compliance-fill met" style="width:13.64%;background:var(--c-negative);"></div></div>
+          <div class="compliance-pct" style="color:var(--c-negative);">14%</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="text-small text-muted mb-8" style="font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:10px;">AVERAGE MINUTES ON SYSTEM vs. GOAL (665 min)</div>
+        <div class="chart-wrap" style="height:220px;">
+          <canvas id="usageChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;">
+      <div>
+        <div class="text-small text-muted" style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;">Active Users</div>
+        <div style="font-size:20px;font-weight:800;color:var(--c-text);">97%</div>
+        <div class="text-small text-muted">of enrolled students logged in at least once</div>
+      </div>
+      <div>
+        <div class="text-small text-muted" style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;">Students Meeting Goal</div>
+        <div style="font-size:20px;font-weight:800;color:var(--c-warn);">156 of 552</div>
+        <div class="text-small text-muted">active users met the 665-minute threshold</div>
+      </div>
+      <div>
+        <div class="text-small text-muted" style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;">Avg Minutes on System</div>
+        <div style="font-size:20px;font-weight:800;color:var(--c-text);">486 min</div>
+        <div class="text-small text-muted">179 minutes below goal over 25 weeks</div>
+      </div>
+      <div>
+        <div class="text-small text-muted" style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;">Dosage Period</div>
+        <div style="font-size:20px;font-weight:800;color:var(--c-text);">25 weeks</div>
+        <div class="text-small text-muted">≈30 min/week = dosage goal</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SUBGROUP FINDINGS TABLE ───────────────────────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Subgroup Effectiveness Findings</div>
+      <span class="section-subtitle">Click column headers to sort &middot; Use filter to focus by category</span>
+    </div>
+
+    <div class="tbl-controls">
+      <div class="tbl-filter" id="catFilter">
+        <button class="active" data-cat="all" onclick="filterTable('all',this)">All</button>
+        <button data-cat="Grade Level" onclick="filterTable('Grade Level',this)">Grade</button>
+        <button data-cat="Gender" onclick="filterTable('Gender',this)">Gender</button>
+        <button data-cat="Ethnicity" onclick="filterTable('Ethnicity',this)">Ethnicity</button>
+        <button data-cat="SpEd Status" onclick="filterTable('SpEd Status',this)">SpEd Status</button>
+        <button data-cat="Prior Performance" onclick="filterTable('Prior Performance',this)">Prior Performance</button>
+        <button data-cat="School" onclick="filterTable('School',this)">School</button>
+      </div>
+    </div>
+
+    <div class="tbl-outer">
+      <table class="data-table" id="subgroupTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable(0)" data-col="0">Category <span class="sort-arrow">&#8597;</span></th>
+            <th onclick="sortTable(1)" data-col="1">Subgroup <span class="sort-arrow">&#8597;</span></th>
+            <th onclick="sortTable(2)" data-col="2">Direction <span class="sort-arrow">&#8597;</span></th>
+            <th onclick="sortTable(3)" data-col="3" title="Partial correlation r">Effect Size <span class="sort-arrow">&#8597;</span></th>
+            <th onclick="sortTable(4)" data-col="4">95% CI <span class="sort-arrow">&#8597;</span></th>
+            <th onclick="sortTable(5)" data-col="5">Significance <span class="sort-arrow">&#8597;</span></th>
+            <th onclick="sortTable(6)" data-col="6">n <span class="sort-arrow">&#8597;</span></th>
+            <th onclick="sortTable(7)" data-col="7">Avg Minutes <span class="sort-arrow">&#8597;</span></th>
+            <th>% Met Goal</th>
+          </tr>
+        </thead>
+        <tbody id="subgroupTbody">
+          <!-- Rows injected by JS -->
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-8 text-small text-muted" style="line-height:1.5;">
+      Effect size = partial correlation r. "Not plotted" indicates n &lt; 30 (below the threshold for a stable effect size estimate). Visual ambiguity flags indicate data that could not be cleanly read from charts and requires human review.
+    </div>
+  </div>
+
+  <!-- ── EFFECTIVENESS BY SUBGROUP CHART ──────────────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Effect Size Dot Plot — Subgroups with Estimates</div>
+      <span class="section-subtitle">Partial correlation r &middot; Error bars = 95% CI &middot; Green = significant positive, Yellow = not significant</span>
+    </div>
+    <div class="chart-wrap" style="height:420px;">
+      <canvas id="dotPlotChart"></canvas>
+    </div>
+  </div>
+
+  <!-- ── ETHNICITY USAGE DEEP-DIVE ────────────────────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Usage by Ethnicity — Average Minutes vs. Dosage Goal</div>
+      <span class="section-subtitle">Goal line at 665 minutes &middot; Bars above goal shown in teal</span>
+    </div>
+    <div class="chart-wrap" style="height:260px;">
+      <canvas id="ethnicityUsageChart"></canvas>
+    </div>
+    <div class="mt-8 text-small text-muted">
+      Native Hawaiian/Pacific Islander and Black or African American students averaged above the 665-minute dosage goal. Hispanic/Latino and American Indian/Alaska Native students averaged the fewest minutes. These usage differences may contribute to the variation in effect size estimates across ethnicity subgroups.
+    </div>
+  </div>
+
+  <!-- ── EVIDENCE QUALITY ──────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Evidence Quality &amp; Study Design</div>
+    </div>
+
+    <div class="evidence-grid">
+      <div class="evidence-item">
+        <label>ESSA Tier</label>
+        <div class="ev-value">Level III — Promising Evidence</div>
+        <div class="ev-note">Based on correlational design with statistical controls</div>
+      </div>
+      <div class="evidence-item">
+        <label>Analysis Method</label>
+        <div class="ev-value">Partial Correlation</div>
+        <div class="ev-note">Total time on ALEKS correlated with MOY aMath scores</div>
+      </div>
+      <div class="evidence-item">
+        <label>Effect Size Metric</label>
+        <div class="ev-value">Pearson r (partial correlation)</div>
+        <div class="ev-note">Not Cohen's d — LearnPlatform platform standard</div>
+      </div>
+      <div class="evidence-item">
+        <label>Confidence Level</label>
+        <div class="ev-value">95% (two-tailed)</div>
+        <div class="ev-note">Significance = CI excludes zero</div>
+      </div>
+      <div class="evidence-item">
+        <label>Statistical Controls</label>
+        <div class="ev-value">School, Grade Level</div>
+        <div class="ev-note">Covariates held constant in partial correlation</div>
+      </div>
+      <div class="evidence-item">
+        <label>Number of RCEs</label>
+        <div class="ev-value">1 RCE</div>
+        <div class="ev-note">Single rapid cycle evaluation, BOY-MOY window</div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+    <div style="font-size:12px;font-weight:700;color:var(--c-text-2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Study Limitations</div>
+    <ul class="limitation-list">
+      <li>Correlational design — cannot establish that ALEKS caused the score gains; other factors may explain the relationship</li>
+      <li>Only Grade 6 analyzed — insufficient data for other grade levels, limiting generalizability</li>
+      <li>Low dosage compliance (27%) means most effect size estimates reflect below-recommended usage; outcomes at full dosage may differ</li>
+      <li>Several ethnicity subgroups (Asian, Native Hawaiian/Pacific Islander, American Indian/Alaska Native) had n &lt; 30 and could not generate stable effect size estimates</li>
+      <li>Single school (Southeast Polk Middle School) — results reflect one local context</li>
+    </ul>
+
+    <div class="mt-16">
+      <div class="collapsible-btn" id="nextStepsBtn" onclick="toggleCollapsible('nextSteps','nextStepsBtn')">
+        <span>&#128204; Recommended Next Steps</span>
+        <span class="chev">&#9660;</span>
+      </div>
+      <div class="collapsible-body" id="nextSteps">
+        <div style="padding-top:14px;font-size:13px;color:var(--c-text-2);line-height:1.6;">
+          <p>Discuss results with the district team (see Appendix C of the full report). Consider the following actions:</p>
+          <ul style="padding-left:18px;line-height:1.8;">
+            <li>Review barriers to dosage compliance, particularly for Special Education students (14% met goal vs. 30% General Ed)</li>
+            <li>Implement usage monitoring and nudge systems to support students approaching — but not yet meeting — the 665-minute threshold</li>
+            <li>Consider additional EOY RCEs using updated 2025-2026 usage and outcomes data to track trajectory</li>
+            <li>Investigate why Hispanic/Latino and American Indian/Alaska Native students logged fewer average minutes and whether scheduling or access factors are contributing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DATA PROVENANCE FOOTER ────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title" style="font-size:13px;">Data Provenance &amp; QA Record</div>
+    </div>
+    <div class="footer">
+      <div class="footer-item"><label>Source Document</label><span>ALEKS 1–5.pdf (Full Report, Sample School District)</span></div>
+      <div class="footer-item"><label>Extraction Model</label><span>claude-opus-4-8</span></div>
+      <div class="footer-item"><label>Extraction Date</label><span>2026-06-23</span></div>
+      <div class="footer-item"><label>Schema Version</label><span>rce_schema.py v0.1</span></div>
+      <div class="footer-item"><label>Artifact Generated</label><span>2026-06-25</span></div>
+      <div class="footer-item"><label>QA Reviewer</label><span>Amanda Cadran, PhD (pending sign-off)</span></div>
+      <div class="footer-item"><label>Report Author</label><span>Amanda Cadran, PhD</span></div>
+      <div class="footer-item"><label>Pipeline Phase</label><span>Phase 4 — Synthesis / Artifact MVP</span></div>
+      <div class="footer-flags">
+        <strong>Outstanding Ambiguity Flags:</strong> One ethnicity subgroup row ("Asian / Native Hawaiian or Other Pacific Islander / Two or more races") in the original worked-example JSON was flagged as Visual Ambiguity — leader lines on the effect-size dot plot were unresolved. This brief uses Amanda's reconciled subgroup table (subgroup-table-with-effect-size-details.json) which separates these groups and marks small-n subgroups as "Not Plotted" rather than guessing. Effect size values for "Not Plotted" subgroups are omitted from all charts and tables.
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .page -->
+
+<script>
+/* ── DATA ─────────────────────────────────────────────────────────────────────
+   All values sourced from verified JSON files (aleks_worked_example.json,
+   subgroup-table-with-effect-size-details.json, average-usage-by-subgroup.json,
+   percent-meeting-fidelity-subrgroup.json). See provenance footer above.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+const SUBGROUP_DATA = [
+  {
+    cat: "Grade Level",
+    subgroup: "6th Grade",
+    direction: "positive",
+    es: 0.20,
+    ci: "(0.12, 0.28)",
+    ciLow: 0.12, ciHigh: 0.28,
+    sig: "significant",
+    n: 572,
+    avgMin: 486,
+    metGoalPct: 28.26,
+    sortEs: 0.20
+  },
+  {
+    cat: "Gender",
+    subgroup: "Male",
+    direction: "positive",
+    es: 0.25,
+    ci: "(0.14, 0.36)",
+    ciLow: 0.14, ciHigh: 0.36,
+    sig: "significant",
+    n: 290,
+    avgMin: 471,
+    metGoalPct: 26.43,
+    sortEs: 0.25
+  },
+  {
+    cat: "Gender",
+    subgroup: "Female",
+    direction: "positive",
+    es: 0.14,
+    ci: "(0.02, 0.26)",
+    ciLow: 0.02, ciHigh: 0.26,
+    sig: "significant",
+    n: 282,
+    avgMin: 502,
+    metGoalPct: 30.15,
+    sortEs: 0.14
+  },
+  {
+    cat: "Ethnicity",
+    subgroup: "Hispanic/Latino",
+    direction: "neutral",
+    es: 0.19,
+    ci: "(-0.07, 0.42)",
+    ciLow: -0.07, ciHigh: 0.42,
+    sig: "not_significant",
+    n: 64,
+    avgMin: 440,
+    metGoalPct: 26.23,
+    sortEs: 0.19
+  },
+  {
+    cat: "Ethnicity",
+    subgroup: "American Indian or Alaska Native",
+    direction: "not_plotted",
+    es: null,
+    ci: "Not Plotted",
+    ciLow: null, ciHigh: null,
+    sig: "not_plotted",
+    n: null,
+    avgMin: 453,
+    metGoalPct: 50.0,
+    sortEs: null,
+    note: "n < 30 — below threshold for stable effect size estimate"
+  },
+  {
+    cat: "Ethnicity",
+    subgroup: "Asian",
+    direction: "not_plotted",
+    es: null,
+    ci: "Not Plotted",
+    ciLow: null, ciHigh: null,
+    sig: "not_plotted",
+    n: null,
+    avgMin: 585,
+    metGoalPct: 42.86,
+    sortEs: null,
+    note: "n < 30 — below threshold for stable effect size estimate"
+  },
+  {
+    cat: "Ethnicity",
+    subgroup: "Black or African American",
+    direction: "neutral",
+    es: 0.12,
+    ci: "(-0.13, 0.36)",
+    ciLow: -0.13, ciHigh: 0.36,
+    sig: "not_significant",
+    n: 73,
+    avgMin: 690,
+    metGoalPct: 26.15,
+    sortEs: 0.12
+  },
+  {
+    cat: "Ethnicity",
+    subgroup: "Native Hawaiian/Pacific Islander",
+    direction: "not_plotted",
+    es: null,
+    ci: "Not Plotted",
+    ciLow: null, ciHigh: null,
+    sig: "not_plotted",
+    n: null,
+    avgMin: 740,
+    metGoalPct: 50.0,
+    sortEs: null,
+    note: "n < 30 — below threshold for stable effect size estimate"
+  },
+  {
+    cat: "Ethnicity",
+    subgroup: "White",
+    direction: "positive",
+    es: 0.25,
+    ci: "(0.15, 0.34)",
+    ciLow: 0.15, ciHigh: 0.34,
+    sig: "significant",
+    n: 374,
+    avgMin: 491,
+    metGoalPct: 27.52,
+    sortEs: 0.25
+  },
+  {
+    cat: "Ethnicity",
+    subgroup: "Two or More Races",
+    direction: "positive",
+    es: 0.33,
+    ci: "(0.02, 0.59)",
+    ciLow: 0.02, ciHigh: 0.59,
+    sig: "significant",
+    n: 41,
+    avgMin: 494,
+    metGoalPct: 33.33,
+    sortEs: 0.33
+  },
+  {
+    cat: "School",
+    subgroup: "Southeast Polk Middle School",
+    direction: "positive",
+    es: 0.20,
+    ci: "(0.12, 0.28)",
+    ciLow: 0.12, ciHigh: 0.28,
+    sig: "significant",
+    n: 572,
+    avgMin: 486,
+    metGoalPct: 28.26,
+    sortEs: 0.20
+  },
+  {
+    cat: "SpEd Status",
+    subgroup: "No (General Ed)",
+    direction: "positive",
+    es: 0.21,
+    ci: "(0.12, 0.30)",
+    ciLow: 0.12, ciHigh: 0.30,
+    sig: "significant",
+    n: 501,
+    avgMin: 507,
+    metGoalPct: 30.25,
+    sortEs: 0.21
+  },
+  {
+    cat: "SpEd Status",
+    subgroup: "Yes (Special Ed)",
+    direction: "neutral",
+    es: 0.00,
+    ci: "(-0.25, 0.25)",
+    ciLow: -0.25, ciHigh: 0.25,
+    sig: "not_significant",
+    n: 71,
+    avgMin: 332,
+    metGoalPct: 13.64,
+    sortEs: 0.00
+  },
+  {
+    cat: "Prior Performance",
+    subgroup: "Group 1 (Lowest)",
+    direction: "positive",
+    es: 0.29,
+    ci: "(0.11, 0.46)",
+    ciLow: 0.11, ciHigh: 0.46,
+    sig: "significant",
+    n: 113,
+    avgMin: null,
+    metGoalPct: null,
+    sortEs: 0.29
+  },
+  {
+    cat: "Prior Performance",
+    subgroup: "Group 2",
+    direction: "positive",
+    es: 0.32,
+    ci: "(0.14, 0.48)",
+    ciLow: 0.14, ciHigh: 0.48,
+    sig: "significant",
+    n: 113,
+    avgMin: null,
+    metGoalPct: null,
+    sortEs: 0.32
+  },
+  {
+    cat: "Prior Performance",
+    subgroup: "Group 3",
+    direction: "neutral",
+    es: 0.07,
+    ci: "(-0.12, 0.25)",
+    ciLow: -0.12, ciHigh: 0.25,
+    sig: "not_significant",
+    n: 113,
+    avgMin: null,
+    metGoalPct: null,
+    sortEs: 0.07
+  },
+  {
+    cat: "Prior Performance",
+    subgroup: "Group 4",
+    direction: "neutral",
+    es: 0.15,
+    ci: "(-0.04, 0.33)",
+    ciLow: -0.04, ciHigh: 0.33,
+    sig: "not_significant",
+    n: 113,
+    avgMin: null,
+    metGoalPct: null,
+    sortEs: 0.15
+  },
+  {
+    cat: "Prior Performance",
+    subgroup: "Group 5 (Highest)",
+    direction: "negative",
+    es: -0.13,
+    ci: "(-0.30, 0.06)",
+    ciLow: -0.30, ciHigh: 0.06,
+    sig: "not_significant",
+    n: 113,
+    avgMin: null,
+    metGoalPct: null,
+    sortEs: -0.13
+  }
+];
+
+/* ── TABLE ─────────────────────────────────────────────────────────────── */
+let currentFilter = "all";
+let sortCol = null;
+let sortAsc = true;
+
+function dirPill(dir) {
+  if (dir === "positive")     return '<span class="dir-pill dir-positive">&#9679; Positive</span>';
+  if (dir === "neutral")      return '<span class="dir-pill dir-neutral">&#9679; Neutral</span>';
+  if (dir === "negative")     return '<span class="dir-pill dir-negative">&#9679; Negative</span>';
+  if (dir === "not_plotted")  return '<span class="dir-pill dir-not-reported">&#9675; Not Plotted</span>';
+  return '<span class="dir-pill dir-not-reported">&#8212;</span>';
+}
+
+function sigLabel(sig) {
+  if (sig === "significant")     return '<span class="sig-badge sig-significant" style="font-size:11px;">&#10003; Significant</span>';
+  if (sig === "not_significant") return '<span class="sig-badge sig-not-significant" style="font-size:11px;">&#9679; Not Significant</span>';
+  if (sig === "not_plotted")     return '<span class="not-plotted">n &lt; 30</span>';
+  return '<span class="not-plotted">—</span>';
+}
+
+function esDisplay(row) {
+  if (row.es === null) return '<span class="not-plotted">Not Plotted</span>';
+  const cls = row.direction === "positive" ? "es-positive" : row.direction === "negative" ? "es-negative" : "es-neutral";
+  const sign = row.es > 0 ? "+" : "";
+  return `<span class="es-cell ${cls}">${sign}${row.es.toFixed(2)}</span>`;
+}
+
+function avgMinDisplay(row) {
+  if (row.avgMin === null) return '<span class="not-plotted">—</span>';
+  const GOAL = 665;
+  const pct = Math.min(100, (row.avgMin / GOAL) * 100);
+  const cls = row.avgMin >= GOAL ? "bar-above-goal" : "bar-below-goal";
+  const tickMark = row.avgMin >= GOAL ? ' <span style="color:var(--c-accent);font-weight:700;font-size:11px;">&#10003;</span>' : '';
+  return `<div class="avg-min-bar">
+    <div class="mini-bar-track"><div class="mini-bar-fill ${cls}" style="width:${pct}%"></div></div>
+    <span class="avg-min-val">${row.avgMin}${tickMark}</span>
+  </div>`;
+}
+
+function metGoalDisplay(row) {
+  if (row.metGoalPct === null) return '<span class="not-plotted">—</span>';
+  const color = row.metGoalPct >= 30 ? "var(--c-positive)" : "var(--c-warn)";
+  return `<span style="font-weight:700;font-variant-numeric:tabular-nums;color:${color};">${row.metGoalPct.toFixed(1)}%</span>`;
+}
+
+function renderTable() {
+  const tbody = document.getElementById("subgroupTbody");
+  let rows = [...SUBGROUP_DATA];
+
+  if (currentFilter !== "all") {
+    rows = rows.filter(r => r.cat === currentFilter);
+  }
+
+  if (sortCol !== null) {
+    rows.sort((a, b) => {
+      let va, vb;
+      switch(sortCol) {
+        case 0: va = a.cat; vb = b.cat; break;
+        case 1: va = a.subgroup; vb = b.subgroup; break;
+        case 2: va = a.direction; vb = b.direction; break;
+        case 3: va = a.sortEs !== null ? a.sortEs : -999; vb = b.sortEs !== null ? b.sortEs : -999; break;
+        case 4: va = a.ci; vb = b.ci; break;
+        case 5: va = a.sig; vb = b.sig; break;
+        case 6: va = a.n !== null ? a.n : -1; vb = b.n !== null ? b.n : -1; break;
+        case 7: va = a.avgMin !== null ? a.avgMin : -1; vb = b.avgMin !== null ? b.avgMin : -1; break;
+        default: va = ""; vb = "";
+      }
+      if (typeof va === "string") va = va.toLowerCase();
+      if (typeof vb === "string") vb = vb.toLowerCase();
+      if (va < vb) return sortAsc ? -1 : 1;
+      if (va > vb) return sortAsc ? 1 : -1;
+      return 0;
+    });
+  }
+
+  tbody.innerHTML = rows.map(r => {
+    const noteHtml = r.note ? `<div style="font-size:10px;color:var(--c-warn);margin-top:3px;">${r.note}</div>` : "";
+    return `<tr>
+      <td><span style="font-size:11px;font-weight:600;color:var(--c-text-3);text-transform:uppercase;letter-spacing:.04em;">${r.cat}</span></td>
+      <td style="font-weight:600;">${r.subgroup}${noteHtml}</td>
+      <td>${dirPill(r.direction)}</td>
+      <td>${esDisplay(r)}</td>
+      <td><span class="ci-text">${r.ci}</span></td>
+      <td>${sigLabel(r.sig)}</td>
+      <td class="n-count">${r.n !== null ? r.n.toLocaleString() : '<span class="not-plotted">—</span>'}</td>
+      <td>${avgMinDisplay(r)}</td>
+      <td>${metGoalDisplay(r)}</td>
+    </tr>`;
+  }).join("");
+}
+
+function filterTable(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll("#catFilter button").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderTable();
+}
+
+function sortTable(col) {
+  if (sortCol === col) {
+    sortAsc = !sortAsc;
+  } else {
+    sortCol = col;
+    sortAsc = true;
+  }
+  document.querySelectorAll(".data-table thead th").forEach((th, i) => {
+    th.classList.toggle("sorted", i === col);
+    const arrow = th.querySelector(".sort-arrow");
+    if (arrow) arrow.textContent = i === col ? (sortAsc ? " ▲" : " ▼") : " ⇅";
+  });
+  renderTable();
+}
+
+renderTable();
+
+/* ── COLLAPSIBLE ───────────────────────────────────────────────────────── */
+function toggleCollapsible(bodyId, btnId) {
+  const body = document.getElementById(bodyId);
+  const btn  = document.getElementById(btnId);
+  body.classList.toggle("open");
+  btn.classList.toggle("open");
+}
+
+/* ── CHARTS ────────────────────────────────────────────────────────────── */
+
+// Chart 1: Usage by ethnicity (bar chart)
+const ETHNICITY_USAGE = [
+  { label: "NH/Pacific Islander", min: 740 },
+  { label: "Black/African Amer.", min: 690 },
+  { label: "Asian",               min: 585 },
+  { label: "Two or More Races",   min: 494 },
+  { label: "White",               min: 491 },
+  { label: "6th Grade Avg",       min: 486 },
+  { label: "Amer. Indian/AK Nat.",min: 453 },
+  { label: "Hispanic/Latino",     min: 440 },
+];
+
+const GOAL = 665;
+const ethnicityColors = ETHNICITY_USAGE.map(d =>
+  d.min >= GOAL ? "rgba(15,118,110,0.8)" : "rgba(96,165,250,0.75)"
+);
+
+new Chart(document.getElementById("ethnicityUsageChart"), {
+  type: "bar",
+  data: {
+    labels: ETHNICITY_USAGE.map(d => d.label),
+    datasets: [{
+      label: "Avg Minutes on System",
+      data: ETHNICITY_USAGE.map(d => d.min),
+      backgroundColor: ethnicityColors,
+      borderRadius: 5,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: "y",
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.parsed.x} minutes` + (ctx.parsed.x >= GOAL ? " ✓ above goal" : " (goal: 665 min)")
+        }
+      },
+      annotation: undefined
+    },
+    scales: {
+      x: {
+        min: 0,
+        max: 800,
+        title: { display: true, text: "Average minutes on ALEKS (BOY-MOY 2025-26)", font: { size: 11 }, color: "#6b7280" },
+        grid: { color: "rgba(0,0,0,.06)" },
+        ticks: { font: { size: 11 } }
+      },
+      y: {
+        ticks: { font: { size: 12 }, color: "#374151" },
+        grid: { display: false }
+      }
+    }
+  },
+  plugins: [{
+    id: "goalLine",
+    afterDatasetsDraw(chart) {
+      const { ctx, chartArea: { top, bottom }, scales: { x } } = chart;
+      const xPos = x.getPixelForValue(GOAL);
+      ctx.save();
+      ctx.beginPath();
+      ctx.setLineDash([5, 4]);
+      ctx.strokeStyle = "#b45309";
+      ctx.lineWidth = 2;
+      ctx.moveTo(xPos, top);
+      ctx.lineTo(xPos, bottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = "#b45309";
+      ctx.font = "bold 10px system-ui";
+      ctx.fillText("Goal: 665 min", xPos + 4, top + 14);
+      ctx.restore();
+    }
+  }]
+});
+
+// Chart 2: Usage overview bar chart (by subgroup category: Gender, SpEd)
+const USAGE_CAT_DATA = {
+  labels: ["Female", "Male", "Gen. Ed (No)", "Spec. Ed (Yes)"],
+  minutes: [502, 471, 507, 332],
+  colors: ["rgba(96,165,250,.75)", "rgba(96,165,250,.75)", "rgba(96,165,250,.75)", "rgba(239,68,68,.65)"]
+};
+
+new Chart(document.getElementById("usageChart"), {
+  type: "bar",
+  data: {
+    labels: USAGE_CAT_DATA.labels,
+    datasets: [{
+      label: "Avg Minutes",
+      data: USAGE_CAT_DATA.minutes,
+      backgroundColor: USAGE_CAT_DATA.colors,
+      borderRadius: 5,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.parsed.y} minutes` + (ctx.parsed.y >= GOAL ? " ✓" : " (goal: 665)")
+        }
+      }
+    },
+    scales: {
+      y: {
+        min: 0, max: 750,
+        title: { display: true, text: "Avg minutes", font: { size: 10 }, color: "#6b7280" },
+        grid: { color: "rgba(0,0,0,.06)" },
+        ticks: { font: { size: 10 } }
+      },
+      x: {
+        ticks: { font: { size: 11 }, color: "#374151" },
+        grid: { display: false }
+      }
+    }
+  },
+  plugins: [{
+    id: "goalLineSmall",
+    afterDatasetsDraw(chart) {
+      const { ctx, chartArea: { left, right }, scales: { y } } = chart;
+      const yPos = y.getPixelForValue(GOAL);
+      ctx.save();
+      ctx.beginPath();
+      ctx.setLineDash([5, 4]);
+      ctx.strokeStyle = "#b45309";
+      ctx.lineWidth = 1.5;
+      ctx.moveTo(left, yPos);
+      ctx.lineTo(right, yPos);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = "#b45309";
+      ctx.font = "bold 9px system-ui";
+      ctx.fillText("Goal: 665 min", left + 4, yPos - 4);
+      ctx.restore();
+    }
+  }]
+});
+
+// Chart 3: Effect size dot plot
+// Only include subgroups with actual effect size estimates (exclude "not_plotted")
+const DOT_PLOT_DATA = SUBGROUP_DATA.filter(d => d.es !== null);
+
+// Build display labels with category prefix for clarity
+const dotLabels = DOT_PLOT_DATA.map(d => `${d.cat}: ${d.subgroup}`);
+const dotValues = DOT_PLOT_DATA.map(d => d.es);
+const dotColors = DOT_PLOT_DATA.map(d => {
+  if (d.direction === "positive" && d.sig === "significant") return "rgba(30,110,60,0.85)";
+  if (d.direction === "positive" && d.sig === "not_significant") return "rgba(202,160,8,0.85)";
+  if (d.direction === "negative") return "rgba(185,28,28,0.8)";
+  return "rgba(202,160,8,0.85)";
+});
+const dotErrorLow  = DOT_PLOT_DATA.map(d => d.es - d.ciLow);   // distance from point to low
+const dotErrorHigh = DOT_PLOT_DATA.map(d => d.ciHigh - d.es);  // distance from point to high
+
+new Chart(document.getElementById("dotPlotChart"), {
+  type: "bar",
+  data: {
+    labels: dotLabels,
+    datasets: [
+      {
+        label: "Effect Size (r)",
+        data: dotValues,
+        backgroundColor: dotColors,
+        borderRadius: 3,
+        borderSkipped: false,
+        barThickness: 12,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: "y",
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const row = DOT_PLOT_DATA[ctx.dataIndex];
+            return [
+              ` Effect size: ${row.es > 0 ? "+" : ""}${row.es.toFixed(2)}`,
+              ` 95% CI: ${row.ci}`,
+              ` Significance: ${row.sig === "significant" ? "Statistically significant" : "Not significant"}`,
+              ` n = ${row.n !== null ? row.n : "—"}`
+            ];
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        min: -0.5,
+        max: 0.7,
+        title: { display: true, text: "Effect size (partial correlation r)", font: { size: 11 }, color: "#6b7280" },
+        grid: { color: "rgba(0,0,0,.06)" },
+        ticks: {
+          font: { size: 11 },
+          callback: v => v === 0 ? "0 (no effect)" : (v > 0 ? "+" + v.toFixed(1) : v.toFixed(1))
+        }
+      },
+      y: {
+        ticks: { font: { size: 11 }, color: "#374151" },
+        grid: { display: false }
+      }
+    }
+  },
+  plugins: [{
+    id: "zeroLine",
+    afterDatasetsDraw(chart) {
+      const { ctx, chartArea: { top, bottom }, scales: { x } } = chart;
+      const xPos = x.getPixelForValue(0);
+      ctx.save();
+      ctx.beginPath();
+      ctx.setLineDash([4, 3]);
+      ctx.strokeStyle = "#6b7280";
+      ctx.lineWidth = 1.5;
+      ctx.moveTo(xPos, top);
+      ctx.lineTo(xPos, bottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+    }
+  }, {
+    id: "errorBars",
+    afterDatasetsDraw(chart) {
+      const { ctx, scales: { x, y } } = chart;
+      ctx.save();
+      ctx.strokeStyle = "rgba(0,0,0,0.5)";
+      ctx.lineWidth = 1.5;
+      DOT_PLOT_DATA.forEach((row, i) => {
+        const yMeta = chart.getDatasetMeta(0).data[i];
+        if (!yMeta) return;
+        const yPos = yMeta.y;
+        const xLow  = x.getPixelForValue(row.ciLow);
+        const xHigh = x.getPixelForValue(row.ciHigh);
+        // horizontal CI line
+        ctx.beginPath();
+        ctx.moveTo(xLow, yPos);
+        ctx.lineTo(xHigh, yPos);
+        ctx.stroke();
+        // end caps
+        ctx.beginPath();
+        ctx.moveTo(xLow, yPos - 4);
+        ctx.lineTo(xLow, yPos + 4);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(xHigh, yPos - 4);
+        ctx.lineTo(xHigh, yPos + 4);
+        ctx.stroke();
+        // center dot
+        ctx.beginPath();
+        ctx.arc(x.getPixelForValue(row.es), yPos, 5, 0, Math.PI * 2);
+        ctx.fillStyle = dotColors[i];
+        ctx.fill();
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.strokeStyle = "rgba(0,0,0,0.5)";
+        ctx.lineWidth = 1.5;
+      });
+      ctx.restore();
+    }
+  }]
+});
+</script>
+</body>
+</html>
