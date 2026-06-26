@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Development Journal — smart-ALEKS</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3352;
+      --accent: #5b8dee;
+      --accent2: #a78bfa;
+      --success: #34d399;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --text: #e2e8f0;
+      --muted: #8892b0;
+      --dim: #555e7a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px 100px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 780px;
+    }
+
+    /* ── Header ── */
+    .doc-header {
+      margin-bottom: 64px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 32px;
+    }
+
+    .doc-kicker {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 14px;
+    }
+
+    .doc-title {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .doc-subtitle {
+      font-size: 0.82rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin-bottom: 22px;
+    }
+
+    .doc-intro {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 680px;
+    }
+
+    /* ── Entry ── */
+    .entry {
+      margin-bottom: 64px;
+    }
+
+    .entry-header {
+      margin-bottom: 20px;
+    }
+
+    .entry-date {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .entry-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .entry-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+    }
+
+    .meta-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 12px;
+      color: var(--muted);
+    }
+
+    .meta-pill .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .meta-pill.time   .dot { background: var(--accent); }
+    .meta-pill.compute .dot { background: var(--accent2); }
+    .meta-pill.tokens  .dot { background: var(--success); }
+    .meta-pill.team    .dot { background: var(--warning); }
+
+    /* ── Body text ── */
+    .entry-body {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .entry-body p + p {
+      margin-top: 16px;
+    }
+
+    .entry-body strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .entry-body em {
+      color: var(--accent2);
+      font-style: normal;
+    }
+
+    .entry-body code {
+      background: var(--surface2);
+      color: var(--accent2);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 0.77rem;
+    }
+
+    .entry-body .callout {
+      background: var(--surface);
+      border-left: 3px solid var(--accent);
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      margin: 20px 0;
+      color: var(--text);
+      font-size: 0.78rem;
+      line-height: 1.65;
+    }
+
+    .entry-body .callout.pivot {
+      border-left-color: var(--danger);
+    }
+
+    .entry-body .callout.decision {
+      border-left-color: var(--warning);
+    }
+
+    /* ── Divider ── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 8px 0 64px;
+    }
+
+    /* ── Totals table ── */
+    .totals-section {
+      margin-top: 16px;
+    }
+
+    .totals-section h2 {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.76rem;
+    }
+
+    th {
+      text-align: left;
+      color: var(--dim);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0 12px 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 10px 12px 10px 0;
+      color: var(--muted);
+      border-bottom: 1px solid #1e2235;
+      vertical-align: top;
+    }
+
+    td:first-child {
+      color: var(--text);
+    }
+
+    tr.total-row td {
+      color: var(--text);
+      font-weight: 600;
+      border-top: 1px solid var(--border);
+      border-bottom: none;
+      padding-top: 14px;
+    }
+
+    .footnote {
+      font-size: 0.65rem;
+      color: var(--dim);
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Document header -->
+  <div class="doc-header">
+    <div class="doc-kicker">Development Journal · June 23–25, 2026</div>
+    <div class="doc-title">Building smart-ALEKS</div>
+    <div class="doc-subtitle">Sherman × Claude · A three-day collaborative build log</div>
+    <p class="doc-intro">
+      This document narrates the full development arc of smart-ALEKS: from an empty repo to a working
+      extraction pipeline, and then — after discovering that pipeline no longer matched reality — to a
+      cleaner architecture that reflects how the work is actually done. Each entry covers one
+      development block, with estimated wall-clock time, Claude's active compute window, and
+      approximate output tokens generated. All timestamps are inferred from git commit history.
+      Sherman provided direction, domain context, and quality judgment; Claude handled code generation,
+      schema design, and documentation.
+    </p>
+  </div>
+
+  <!-- Entry 1 -->
+  <div class="entry">
+    <div class="entry-header">
+      <div class="entry-date">Day 1 · June 23, 2026 · ~2:00 – 3:30 PM</div>
+      <div class="entry-title">Repo Creation & Team Scaffold</div>
+      <div class="entry-meta">
+        <div class="meta-pill time"><span class="dot"></span> ~1.5 hr real time</div>
+        <div class="meta-pill compute"><span class="dot"></span> minimal compute</div>
+        <div class="meta-pill tokens"><span class="dot"></span> &lt;1,000 tokens</div>
+        <div class="meta-pill team"><span class="dot"></span> Sherman solo</div>
+      </div>
+    </div>
+    <div class="entry-body">
+      <p>
+        Sherman creates the repo. The first commit is a <code>.gitattributes</code> file; the second
+        lays down the project scaffold: contributor directories for Sherman, Annia, Oluwaseun, and
+        Amanda, a root README covering the project premise, and a <code>scaffold_project.sh</code>
+        that would hold the directory structure together. The README is already clear about the goal —
+        automating the synthesis of LearnPlatform Rapid Cycle Evaluation reports into a district-facing
+        research brief — but the pipeline is still notional.
+      </p>
+      <p>
+        This block is almost entirely human work: clicking through GitHub's web interface, writing the
+        first pass of the README, establishing the team structure. The <code>.DS_Store</code> files
+        appear almost immediately. They will return.
+      </p>
+    </div>
+  </div>
+
+  <!-- Entry 2 -->
+  <div class="entry">
+    <div class="entry-header">
+      <div class="entry-date">Day 1 · June 23, 2026 · ~4:45 – 6:00 PM</div>
+      <div class="entry-title">First Claude Session — Schema, Skill, and the QA Gate</div>
+      <div class="entry-meta">
+        <div class="meta-pill time"><span class="dot"></span> ~1.25 hr real time</div>
+        <div class="meta-pill compute"><span class="dot"></span> ~25 min compute</div>
+        <div class="meta-pill tokens"><span class="dot"></span> ~18,000 output tokens</div>
+        <div class="meta-pill team"><span class="dot"></span> Sherman + Claude</div>
+      </div>
+    </div>
+    <div class="entry-body">
+      <p>
+        The first real Claude session. Sherman brings the extraction problem in full: ALEKS PDFs are
+        dense chart-heavy dashboards. He knows the target variables — effect sizes, subgroup
+        breakdowns, usage compliance, ESSA evidence tiers — and he wants a Pydantic schema to validate
+        whatever comes out of the LLM, and an HTML QA gate so Amanda can review every value before it
+        reaches district leadership.
+      </p>
+      <p>
+        In a single session Claude produces <code>rce_schema.py</code> — three nested Pydantic v2
+        models: <code>RCEReport</code>, <code>UsageAnalysis</code>, and <code>SubgroupFinding</code>
+        — with CORE/EXT/META field tiers, a custom validator that parses raw effect-size strings, and
+        enum types for ESSA tier, effect direction, and statistical significance. The CORE/EXT/META
+        tier pattern is established here and holds for the rest of the project.
+      </p>
+      <p>
+        <code>SKILL.md</code> is also written: the extraction protocol, giving the LLM sequential
+        chart-reading rules to combat spatial drift on bar charts. <code>field_source_map.md</code>
+        maps every schema field to its visual location in the PDF. And a first draft of
+        <code>spot_check.html</code> arrives — a self-contained browser QA gate with confidence
+        tiering, ambiguity flags, and export. All of it lands in a staging folder:
+        <code>contributors/sherman/_RCE_Contrib/</code>.
+      </p>
+      <div class="callout">
+        <strong>Design decision locked here:</strong> the QA gate must be a self-contained HTML file
+        with no server dependency. Amanda can open it locally, drag-drop a JSON, and review without
+        installing anything. This constraint shapes every subsequent output artifact.
+      </div>
+    </div>
+  </div>
+
+  <!-- Entry 3 -->
+  <div class="entry">
+    <div class="entry-header">
+      <div class="entry-date">Day 2 · June 24, 2026 · ~9:00 – 11:54 AM</div>
+      <div class="entry-title">Architecture, CLAUDE.md, and Canonical Promotion</div>
+      <div class="entry-meta">
+        <div class="meta-pill time"><span class="dot"></span> ~3 hr real time (incl. ~1 hr lunch)</div>
+        <div class="meta-pill compute"><span class="dot"></span> ~30 min compute</div>
+        <div class="meta-pill tokens"><span class="dot"></span> ~22,000 output tokens</div>
+        <div class="meta-pill team"><span class="dot"></span> Sherman + Claude</div>
+      </div>
+    </div>
+    <div class="entry-body">
+      <p>
+        Morning of Day 2. Sherman and Claude promote the <code>_RCE_Contrib</code> staging assets to
+        their canonical locations: <code>deliverables/rce_schema.py</code>,
+        <code>shared/prompts/SKILL.md</code>, <code>shared/prompts/field_source_map.md</code>. Then a
+        new request: write the project's <code>CLAUDE.md</code> — the document that gives Claude Code
+        context about how this repo works across sessions, so it doesn't have to be re-briefed from
+        scratch.
+      </p>
+      <p>
+        <code>CLAUDE.md</code> covers all five pipeline stages, the schema overview with field tiers,
+        a glossary of domain terms (RCE, ESSA tiers, BOY/MOY/EOY, spatial drift, Pearson's r vs.
+        Hedge's g), key commands, and engineering conventions. It's written as a document that a
+        senior engineer unfamiliar with the domain should be able to read and immediately understand
+        what to build and why.
+      </p>
+      <p>
+        <code>status_report.py</code> also gets built here — a utility that reads repo state and
+        reports pipeline completeness to the terminal or to Slack via webhook. Sherman had team
+        visibility in mind: a quick script to post daily status without manual compilation.
+      </p>
+      <p>
+        The <code>.gitignore</code> gets its first real treatment; <code>.env.example</code> is
+        committed as the template for API key configuration. By late morning the repo is organized,
+        documented, and ready for real data.
+      </p>
+    </div>
+  </div>
+
+  <!-- Entry 4 -->
+  <div class="entry">
+    <div class="entry-header">
+      <div class="entry-date">Day 2 · June 24, 2026 · ~1:30 – 5:45 PM</div>
+      <div class="entry-title">The PDF Experiment, Spatial Drift, and the Pivot to Gemini XLSX</div>
+      <div class="entry-meta">
+        <div class="meta-pill time"><span class="dot"></span> ~4.25 hr real time</div>
+        <div class="meta-pill compute"><span class="dot"></span> ~50 min compute</div>
+        <div class="meta-pill tokens"><span class="dot"></span> ~35,000 output tokens</div>
+        <div class="meta-pill team"><span class="dot"></span> Sherman + Claude</div>
+      </div>
+    </div>
+    <div class="entry-body">
+      <p>
+        The afternoon of Day 2 is where the project learns something important.
+      </p>
+      <p>
+        Sherman uploads the five de-identified ALEKS PDFs. Claude builds <code>extract_rce.py</code>:
+        a script that reads each PDF page as an image and sends it to Claude Vision with the
+        <code>SKILL.md</code> extraction prompt, expecting a structured <code>RCEReport</code> JSON
+        back. It has retry logic, schema validation, and a working prompt. On paper it is the cleanest
+        possible pipeline: PDF in, validated JSON out.
+      </p>
+      <div class="callout pivot">
+        <strong>The problem:</strong> ALEKS PDFs are image-only exports — each page is an embedded
+        JPEG with no text layer. That is manageable. What is not manageable is <em>spatial drift</em>:
+        the callout labels on ALEKS bar charts are printed in a column that is visually offset from
+        the bars they label. Claude Vision reads them left-to-right and maps each label to the nearest
+        bar — which is consistently the wrong bar. Gender subgroup values swap. Ethnicity rows shift
+        by one. The extractions look plausible but are systematically wrong in a way that is hard to
+        catch without the source PDF open beside them.
+      </div>
+      <p>
+        The fix is not a better prompt. It is a different tool. Amanda, the senior researcher, had
+        already been using Gemini Enterprise for extraction in parallel and producing a verified XLSX.
+        The architecture needed to reflect that reality: Gemini extracts, P2 manually QAs, the XLSX
+        is the trusted output.
+      </p>
+      <div class="callout decision">
+        <strong>Pivot decision:</strong> abandon Claude Vision as the primary extractor.
+        <code>extract_rce.py</code> stays in the repo as a record of what was tried but is no longer
+        the path. All extraction routes through Gemini Enterprise → XLSX → human review.
+      </div>
+      <p>
+        <code>xlsx_to_rce.py</code> is built next: a converter that reads Amanda's Gemini XLSX, maps
+        17 subgroup finding rows, the overall effect size, usage compliance, and fidelity threshold,
+        and emits a Pydantic-valid <code>RCEReport</code> JSON. <code>spot_check.html</code> gets its
+        drag-drop JSON loader. <code>populate_spot_check.py</code> is added so the CLI can
+        pre-populate a review file without ever touching the QA prototype directly (a lesson in
+        accidental overwrites). <code>artifact.html</code> is scaffolded as the final output target —
+        an interactive leader brief for district decision-makers. The README is updated.
+      </p>
+      <p>
+        By 5:45 PM the MVP pipeline exists in code: XLSX in, JSON out, QA gate, HTML artifact.
+        Sherman pushes. On paper this is the finish line for Phase 3.
+      </p>
+    </div>
+  </div>
+
+  <!-- Entry 5 -->
+  <div class="entry">
+    <div class="entry-header">
+      <div class="entry-date">Day 2 · June 24, 2026 · ~7:00 – 9:30 PM</div>
+      <div class="entry-title">Team Evening — Visualizations and Mock Data</div>
+      <div class="entry-meta">
+        <div class="meta-pill time"><span class="dot"></span> ~2.5 hr real time</div>
+        <div class="meta-pill compute"><span class="dot"></span> 0 min compute</div>
+        <div class="meta-pill tokens"><span class="dot"></span> 0 tokens</div>
+        <div class="meta-pill team"><span class="dot"></span> Annia + Amanda</div>
+      </div>
+    </div>
+    <div class="entry-body">
+      <p>
+        Evening work — the team, not Claude. Annia adds two visualization scripts:
+        <code>plot_es_scatter_script_JSON.py</code> and <code>plot_usage_JSON_script.py</code>, built
+        to read JSON and produce effect-size scatter plots and usage compliance charts. Amanda
+        contributes the first mock JSON data files in <code>contributors/amanda/</code>: a table mock,
+        subgroup effect size tables, demographic tables. The team is converging on a shared JSON data
+        format. The pipeline now has contributors working in parallel for the first time.
+      </p>
+    </div>
+  </div>
+
+  <!-- Entry 6 -->
+  <div class="entry">
+    <div class="entry-header">
+      <div class="entry-date">Day 3 · June 25, 2026 · ~9:00 AM – 1:00 PM</div>
+      <div class="entry-title">Amanda's Data Uploads & Morning Prep</div>
+      <div class="entry-meta">
+        <div class="meta-pill time"><span class="dot"></span> ~4 hr real time (incl. ~1 hr lunch)</div>
+        <div class="meta-pill compute"><span class="dot"></span> 0 min compute</div>
+        <div class="meta-pill tokens"><span class="dot"></span> 0 tokens</div>
+        <div class="meta-pill team"><span class="dot"></span> Amanda + Sherman</div>
+      </div>
+    </div>
+    <div class="entry-body">
+      <p>
+        Morning of Day 3. Amanda uploads four structured JSON files extracted from her Gemini XLSX:
+        average usage by subgroup, percent meeting the fidelity threshold, student demographics, and
+        subgroup findings with full effect size detail. These are the real numbers from a real ALEKS
+        report. There is a brief commit artifact — a file uploaded with the wrong name, deleted, and
+        re-uploaded correctly — then three more upload commits in quick succession.
+      </p>
+      <p>
+        By early afternoon the repo has real data, a documented pipeline, and a working artifact
+        scaffold. The pieces are assembled. What it doesn't yet have is a way to see how they fit
+        together.
+      </p>
+    </div>
+  </div>
+
+  <!-- Entry 7 -->
+  <div class="entry">
+    <div class="entry-header">
+      <div class="entry-date">Day 3 · June 25, 2026 · ~2:00 – 2:47 PM</div>
+      <div class="entry-title">Interactive Pipeline Flowchart</div>
+      <div class="entry-meta">
+        <div class="meta-pill time"><span class="dot"></span> ~50 min real time</div>
+        <div class="meta-pill compute"><span class="dot"></span> ~18 min compute</div>
+        <div class="meta-pill tokens"><span class="dot"></span> ~12,000 output tokens</div>
+        <div class="meta-pill team"><span class="dot"></span> Sherman + Claude</div>
+      </div>
+    </div>
+    <div class="entry-body">
+      <p>
+        Sherman brings a new request: the pipeline needs a visual. Not a static diagram — an
+        interactive flowchart where you can click any node to get a full description of what it does,
+        why it exists, and where to find its code. Something that anyone on the team or in a
+        stakeholder conversation can open in a browser to understand the full system at a glance.
+      </p>
+      <p>
+        Claude builds <code>pipeline_flowchart.html</code> in one pass: a dark-themed, fully
+        self-contained HTML file with ten nodes, a vertical main flow, right-side tooltip panel that
+        slides in on click, and color-coded node types (Input, Process, Agent, Gate, Output). Each
+        node carries a type badge, title, description, and optional file reference. The spatial drift
+        problem gets its own tooltip. Gemini's role gets one. The README is updated to link to it.
+      </p>
+      <p>
+        Sherman reviews the result and adds nuance directly: he expands the XLSX QA step with a
+        decision diamond (is the XLSX correct?), adds the manual corrections branch, and extends the
+        decision tree to match the actual back-and-forth of P2's review loop. These adjustments are
+        committed by Sherman in the minutes following.
+      </p>
+    </div>
+  </div>
+
+  <!-- Entry 8 -->
+  <div class="entry">
+    <div class="entry-header">
+      <div class="entry-date">Day 3 · June 25, 2026 · ~4:35 – 5:40 PM</div>
+      <div class="entry-title">Pipeline Redesign, Cleanup, and Closing the Gap</div>
+      <div class="entry-meta">
+        <div class="meta-pill time"><span class="dot"></span> ~1.75 hr real time</div>
+        <div class="meta-pill compute"><span class="dot"></span> ~35 min compute</div>
+        <div class="meta-pill tokens"><span class="dot"></span> ~24,000 output tokens</div>
+        <div class="meta-pill team"><span class="dot"></span> Sherman + Claude</div>
+      </div>
+    </div>
+    <div class="entry-body">
+      <p>
+        This is the session that rewrites the pipeline.
+      </p>
+      <p>
+        Sherman returns with a clearer picture of how the work is actually flowing. Amanda and Agent 2
+        are not just running synthesis — they are building a <strong>Client-Specific Agent</strong>
+        per engagement, one configured with the current XLSX and prior research briefs to do
+        longitudinal contextual analysis. The output is a <strong>Google Doc</strong>, not an HTML
+        file. <code>xlsx_to_rce.py</code> and the <code>RCEReport</code> JSON intermediary never made
+        it into the live workflow. The Research Brief Agent instruction template — a full operating
+        spec for the synthesis agent, with anomaly detection patterns, output structure, evidence
+        rules, and a self-verification checklist — had been written by Sherman and was sitting in
+        <code>docs/</code> waiting to be connected to the rest.
+      </p>
+      <p>
+        The flowchart is rebuilt to match reality: an Agent 1 correction loop (P2 routes errors back
+        to Gemini for a corrected XLSX, which re-enters review), a new Client-Specific Agent node,
+        Previous Research Briefs feeding in from the left for longitudinal context, and the final
+        output relabeled as Google Doc. The tooltip descriptions are rewritten throughout.
+      </p>
+      <div class="callout">
+        <strong>The two-year problem and the thirty-minute fix:</strong> the gap between what the
+        codebase implied and what the pipeline actually was had been growing for two days of parallel
+        development. The code said "JSON → spot_check → artifact.html." The actual workflow said
+        "XLSX → Gemini → Google Doc." The flowchart made the gap visible for the first time.
+      </div>
+      <p>
+        The cleanup follows. Claude audits the full file tree — 28 tracked files, two experimental
+        branches, five PDFs committed against the gitignore rules — and presents a phased plan.
+        Sherman confirms which contributor directories to leave alone and greenlights the approach.
+        A <code>cleanup/reorganize</code> branch is created; four commits run in under two minutes
+        of wall-clock time:
+      </p>
+      <p>
+        <strong>Phase 1:</strong> untrack the PDFs and the JSON gold fixture that had been committed
+        before the gitignore rules were added. <strong>Phase 2:</strong> remove <code>spot_check.html</code>,
+        <code>artifact.html</code>, <code>rce_schema.py</code>, <code>scaffold_project.sh</code>,
+        <code>VALIDATION_SKILL.md</code>, <code>status_report.py</code>, and the empty test
+        placeholder. <strong>Phase 3:</strong> remove <code>xlsx_to_rce.py</code>,
+        <code>extract_rce.py</code>, <code>populate_spot_check.py</code>, and the entire
+        <code>_RCE_Contrib</code> staging folder from <code>contributors/sherman/</code>.
+        <strong>Phase 4:</strong> rewrite <code>CLAUDE.md</code> and <code>README.md</code> to
+        describe the pipeline that actually exists.
+      </p>
+      <p>
+        The branch merges to <code>main</code>. <code>llm-direct</code> and
+        <code>meta-analysis-full</code> — the experimental branches that had never been pushed to
+        remote — are deleted. The repo ends where the pipeline actually is.
+      </p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Totals -->
+  <div class="totals-section">
+    <h2>Session Totals</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Session</th>
+          <th>Real Time</th>
+          <th>Claude Compute</th>
+          <th>Output Tokens</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Day 1 — Schema, skill, spot_check prototype</td>
+          <td>~1.25 hr</td>
+          <td>~25 min</td>
+          <td>~18,000</td>
+        </tr>
+        <tr>
+          <td>Day 2 AM — CLAUDE.md, status_report, canonical promotion</td>
+          <td>~3 hr</td>
+          <td>~30 min</td>
+          <td>~22,000</td>
+        </tr>
+        <tr>
+          <td>Day 2 PM — PDF experiment, pivot, xlsx_to_rce, artifact</td>
+          <td>~4.25 hr</td>
+          <td>~50 min</td>
+          <td>~35,000</td>
+        </tr>
+        <tr>
+          <td>Day 3 — Pipeline flowchart (build + iterations)</td>
+          <td>~50 min</td>
+          <td>~18 min</td>
+          <td>~12,000</td>
+        </tr>
+        <tr>
+          <td>Day 3 — Redesign, cleanup, docs rewrite</td>
+          <td>~1.75 hr</td>
+          <td>~35 min</td>
+          <td>~24,000</td>
+        </tr>
+        <tr class="total-row">
+          <td>Total (Claude sessions only)</td>
+          <td>~11 hr</td>
+          <td>~2.6 hr</td>
+          <td>~111,000</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="footnote">
+      Real time includes periods of Sherman reviewing output, testing in the browser, editing directly,
+      and coordinating with other team members — not pure active prompting. Lunch breaks (~1 hr/day)
+      are included in the real-time figures for the blocks where they fall.<br><br>
+      Compute time is estimated from output token count at ~40 tokens/second generation rate, including
+      multi-turn conversation overhead. Output tokens are approximated from file sizes and conversation
+      complexity; input tokens are not separately tracked here. At Claude Sonnet pricing (~$15/1M
+      output tokens), the five Claude sessions above represent roughly <strong>$1.65 in output token
+      cost</strong> — not counting input context, which roughly triples the total. The entire build,
+      end-to-end: approximately <strong>$5–6</strong>.
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
