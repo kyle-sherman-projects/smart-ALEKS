@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ALEKS Research Brief — Slide Deck | Sample School District</title>
+<style>
+/* ───────────────────────────────────────────────────────────────────────
+   Design note: this deck deliberately commits to one visual world — a
+   dark navy presentation frame around a white brief card — matching the
+   Instructure research-brief template already established in
+   deliverables/sample_research_brief_ALEKS.html. Status colors (green /
+   gold / red / blue) are reused verbatim from that file for consistency
+   across sibling deliverables; every status color ships paired with a
+   text label or icon, never color alone.
+   ─────────────────────────────────────────────────────────────────────── */
+:root {
+  --navy-0: #0a1526;
+  --navy-1: #122744;
+  --navy-2: #1a3660;
+  --glow:   rgba(56,120,255,.22);
+
+  --c-bg:          #f5f4f0;
+  --c-surface:     #ffffff;
+  --c-surface-alt: #faf9f6;
+  --c-border:      rgba(0,0,0,.10);
+  --c-border-md:   rgba(0,0,0,.18);
+
+  --c-text:        #1a1a18;
+  --c-text-2:      #5a5a56;
+  --c-text-3:      #8a8a84;
+
+  --c-positive:    #1e6e3c;
+  --c-positive-bg: #e8f5ee;
+  --c-neutral:     #7a5c08;
+  --c-neutral-bg:  #fdf3d8;
+  --c-negative:    #b91c1c;
+  --c-negative-bg: #fde8e8;
+  --c-not-reported:#4b5563;
+  --c-not-reported-bg:#f3f4f6;
+
+  --c-brand:       #1d4ed8;
+  --c-brand-light: #eff3ff;
+
+  --c-warn:        #b45309;
+  --c-warn-bg:     #fffbeb;
+  --c-warn-border: #fcd34d;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 18px;
+
+  --shadow-card: 0 30px 60px -15px rgba(0,0,0,.45), 0 10px 25px -8px rgba(0,0,0,.35);
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", "Fira Code", Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--c-text);
+  background:
+    radial-gradient(900px 600px at 82% 88%, var(--glow), transparent 60%),
+    linear-gradient(160deg, var(--navy-1) 0%, var(--navy-0) 55%, var(--navy-0) 100%);
+  overflow: hidden;
+}
+h1,h2,h3,h4 { margin: 0; line-height: 1.25; }
+p { margin: 0 0 .7em; }
+p:last-child { margin-bottom: 0; }
+table { border-collapse: collapse; width: 100%; }
+button { font-family: inherit; cursor: pointer; }
+::selection { background: var(--c-brand); color: #fff; }
+
+/* ── Deck shell ───────────────────────────────────────────────────────── */
+.deck {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 16px 64px;
+  position: relative;
+}
+
+.slide-frame {
+  width: min(1160px, 94vw);
+  height: min(700px, 82dvh);
+  background: var(--c-surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.slide {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.slide.active { display: flex; animation: slideIn .35s ease; }
+@media (prefers-reduced-motion: reduce) { .slide.active { animation: none; } }
+@keyframes slideIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.slide-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 30px 40px 22px;
+}
+.slide-body::-webkit-scrollbar { width: 8px; }
+.slide-body::-webkit-scrollbar-thumb { background: var(--c-border-md); border-radius: 8px; }
+
+.slide-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--c-brand-light);
+  border: 1px solid #bfdbfe;
+  color: var(--c-brand);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+.slide-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--c-text);
+  margin-bottom: 4px;
+  text-wrap: balance;
+}
+.slide-subtitle {
+  font-size: 13px;
+  color: var(--c-text-2);
+  margin-bottom: 18px;
+}
+
+/* ── Deck footer (outside the card, on the navy frame) ─────────────────── */
+.deck-footer {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 max(20px, calc((100vw - 1160px) / 2 + 8px));
+  color: rgba(255,255,255,.55);
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.deck-footer .brand { color: rgba(255,255,255,.72); }
+.deck-footer .brand b { color: #fff; font-weight: 800; }
+.deck-counter { font-variant-numeric: tabular-nums; }
+
+/* ── Nav arrows ──────────────────────────────────────────────────────── */
+.nav-btn {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .15s, opacity .15s;
+  backdrop-filter: blur(6px);
+}
+.nav-btn:hover { background: rgba(255,255,255,.18); }
+.nav-btn:disabled { opacity: .25; cursor: default; }
+.nav-btn:disabled:hover { background: rgba(255,255,255,.08); }
+.nav-prev { left: 18px; }
+.nav-next { right: 18px; }
+
+.dot-rail {
+  position: fixed;
+  bottom: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 7px;
+}
+.dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.28);
+  border: none;
+  padding: 0;
+  transition: background .15s, transform .15s;
+}
+.dot.active { background: #fff; transform: scale(1.3); }
+
+/* ── Shared components (ported from the dashboard brief) ───────────────── */
+.essa-badge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--c-brand-light);
+  border: 1.5px solid #93c5fd;
+  border-radius: var(--r-md);
+  padding: 10px 16px;
+  min-width: 108px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.essa-badge .essa-level { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--c-brand); margin-bottom: 2px; }
+.essa-badge .essa-tier-num { font-size: 24px; font-weight: 800; color: var(--c-brand); line-height: 1; }
+.essa-badge .essa-name { font-size: 11px; font-weight: 600; color: var(--c-brand); line-height: 1.2; }
+
+.header-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 14px; }
+.meta-grid { display: flex; gap: 26px; flex-wrap: wrap; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--c-border); }
+.meta-item label { display: block; font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--c-text-3); margin-bottom: 2px; }
+.meta-item span { font-size: 12px; font-weight: 600; color: var(--c-text); }
+
+.exec-summary {
+  background: var(--c-surface-alt);
+  border: 1px solid var(--c-border);
+  border-left: 4px solid var(--c-positive);
+  border-radius: var(--r-md);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+.exec-summary strong { color: var(--c-positive); }
+
+.metrics-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px; }
+.metric-card { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-md); padding: 12px 10px 10px; text-align: center; }
+.metric-card .metric-value { font-size: 24px; font-weight: 800; line-height: 1; margin-bottom: 3px; font-variant-numeric: tabular-nums; }
+.metric-card .metric-label { font-size: 9.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--c-text-2); line-height: 1.3; }
+.metric-card .metric-sub { font-size: 9.5px; color: var(--c-text-3); margin-top: 3px; line-height: 1.3; }
+.metric-positive .metric-value { color: var(--c-positive); }
+.metric-brand    .metric-value { color: var(--c-brand); font-size: 17px; }
+.metric-warn     .metric-value { color: var(--c-warn); }
+.metric-neutral  .metric-value { color: var(--c-text); }
+
+.callout-box { border: 1.5px solid var(--c-warn-border); background: var(--c-warn-bg); border-radius: var(--r-md); padding: 12px 16px; display: flex; gap: 10px; align-items: flex-start; }
+.callout-icon { font-size: 18px; flex-shrink: 0; }
+.callout-title { font-size: 12.5px; font-weight: 700; color: var(--c-warn); margin-bottom: 3px; }
+.callout-body { font-size: 12.5px; color: var(--c-text-2); line-height: 1.5; }
+
+.sig-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600; padding: 4px 10px; border-radius: 999px; }
+.sig-significant { background: var(--c-positive-bg); color: var(--c-positive); }
+.sig-not-significant { background: var(--c-neutral-bg); color: var(--c-neutral); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+
+.es-gauge-wrap { text-align: center; flex-shrink: 0; }
+.es-gauge { width: 108px; height: 108px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+.es-gauge-inner { width: 76px; height: 76px; background: #fff; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.es-value { font-size: 21px; font-weight: 800; color: var(--c-positive); line-height: 1; }
+.es-type { font-size: 8.5px; color: var(--c-text-3); letter-spacing: .04em; text-transform: uppercase; margin-top: 2px; }
+.es-label { font-size: 10.5px; font-weight: 600; color: var(--c-text-2); margin-top: 8px; }
+
+.ci-bar-track { height: 11px; background: #e5e7eb; border-radius: 999px; position: relative; margin: 6px 0; }
+.ci-bar-fill { position: absolute; height: 100%; border-radius: 999px; background: var(--c-positive); opacity: .7; left: 42%; width: 14.4%; }
+.ci-bar-zero { position: absolute; top: -3px; height: 17px; width: 2px; background: #374151; border-radius: 1px; left: 42%; }
+.ci-bar-dot { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 13px; height: 13px; border-radius: 50%; background: var(--c-positive); border: 2px solid white; box-shadow: 0 0 0 2px var(--c-positive); left: 49%; }
+.ci-bar-values { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--c-text-3); }
+
+.compliance-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.compliance-label { font-size: 11.5px; font-weight: 600; color: var(--c-text-2); min-width: 150px; }
+.compliance-track { flex: 1; height: 12px; background: #e5e7eb; border-radius: 999px; position: relative; overflow: hidden; }
+.compliance-fill { height: 100%; border-radius: 999px; }
+.compliance-fill.met { background: var(--c-positive); }
+.compliance-fill.gap { background: var(--c-negative); }
+.compliance-pct { font-size: 11.5px; font-weight: 700; min-width: 34px; text-align: right; font-variant-numeric: tabular-nums; }
+
+.section-label { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--c-text-3); margin: 14px 0 8px; }
+.section-label:first-child { margin-top: 0; }
+
+.chart-wrap { position: relative; width: 100%; }
+.chart-caption { font-size: 11px; color: var(--c-text-3); margin-top: 8px; line-height: 1.5; }
+
+.data-table { font-size: 12px; }
+.data-table thead th { background: var(--c-surface-alt); font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--c-text-2); padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--c-border); white-space: nowrap; }
+.data-table tbody td { padding: 8px 10px; border-bottom: 1px solid var(--c-border); vertical-align: middle; }
+.data-table tbody tr:last-child td { border-bottom: none; }
+.tbl-outer { overflow-x: auto; border-radius: var(--r-md); border: 1px solid var(--c-border); }
+
+.dir-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+.dir-positive { background: var(--c-positive-bg); color: var(--c-positive); }
+.dir-neutral  { background: var(--c-neutral-bg);  color: var(--c-neutral);  }
+.dir-negative { background: var(--c-negative-bg); color: var(--c-negative); }
+
+.es-cell { font-weight: 700; font-variant-numeric: tabular-nums; }
+.es-positive { color: var(--c-positive); }
+.es-neutral  { color: var(--c-neutral);  }
+.es-negative { color: var(--c-negative); }
+.ci-text { font-size: 10.5px; color: var(--c-text-3); font-family: var(--font-mono); }
+
+/* ── Flag card (anomaly slides) ─────────────────────────────────────── */
+.flag-kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.flag-num { width: 30px; height: 30px; border-radius: 50%; background: var(--c-brand-light); color: var(--c-brand); font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.flag-heading { font-size: 17px; font-weight: 700; color: var(--c-text); text-wrap: balance; }
+.flag-block { margin-top: 14px; }
+.flag-block label { display: block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--c-text-3); margin-bottom: 4px; }
+.flag-block p { font-size: 13px; line-height: 1.6; color: var(--c-text-2); }
+.flag-block.question { background: var(--c-brand-light); border-radius: var(--r-md); padding: 12px 16px; }
+.flag-block.question label { color: var(--c-brand); }
+.flag-block.question p { color: #1e3a8a; }
+.stat-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0 4px; }
+.stat-chip { background: var(--c-surface-alt); border: 1px solid var(--c-border); border-radius: 999px; padding: 5px 12px; font-size: 11.5px; font-weight: 600; color: var(--c-text); font-variant-numeric: tabular-nums; }
+.stat-chip.pos { color: var(--c-positive); border-color: #bfe4cc; }
+.stat-chip.neg { color: var(--c-negative); border-color: #f3c6c6; }
+.stat-chip.warn { color: var(--c-warn); border-color: var(--c-warn-border); }
+
+/* ── Discussion agenda ──────────────────────────────────────────────── */
+.agenda-item { display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--c-border); }
+.agenda-item:last-child { border-bottom: none; }
+.agenda-rank { width: 26px; height: 26px; border-radius: 50%; background: var(--c-text); color: #fff; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.agenda-body h4 { font-size: 13.5px; font-weight: 700; margin-bottom: 3px; }
+.agenda-body p { font-size: 12.5px; color: var(--c-text-2); line-height: 1.5; }
+.agenda-tag { font-size: 10px; color: var(--c-brand); font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+
+/* ── Provenance slide ───────────────────────────────────────────────── */
+.prov-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; margin-bottom: 16px; }
+.prov-item label { display: block; font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--c-text-3); margin-bottom: 2px; }
+.prov-item span { font-size: 12px; color: var(--c-text); }
+.flag-note-list { list-style: none; padding: 0; margin: 0; }
+.flag-note-list li { font-size: 12px; color: var(--c-text-2); padding: 7px 0 7px 18px; position: relative; border-bottom: 1px solid var(--c-border); line-height: 1.5; }
+.flag-note-list li:last-child { border-bottom: none; }
+.flag-note-list li::before { content: "–"; position: absolute; left: 0; color: var(--c-text-3); }
+
+@media (max-width: 720px) {
+  .metrics-strip { grid-template-columns: repeat(2, 1fr); }
+  .two-col { grid-template-columns: 1fr; }
+  .prov-grid { grid-template-columns: 1fr; }
+  .slide-body { padding: 22px 20px 16px; }
+  .nav-btn { width: 36px; height: 36px; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+  <div class="slide-frame" id="slideFrame">
+
+    <!-- ══ SLIDE 1 — COVER / EXECUTIVE SUMMARY ══════════════════════════ -->
+    <section class="slide active">
+      <div class="slide-body">
+        <div class="header-row">
+          <div>
+            <div class="slide-eyebrow">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              Research Brief — Edtech Evaluation
+            </div>
+            <h1 class="slide-title">ALEKS: Adaptive Math Software</h1>
+            <div class="slide-subtitle">Usage &amp; outcomes — Rapid Cycle Evaluation summary for Sample School District</div>
+          </div>
+          <div class="essa-badge">
+            <div class="essa-level">ESSA tier</div>
+            <div class="essa-tier-num">III</div>
+            <div class="essa-name">Promising<br>evidence</div>
+          </div>
+        </div>
+
+        <div class="meta-grid">
+          <div class="meta-item"><label>District</label><span>Sample School District</span></div>
+          <div class="meta-item"><label>School</label><span>Southeast Polk Middle School</span></div>
+          <div class="meta-item"><label>Report period</label><span>08/25/2025 – 02/20/2026 (BOY–MOY)</span></div>
+          <div class="meta-item"><label>Grade</label><span>Grade 6</span></div>
+          <div class="meta-item"><label>Outcome measure</label><span>FastBridge aMath (MOY)</span></div>
+          <div class="meta-item"><label>Author</label><span>Amanda Cadran, PhD</span></div>
+        </div>
+
+        <div class="exec-summary">
+          <strong>Grade 6 students who spent more time on ALEKS tended to score higher</strong> on the mid-year FastBridge aMath assessment — an effect size of <strong>+0.20</strong> (partial correlation, 95% CI: 0.12–0.28), which is statistically significant and consistent with ESSA Level III Promising Evidence. The strongest associations showed up among students in the two lowest prior-performance bands and among White and multiracial students. Only <strong>27% of students met the recommended dosage</strong> of 665 minutes over the 25-week window — a low-usage, high-impact pattern that suggests expanding access to the recommended dosage could meaningfully add to outcomes district-wide.
+        </div>
+
+        <div class="metrics-strip">
+          <div class="metric-card metric-positive"><div class="metric-value">+0.20</div><div class="metric-label">Overall effect size</div><div class="metric-sub">Partial correlation r · significant</div></div>
+          <div class="metric-card metric-neutral"><div class="metric-value">572</div><div class="metric-label">Students analyzed</div><div class="metric-sub">Grade 6, BOY–MOY</div></div>
+          <div class="metric-card metric-warn"><div class="metric-value">27%</div><div class="metric-label">Met dosage goal</div><div class="metric-sub">156 of 552 active users</div></div>
+          <div class="metric-card metric-neutral"><div class="metric-value">486</div><div class="metric-label">Avg minutes used</div><div class="metric-sub">179 min below goal</div></div>
+          <div class="metric-card metric-brand"><div class="metric-value">Level III</div><div class="metric-label">ESSA tier</div><div class="metric-sub">1 RCE · partial correlation</div></div>
+        </div>
+
+        <div class="callout-box">
+          <div class="callout-icon">⚠️</div>
+          <div>
+            <div class="callout-title">Low usage, high impact — a key opportunity</div>
+            <div class="callout-body">97% of students logged into ALEKS at least once, but only 27% reached the recommended dosage. The product still shows a statistically significant relationship with math outcomes at this partial usage level. Special Education students met the dosage goal at less than half the rate of General Education students (14% vs. 30%) — see flag 2.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ SLIDE 2 — EFFECTIVENESS + USAGE ══════════════════════════════ -->
+    <section class="slide">
+      <div class="slide-body">
+        <div class="slide-eyebrow">Section 1 of 2</div>
+        <h2 class="slide-title">Effectiveness and usage, side by side.</h2>
+        <p class="slide-subtitle">The overall effect is significant, but most students haven't reached the dosage tied to it.</p>
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Effectiveness findings — overall <span class="sig-badge sig-significant" style="margin-left:6px;">✓ Significant</span></div>
+            <div style="display:flex; gap:16px; align-items:center;">
+              <div class="es-gauge-wrap">
+                <div class="es-gauge" style="background:conic-gradient(var(--c-positive) 0deg, var(--c-positive) 72deg, #e5e7eb 72deg 360deg);">
+                  <div class="es-gauge-inner"><div class="es-value">+0.20</div><div class="es-type">pearson r</div></div>
+                </div>
+                <div class="es-label">Overall effect size</div>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <p style="font-size:12px; color:var(--c-text-2); line-height:1.55;">After accounting for school and grade level, students who used ALEKS more had higher mid-year math scores. A correlation of +0.20 is a small-to-moderate, practically meaningful effect in education research.</p>
+                <div class="ci-bar-track"><div class="ci-bar-zero"></div><div class="ci-bar-fill"></div><div class="ci-bar-dot"></div></div>
+                <div class="ci-bar-values"><span>–0.50</span><span>0 (no effect)</span><span>+0.50</span></div>
+                <p style="font-size:11px; color:var(--c-text-3); margin-top:6px;">95% CI (0.12, 0.28) excludes zero · n = 572 · BOY–MOY 2025–26</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-label">Usage analysis <span style="text-transform:none; font-weight:500; color:var(--c-text-3);">— goal: 665 min</span></div>
+            <div class="compliance-row"><div class="compliance-label">6th grade (overall)</div><div class="compliance-track"><div class="compliance-fill gap" style="width:28.26%"></div></div><div class="compliance-pct" style="color:var(--c-warn);">28%</div></div>
+            <div class="compliance-row"><div class="compliance-label">Female</div><div class="compliance-track"><div class="compliance-fill gap" style="width:30.15%"></div></div><div class="compliance-pct" style="color:var(--c-warn);">30%</div></div>
+            <div class="compliance-row"><div class="compliance-label">Male</div><div class="compliance-track"><div class="compliance-fill gap" style="width:26.43%"></div></div><div class="compliance-pct" style="color:var(--c-warn);">26%</div></div>
+            <div class="compliance-row"><div class="compliance-label">General Ed (No)</div><div class="compliance-track"><div class="compliance-fill gap" style="width:30.25%"></div></div><div class="compliance-pct" style="color:var(--c-warn);">30%</div></div>
+            <div class="compliance-row"><div class="compliance-label" style="color:var(--c-negative); font-weight:700;">Special Ed (Yes)</div><div class="compliance-track"><div class="compliance-fill" style="width:13.64%; background:var(--c-negative);"></div></div><div class="compliance-pct" style="color:var(--c-negative);">14%</div></div>
+            <p style="font-size:11px; color:var(--c-text-3); margin-top:10px;">486 avg minutes on system · 97% active users · 25-week dosage period</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ SLIDE 3 — EFFECT SIZE DOT PLOT ═══════════════════════════════ -->
+    <section class="slide">
+      <div class="slide-body">
+        <div class="slide-eyebrow">Subgroup comparison</div>
+        <h2 class="slide-title">Effect size by subgroup.</h2>
+        <p class="slide-subtitle">Partial correlation r · error bars = 95% CI · green = significant positive, gold = not significant, red = negative direction.</p>
+        <div class="chart-wrap" style="height:420px;">
+          <canvas id="dotPlotChart"></canvas>
+        </div>
+        <div class="chart-caption">Subgroups with n &lt; 30 (three ethnicity groups) are excluded here — their sample sizes are too small for a stable estimate. Full table on the next slide.</div>
+      </div>
+    </section>
+
+    <!-- ══ SLIDE 4 — SUBGROUP TABLE ══════════════════════════════════════ -->
+    <section class="slide">
+      <div class="slide-body">
+        <div class="slide-eyebrow">Full detail</div>
+        <h2 class="slide-title">Subgroup effectiveness table.</h2>
+        <p class="slide-subtitle">Effect size = partial correlation r. "Not plotted" = n &lt; 30, below the threshold for a stable estimate.</p>
+        <div class="tbl-outer">
+          <table class="data-table" id="subgroupTable">
+            <thead><tr><th>Category</th><th>Subgroup</th><th>Direction</th><th>Effect size</th><th>95% CI</th><th>Significance</th><th>n</th></tr></thead>
+            <tbody id="subgroupTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ SLIDE 5 — USAGE BY ETHNICITY ═════════════════════════════════ -->
+    <section class="slide">
+      <div class="slide-body">
+        <div class="slide-eyebrow">Usage deep-dive</div>
+        <h2 class="slide-title">Usage by ethnicity, against the dosage goal.</h2>
+        <p class="slide-subtitle">Goal line at 665 minutes · bars at or above goal shown in teal.</p>
+        <div class="chart-wrap" style="height:340px;">
+          <canvas id="ethnicityChart"></canvas>
+        </div>
+        <div class="chart-caption">Native Hawaiian/Pacific Islander and Black or African American students averaged above the dosage goal. Hispanic/Latino and American Indian/Alaska Native students averaged the fewest minutes.</div>
+      </div>
+    </section>
+
+    <!-- ══ SLIDE 6 — FLAG 1: EQUITY SIGNAL ══════════════════════════════ -->
+    <section class="slide">
+      <div class="slide-body">
+        <div class="slide-eyebrow">Flagged pattern 1 of 3 — equity signal</div>
+        <div class="flag-kicker"><div class="flag-num">1</div><div class="flag-heading">The strongest gains are concentrated among the lowest-performing students.</div></div>
+
+        <div class="flag-block">
+          <label>What the data shows</label>
+          <p>The two lowest prior-performance bands recorded the strongest effect sizes in the entire dataset.</p>
+          <div class="stat-row">
+            <span class="stat-chip pos">Group 1 (lowest): r = +0.29, n = 113, significant</span>
+            <span class="stat-chip pos">Group 2: r = +0.32, n = 113, significant</span>
+            <span class="stat-chip warn">Group 5 (highest): r = -0.13, not significant</span>
+          </div>
+        </div>
+        <div class="flag-block">
+          <label>Why it stands out</label>
+          <p>This runs against a "widening the gap" story. The students who started furthest behind show the clearest, most reliable gains, while the highest performers show no measurable benefit and a small negative trend.</p>
+        </div>
+        <div class="flag-block question">
+          <label>The question it raises</label>
+          <p>Is ALEKS's adaptive difficulty especially well-matched to students in the lowest 40% of prior performance? And is the flat-to-negative trend among the highest performers a ceiling effect worth checking against content depth for that group?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ SLIDE 7 — FLAG 2: SPED COMPOUNDING GAP ═══════════════════════ -->
+    <section class="slide">
+      <div class="slide-body">
+        <div class="slide-eyebrow">Flagged pattern 2 of 3 — equity signal</div>
+        <div class="flag-kicker"><div class="flag-num">2</div><div class="flag-heading">Special Education students show both the lowest usage and no measurable effect.</div></div>
+
+        <div class="flag-block">
+          <label>What the data shows</label>
+          <p>Special Education students averaged the least time on ALEKS of any subgroup and met the dosage goal at less than half the rate of General Education peers.</p>
+          <div class="stat-row">
+            <span class="stat-chip neg">332 avg minutes (vs. 507 for Gen. Ed)</span>
+            <span class="stat-chip neg">14% met dosage goal (vs. 30%)</span>
+            <span class="stat-chip warn">r = 0.00, not significant, n = 71</span>
+          </div>
+        </div>
+        <div class="flag-block">
+          <label>Why it stands out</label>
+          <p>This is a compounding gap, not a single flag — low usage and no measurable outcome benefit appear together for the same subgroup. It isn't possible to tell from this data alone whether ALEKS doesn't work for these students or whether they simply haven't used it enough to show an effect.</p>
+        </div>
+        <div class="flag-block question">
+          <label>The question it raises</label>
+          <p>What's driving the usage gap for Special Education students — access, scheduling, task design, or something else — and would outcomes look different if usage rose to match General Education levels?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ SLIDE 8 — FLAG 3: USAGE-IMPACT PARADOX ═══════════════════════ -->
+    <section class="slide">
+      <div class="slide-body">
+        <div class="slide-eyebrow">Flagged pattern 3 of 3 — usage vs. impact</div>
+        <div class="flag-kicker"><div class="flag-num">3</div><div class="flag-heading">High usage doesn't always mean a measurable effect.</div></div>
+
+        <div class="flag-block">
+          <label>What the data shows</label>
+          <p>District-wide, the significant overall effect held even though just 28% of students met the dosage goal — a high-impact, low-usage pattern. But Black or African American students already average <strong>690 minutes</strong>, above the 665-minute goal, yet show no significant effect (r = +0.12, n = 73).</p>
+          <div class="stat-row">
+            <span class="stat-chip pos">District-wide: 28% dosage, still significant</span>
+            <span class="stat-chip warn">Black/African American: 690 min used, not significant</span>
+          </div>
+        </div>
+        <div class="flag-block">
+          <label>Why it stands out</label>
+          <p>This is the reverse of the district-wide pattern. For most students, the constraint looks like usage. For this subgroup, usage doesn't appear to be the constraint, so something else may be limiting measurable impact.</p>
+        </div>
+        <div class="flag-block question">
+          <label>The question it raises</label>
+          <p>If dosage compliance rose district-wide toward the goal, how much additional benefit might the district see — and for the subgroup already meeting that goal without a measurable gain, what else might explain the gap: content fit, pacing, or assessment alignment?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ SLIDE 9 — DISCUSSION AGENDA ═══════════════════════════════════ -->
+    <section class="slide">
+      <div class="slide-body">
+        <div class="slide-eyebrow">Next steps</div>
+        <h2 class="slide-title">Discussion agenda.</h2>
+        <p class="slide-subtitle">Ranked by how directly the district's own numbers raise each question.</p>
+
+        <div class="agenda-item">
+          <div class="agenda-rank">1</div>
+          <div class="agenda-body"><h4>Dosage compliance</h4><p>Only 28% of students met the recommended dosage, yet the overall effect is already significant. What would it take to raise usage toward the goal?</p><span class="agenda-tag">Flag 3</span></div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-rank">2</div>
+          <div class="agenda-body"><h4>Special Education access and usage</h4><p>What's contributing to the usage gap, and is it worth revisiting before drawing conclusions about whether ALEKS works for this group?</p><span class="agenda-tag">Flag 2</span></div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-rank">3</div>
+          <div class="agenda-body"><h4>What's working for the lowest-performing students</h4><p>Is there something about how these students use ALEKS worth replicating with other groups?</p><span class="agenda-tag">Flag 1</span></div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-rank">4</div>
+          <div class="agenda-body"><h4>High usage without a measurable effect</h4><p>For Black or African American students, usage isn't the constraint. What else might be?</p><span class="agenda-tag">Flag 3</span></div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-rank">5</div>
+          <div class="agenda-body"><h4>Highest-performing students trending flat to negative</h4><p>Is grade-level ALEKS content appropriately challenging for students who've already mastered the material?</p><span class="agenda-tag">Flag 1</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ SLIDE 10 — DATA PROVENANCE ════════════════════════════════════ -->
+    <section class="slide">
+      <div class="slide-body">
+        <div class="slide-eyebrow">Appendix D</div>
+        <h2 class="slide-title">Data provenance &amp; QA notes.</h2>
+
+        <div class="prov-grid">
+          <div class="prov-item"><label>Source files</label><span>subgroup-table-with-effect-size-details.json, average-usage-by-subgroup.json, percent-meeting-fidelity-subrgroup.json, student-demographic-table.json</span></div>
+          <div class="prov-item"><label>Author</label><span>Amanda Cadran, PhD</span></div>
+          <div class="prov-item"><label>Pipeline phase</label><span>Phase 4 — Synthesis / artifact MVP</span></div>
+          <div class="prov-item"><label>Data baseline</label><span>First brief for this engagement — no prior brief to compare against</span></div>
+        </div>
+
+        <div class="section-label">Flags &amp; limitations</div>
+        <ul class="flag-note-list">
+          <li><strong>Enrollment denominator not traceable.</strong> The "97% active" figure implies roughly 569 enrolled students, a number not present in any of the four source files — it likely traces to the original source PDF, which isn't in this repository.</li>
+          <li><strong>Single product, single site.</strong> This dataset covers only ALEKS at one school, so cross-product and cross-site anomaly checks don't apply here.</li>
+          <li><strong>Small-n ethnicity subgroups.</strong> American Indian/Alaska Native, Asian, and Native Hawaiian/Pacific Islander all fell below the n = 30 threshold for a stable effect-size estimate.</li>
+          <li><strong>Unrelated dataset excluded.</strong> contributors/amanda/aleks_table_mock.json (a Grades 3–5, treatment/control dataset) doesn't share a school, grade band, or study design with this brief, and was excluded rather than blended in.</li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+
+  <button class="nav-btn nav-prev" id="prevBtn" aria-label="Previous slide">‹</button>
+  <button class="nav-btn nav-next" id="nextBtn" aria-label="Next slide">›</button>
+  <div class="dot-rail" id="dotRail"></div>
+</div>
+
+<div class="deck-footer">
+  <div class="brand"><b>Instructure</b> · ISEA Research Brief</div>
+  <div class="deck-counter" id="counter">01 / 10</div>
+</div>
+
+<script>
+/* ── SUBGROUP DATA (verified against contributors/amanda/*.json) ───────── */
+const SUBGROUP_DATA = [
+  { cat: "Grade Level", subgroup: "6th Grade", direction: "positive", es: 0.20, ciLow: 0.12, ciHigh: 0.28, sig: "significant", n: 572 },
+  { cat: "Gender", subgroup: "Male", direction: "positive", es: 0.25, ciLow: 0.14, ciHigh: 0.36, sig: "significant", n: 290 },
+  { cat: "Gender", subgroup: "Female", direction: "positive", es: 0.14, ciLow: 0.02, ciHigh: 0.26, sig: "significant", n: 282 },
+  { cat: "Ethnicity", subgroup: "Hispanic/Latino", direction: "neutral", es: 0.19, ciLow: -0.07, ciHigh: 0.42, sig: "not_significant", n: 64 },
+  { cat: "Ethnicity", subgroup: "American Indian or Alaska Native", direction: "not_plotted", es: null, ciLow: null, ciHigh: null, sig: "not_plotted", n: null },
+  { cat: "Ethnicity", subgroup: "Asian", direction: "not_plotted", es: null, ciLow: null, ciHigh: null, sig: "not_plotted", n: null },
+  { cat: "Ethnicity", subgroup: "Black or African American", direction: "neutral", es: 0.12, ciLow: -0.13, ciHigh: 0.36, sig: "not_significant", n: 73 },
+  { cat: "Ethnicity", subgroup: "Native Hawaiian/Pacific Islander", direction: "not_plotted", es: null, ciLow: null, ciHigh: null, sig: "not_plotted", n: null },
+  { cat: "Ethnicity", subgroup: "White", direction: "positive", es: 0.25, ciLow: 0.15, ciHigh: 0.34, sig: "significant", n: 374 },
+  { cat: "Ethnicity", subgroup: "Two or More Races", direction: "positive", es: 0.33, ciLow: 0.02, ciHigh: 0.59, sig: "significant", n: 41 },
+  { cat: "School", subgroup: "Southeast Polk Middle School", direction: "positive", es: 0.20, ciLow: 0.12, ciHigh: 0.28, sig: "significant", n: 572 },
+  { cat: "SpEd Status", subgroup: "No (General Ed)", direction: "positive", es: 0.21, ciLow: 0.12, ciHigh: 0.30, sig: "significant", n: 501 },
+  { cat: "SpEd Status", subgroup: "Yes (Special Ed)", direction: "neutral", es: 0.00, ciLow: -0.25, ciHigh: 0.25, sig: "not_significant", n: 71 },
+  { cat: "Prior Performance", subgroup: "Group 1 (Lowest)", direction: "positive", es: 0.29, ciLow: 0.11, ciHigh: 0.46, sig: "significant", n: 113 },
+  { cat: "Prior Performance", subgroup: "Group 2", direction: "positive", es: 0.32, ciLow: 0.14, ciHigh: 0.48, sig: "significant", n: 113 },
+  { cat: "Prior Performance", subgroup: "Group 3", direction: "neutral", es: 0.07, ciLow: -0.12, ciHigh: 0.25, sig: "not_significant", n: 113 },
+  { cat: "Prior Performance", subgroup: "Group 4", direction: "neutral", es: 0.15, ciLow: -0.04, ciHigh: 0.33, sig: "not_significant", n: 113 },
+  { cat: "Prior Performance", subgroup: "Group 5 (Highest)", direction: "negative", es: -0.13, ciLow: -0.30, ciHigh: 0.06, sig: "not_significant", n: 113 },
+];
+
+const ETHNICITY_USAGE = [
+  { label: "NH/Pacific Islander", min: 740 },
+  { label: "Black/African Amer.", min: 690 },
+  { label: "Asian", min: 585 },
+  { label: "Two or More Races", min: 494 },
+  { label: "White", min: 491 },
+  { label: "6th Grade Avg", min: 486 },
+  { label: "Amer. Indian/AK Nat.", min: 453 },
+  { label: "Hispanic/Latino", min: 440 },
+];
+const DOSAGE_GOAL = 665;
+
+const COLOR = {
+  positive: "#1e6e3c", positiveBg: "#e8f5ee",
+  neutral: "#7a5c08", neutralBg: "#fdf3d8",
+  negative: "#b91c1c", negativeBg: "#fde8e8",
+  brand: "#1d4ed8",
+  ink: "#1a1a18", ink2: "#5a5a56", ink3: "#8a8a84",
+  grid: "rgba(0,0,0,.07)",
+};
+
+function statusColor(row) {
+  if (row.sig === "not_plotted") return COLOR.ink3;
+  if (row.direction === "negative") return COLOR.negative;
+  if (row.sig === "significant") return COLOR.positive;
+  return COLOR.neutral;
+}
+
+/* ── Subgroup table render ──────────────────────────────────────────── */
+function dirPill(dir) {
+  if (dir === "positive") return '<span class="dir-pill dir-positive">● Positive</span>';
+  if (dir === "neutral")  return '<span class="dir-pill dir-neutral">● Neutral</span>';
+  if (dir === "negative") return '<span class="dir-pill dir-negative">● Negative</span>';
+  return '<span class="dir-pill" style="background:#f3f4f6;color:#4b5563;">○ Not plotted</span>';
+}
+function sigLabel(sig) {
+  if (sig === "significant") return '<span class="sig-badge sig-significant">✓ Significant</span>';
+  if (sig === "not_significant") return '<span class="sig-badge sig-not-significant">● Not significant</span>';
+  return '<span style="font-size:11px;color:var(--c-text-3);font-style:italic;">n &lt; 30</span>';
+}
+function esCell(row) {
+  if (row.es === null) return '<span style="font-size:11px;color:var(--c-text-3);font-style:italic;">Not plotted</span>';
+  const cls = row.direction === "positive" ? "es-positive" : row.direction === "negative" ? "es-negative" : "es-neutral";
+  return `<span class="es-cell ${cls}">${row.es > 0 ? "+" : ""}${row.es.toFixed(2)}</span>`;
+}
+document.getElementById("subgroupTbody").innerHTML = SUBGROUP_DATA.map(r => `
+  <tr>
+    <td style="font-size:10.5px;font-weight:600;color:var(--c-text-3);text-transform:uppercase;letter-spacing:.03em;">${r.cat}</td>
+    <td style="font-weight:600;">${r.subgroup}</td>
+    <td>${dirPill(r.direction)}</td>
+    <td>${esCell(r)}</td>
+    <td><span class="ci-text">${r.ciLow !== null ? `(${r.ciLow.toFixed(2)}, ${r.ciHigh.toFixed(2)})` : "—"}</span></td>
+    <td>${sigLabel(r.sig)}</td>
+    <td style="font-variant-numeric:tabular-nums;color:var(--c-text-2);">${r.n !== null ? r.n.toLocaleString() : "—"}</td>
+  </tr>`).join("");
+
+/* ── Canvas helpers ──────────────────────────────────────────────────── */
+function fitCanvas(canvas) {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = Math.round(rect.width * dpr);
+  canvas.height = Math.round(rect.height * dpr);
+  canvas.style.width = rect.width + "px";
+  canvas.style.height = rect.height + "px";
+  const ctx = canvas.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, w: rect.width, h: rect.height };
+}
+
+function makeTooltip() {
+  const el = document.createElement("div");
+  el.style.cssText = "position:fixed;pointer-events:none;background:#1a1a18;color:#fff;font-size:11.5px;line-height:1.5;padding:7px 10px;border-radius:7px;box-shadow:0 8px 20px rgba(0,0,0,.25);opacity:0;transform:translate(-50%,-100%);transition:opacity .1s;z-index:50;white-space:nowrap;";
+  document.body.appendChild(el);
+  return el;
+}
+
+/* ── Dot plot (effect size by subgroup) ─────────────────────────────── */
+function drawDotPlot() {
+  const canvas = document.getElementById("dotPlotChart");
+  if (!canvas) return;
+  const { ctx, w, h } = fitCanvas(canvas);
+  const rows = SUBGROUP_DATA.filter(r => r.es !== null);
+  const padL = 190, padR = 24, padT = 10, padB = 30;
+  const plotW = w - padL - padR, plotH = h - padT - padB;
+  const rowH = plotH / rows.length;
+  const xMin = -0.5, xMax = 0.7;
+  const xPix = v => padL + ((v - xMin) / (xMax - xMin)) * plotW;
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.font = "11px system-ui, sans-serif";
+
+  // gridlines + x axis ticks
+  ctx.strokeStyle = COLOR.grid; ctx.lineWidth = 1;
+  const ticks = [-0.5, -0.2, 0, 0.2, 0.4, 0.6];
+  ticks.forEach(t => {
+    const x = xPix(t);
+    ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, h - padB); ctx.stroke();
+    ctx.fillStyle = COLOR.ink3;
+    ctx.textAlign = "center";
+    ctx.fillText(t === 0 ? "0 (no effect)" : (t > 0 ? "+" + t.toFixed(1) : t.toFixed(1)), x, h - padB + 16);
+  });
+  // zero reference line, emphasized
+  ctx.strokeStyle = "#6b7280"; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(xPix(0), padT); ctx.lineTo(xPix(0), h - padB); ctx.stroke();
+  ctx.setLineDash([]);
+
+  const hitboxes = [];
+  rows.forEach((row, i) => {
+    const y = padT + rowH * i + rowH / 2;
+    const color = statusColor(row);
+    // row label
+    ctx.fillStyle = COLOR.ink2;
+    ctx.textAlign = "right";
+    ctx.font = "11px system-ui, sans-serif";
+    ctx.fillText(`${row.cat}: ${row.subgroup}`, padL - 14, y + 4);
+    // CI whisker
+    const xLow = xPix(row.ciLow), xHigh = xPix(row.ciHigh), xEs = xPix(row.es);
+    ctx.strokeStyle = "rgba(0,0,0,.45)"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(xLow, y); ctx.lineTo(xHigh, y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xLow, y - 4); ctx.lineTo(xLow, y + 4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xHigh, y - 4); ctx.lineTo(xHigh, y + 4); ctx.stroke();
+    // dot (>=8px diameter)
+    ctx.beginPath(); ctx.arc(xEs, y, 5.5, 0, Math.PI * 2);
+    ctx.fillStyle = color; ctx.fill();
+    ctx.strokeStyle = "#fff"; ctx.lineWidth = 1.5; ctx.stroke();
+    hitboxes.push({ x0: xLow - 6, x1: xHigh + 6, y0: y - 8, y1: y + 8, row });
+  });
+
+  // hover tooltip
+  if (!canvas._tooltip) canvas._tooltip = makeTooltip();
+  const tip = canvas._tooltip;
+  canvas.onmousemove = (e) => {
+    const r = canvas.getBoundingClientRect();
+    const mx = e.clientX - r.left, my = e.clientY - r.top;
+    const hit = hitboxes.find(b => mx >= b.x0 && mx <= b.x1 && my >= b.y0 && my <= b.y1);
+    if (hit) {
+      const row = hit.row;
+      tip.innerHTML = `<strong>${row.cat}: ${row.subgroup}</strong><br>Effect size: ${row.es > 0 ? "+" : ""}${row.es.toFixed(2)} · 95% CI (${row.ciLow.toFixed(2)}, ${row.ciHigh.toFixed(2)})<br>n = ${row.n} · ${row.sig === "significant" ? "Statistically significant" : "Not significant"}`;
+      tip.style.left = e.clientX + "px";
+      tip.style.top = (e.clientY - 12) + "px";
+      tip.style.opacity = "1";
+      canvas.style.cursor = "pointer";
+    } else {
+      tip.style.opacity = "0";
+      canvas.style.cursor = "default";
+    }
+  };
+  canvas.onmouseleave = () => { tip.style.opacity = "0"; };
+}
+
+/* ── Ethnicity usage bar chart ───────────────────────────────────────── */
+function drawEthnicityChart() {
+  const canvas = document.getElementById("ethnicityChart");
+  if (!canvas) return;
+  const { ctx, w, h } = fitCanvas(canvas);
+  const padL = 160, padR = 60, padT = 10, padB = 30;
+  const plotW = w - padL - padR, plotH = h - padT - padB;
+  const rowH = plotH / ETHNICITY_USAGE.length;
+  const xMax = 800;
+  const xPix = v => padL + (v / xMax) * plotW;
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.strokeStyle = COLOR.grid; ctx.lineWidth = 1;
+  [0, 200, 400, 600, 800].forEach(t => {
+    const x = xPix(t);
+    ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, h - padB); ctx.stroke();
+    ctx.fillStyle = COLOR.ink3; ctx.font = "10.5px system-ui, sans-serif"; ctx.textAlign = "center";
+    ctx.fillText(t, x, h - padB + 16);
+  });
+
+  const hitboxes = [];
+  const barH = Math.min(24, rowH * 0.55);
+  ETHNICITY_USAGE.forEach((d, i) => {
+    const y = padT + rowH * i + rowH / 2;
+    const aboveGoal = d.min >= DOSAGE_GOAL;
+    ctx.fillStyle = COLOR.ink2; ctx.font = "11.5px system-ui, sans-serif"; ctx.textAlign = "right";
+    ctx.fillText(d.label, padL - 14, y + 4);
+    const x0 = xPix(0), x1 = xPix(d.min);
+    ctx.fillStyle = aboveGoal ? "rgba(15,118,110,0.85)" : "rgba(96,165,250,0.8)";
+    const r = 5;
+    ctx.beginPath();
+    ctx.moveTo(x0, y - barH / 2);
+    ctx.lineTo(x1 - r, y - barH / 2);
+    ctx.arcTo(x1, y - barH / 2, x1, y - barH / 2 + r, r);
+    ctx.lineTo(x1, y + barH / 2 - r);
+    ctx.arcTo(x1, y + barH / 2, x1 - r, y + barH / 2, r);
+    ctx.lineTo(x0, y + barH / 2);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = COLOR.ink; ctx.font = "11px system-ui, sans-serif"; ctx.textAlign = "left";
+    ctx.fillText(d.min + (aboveGoal ? " ✓" : ""), x1 + 8, y + 4);
+    hitboxes.push({ x0: x0, x1: x1 + 40, y0: y - barH / 2 - 3, y1: y + barH / 2 + 3, d, aboveGoal });
+  });
+
+  // goal line
+  const gx = xPix(DOSAGE_GOAL);
+  ctx.strokeStyle = "#b45309"; ctx.lineWidth = 2; ctx.setLineDash([5, 4]);
+  ctx.beginPath(); ctx.moveTo(gx, padT); ctx.lineTo(gx, h - padB); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = "#b45309"; ctx.font = "bold 10px system-ui, sans-serif"; ctx.textAlign = "left";
+  ctx.fillText("Goal: 665 min", gx + 4, padT + 12);
+
+  if (!canvas._tooltip) canvas._tooltip = makeTooltip();
+  const tip = canvas._tooltip;
+  canvas.onmousemove = (e) => {
+    const r = canvas.getBoundingClientRect();
+    const mx = e.clientX - r.left, my = e.clientY - r.top;
+    const hit = hitboxes.find(b => mx >= b.x0 && mx <= b.x1 && my >= b.y0 && my <= b.y1);
+    if (hit) {
+      tip.innerHTML = `<strong>${hit.d.label}</strong><br>${hit.d.min} minutes ${hit.aboveGoal ? "· above goal ✓" : "· below 665-min goal"}`;
+      tip.style.left = e.clientX + "px";
+      tip.style.top = (e.clientY - 12) + "px";
+      tip.style.opacity = "1";
+      canvas.style.cursor = "pointer";
+    } else {
+      tip.style.opacity = "0";
+      canvas.style.cursor = "default";
+    }
+  };
+  canvas.onmouseleave = () => { tip.style.opacity = "0"; };
+}
+
+/* ── Slide deck controller ──────────────────────────────────────────── */
+const slides = Array.from(document.querySelectorAll(".slide"));
+const dotRail = document.getElementById("dotRail");
+const counter = document.getElementById("counter");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+let current = 0;
+
+slides.forEach((_, i) => {
+  const dot = document.createElement("button");
+  dot.className = "dot" + (i === 0 ? " active" : "");
+  dot.setAttribute("aria-label", "Go to slide " + (i + 1));
+  dot.onclick = () => goTo(i);
+  dotRail.appendChild(dot);
+});
+const dots = Array.from(dotRail.children);
+
+function goTo(i) {
+  if (i < 0 || i >= slides.length) return;
+  slides[current].classList.remove("active");
+  dots[current].classList.remove("active");
+  current = i;
+  slides[current].classList.add("active");
+  dots[current].classList.add("active");
+  counter.textContent = String(current + 1).padStart(2, "0") + " / " + slides.length;
+  prevBtn.disabled = current === 0;
+  nextBtn.disabled = current === slides.length - 1;
+  requestAnimationFrame(() => { drawDotPlot(); drawEthnicityChart(); });
+}
+prevBtn.onclick = () => goTo(current - 1);
+nextBtn.onclick = () => goTo(current + 1);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") goTo(current + 1);
+  if (e.key === "ArrowLeft") goTo(current - 1);
+});
+window.addEventListener("resize", () => { drawDotPlot(); drawEthnicityChart(); });
+
+goTo(0);
+</script>
+</body>
+</html>
