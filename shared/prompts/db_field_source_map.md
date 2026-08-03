@@ -18,7 +18,9 @@ the reference worked example the way `SKILL.md` §6 treats the spatial-drift PDF
 5. Deriving the demographic (active-user) table
 6. Two different "n" — don't mix them up
 7. Distinguishing a real outcome analysis from a usage-only one
-8. Caveats
+8. Picking among duplicate `active` rows
+9. Multiple assessment metrics for the same product/period — check population scope first
+10. Caveats
 
 ---
 
@@ -148,7 +150,67 @@ trusting `effect_size`:
 If step 1's query returns several rows for the same district/period, prefer
 the one tagged `outcome_analysis`.
 
-## 8. Caveats
+## 8. Picking among duplicate `active` rows
+
+A single trial can have many `active` rows that share the same `use_metric`
+and `assessment_metric` — not archived, not tagged differently, genuinely
+identical-looking metadata. This isn't necessarily bad data; it's usually the
+result of someone re-running the same analysis configuration repeatedly while
+setting up a trial.
+
+**Pull `created_at`/`updated_at` and take the most recently updated row.**
+
+```sql
+SELECT ia.id, ia.use_metric, ia.assessment_metric, ia.created_at, ia.updated_at
+FROM impact_analyses ia
+JOIN tools tl ON tl.id = ia.tool_id
+LEFT JOIN organizations o ON o.id = ia.organization_id
+WHERE o.name ILIKE '%<district name>%'
+  AND tl.name ILIKE '%<tool name>%'
+ORDER BY ia.use_metric, ia.assessment_metric, ia.updated_at DESC;
+```
+
+Worked example: Bellevue School District's i-Ready × Math Time on Task ×
+SmarterBalanced had seven `active` rows (ids 8076–8082), created 5–40 minutes
+apart across about three hours on one day. That's someone iterating on the
+setup, not a scheduled refresh. The last one in the sequence (`8082`,
+by `updated_at`) is the one that reflects the final configuration — use it,
+not an arbitrary or lowest/highest id.
+
+## 9. Multiple assessment metrics for the same product/period — check population scope first
+
+A trial can run separate outcome analyses against two different assessments
+for the same product and period (e.g., a state summative test *and* the
+product's own internal diagnostic). Do **not** assume these two rows describe
+the same population just because the product and dates match — **check
+`result.grade_level` (or the school list in `cov1`) before treating them as
+comparable.**
+
+Worked example: Bellevue's i-Ready trial (2025–26) has two outcome rows for
+`"Math Time on Task"`:
+
+| | vs. iReady (internal diagnostic) | vs. SmarterBalanced (WA state test) |
+|---|---|---|
+| Population | All of K–12 (13 grade levels) | 10th grade only |
+| `students_count` | 14,081 | 1,684 in scope, but only 52 had a matched score |
+| Effect size | r = +0.095, p = 2.5×10⁻²² | r = +0.182, p = 0.335 (not significant) |
+
+These aren't two readings of one finding — SmarterBalanced is only
+administered in grade 10 in Washington, so that row is structurally confined
+to a single grade with a tiny matched sample, while the internal-diagnostic
+row covers the whole district. **When grade/population scope differs between
+two assessment-metric rows, report them as separate, differently-scoped
+findings.** Never average, blend, or present them as two columns of the same
+table — a reader would reasonably assume they're describing the same
+students, and they aren't.
+
+If you're building a brief from a case like this, lead with the row that has
+real statistical power (here, the district-wide iReady result) as the primary
+evidence, and present the narrower row as an explicitly caveated side note
+(sample size, grade restriction, and non-significance stated up front), not
+as a second opinion on the same question.
+
+## 10. Caveats
 
 - **This is real production data, not de-identified.** `organization_id` /
   `organizations.name` will be the actual district (e.g. "Southeast Polk
@@ -161,3 +223,10 @@ the one tagged `outcome_analysis`.
   path in `SKILL.md` is still the fallback.
 - **`impact_errors` is the data-quality flag column** — check it before
   trusting a row; it maps directly to the brief's Appendix D notes.
+- **`recommended_use` of `0` or blank means no dosage goal was configured,
+  not that a goal existed and was missed.** On Bellevue's i-Ready rows,
+  `target_usage: 0` makes every user with any usage trivially "meet" the
+  (nonexistent) goal — the `fidelity_group` breakdown is meaningless here.
+  Check for a real, positive `recommended_use` before reporting a usage-
+  compliance percentage; if there isn't one, report raw average usage only
+  and say plainly that no dosage goal was set for this trial.
