@@ -150,65 +150,78 @@ trusting `effect_size`:
 If step 1's query returns several rows for the same district/period, prefer
 the one tagged `outcome_analysis`.
 
-## 8. Picking among duplicate `active` rows
+## 8. Rows that look like duplicates may each be one grade — check population scope before touching anything
 
 A single trial can have many `active` rows that share the same `use_metric`
 and `assessment_metric` — not archived, not tagged differently, genuinely
-identical-looking metadata. This isn't necessarily bad data; it's usually the
-result of someone re-running the same analysis configuration repeatedly while
-setting up a trial.
+identical-looking metadata. **Do not assume these are re-run duplicates and
+pick one.** Some assessments (state summative tests especially) are only
+administered in certain grades, and the source system runs a **separate
+analysis per grade** rather than one combined model. Seven same-looking rows
+can mean seven grades, not seven attempts at the same thing.
 
-**Pull `created_at`/`updated_at` and take the most recently updated row.**
+**Check `result->'grade_level'` on each row before deciding anything:**
 
 ```sql
-SELECT ia.id, ia.use_metric, ia.assessment_metric, ia.created_at, ia.updated_at
-FROM impact_analyses ia
-JOIN tools tl ON tl.id = ia.tool_id
-LEFT JOIN organizations o ON o.id = ia.organization_id
-WHERE o.name ILIKE '%<district name>%'
-  AND tl.name ILIKE '%<tool name>%'
-ORDER BY ia.use_metric, ia.assessment_metric, ia.updated_at DESC;
+SELECT id, use_metric, assessment_metric, result->'grade_level' AS grade_level_scope
+FROM impact_analyses
+WHERE id IN (<candidate ids>);
 ```
 
-Worked example: Bellevue School District's i-Ready × Math Time on Task ×
-SmarterBalanced had seven `active` rows (ids 8076–8082), created 5–40 minutes
-apart across about three hours on one day. That's someone iterating on the
-setup, not a scheduled refresh. The last one in the sequence (`8082`,
-by `updated_at`) is the one that reflects the final configuration — use it,
-not an arbitrary or lowest/highest id.
+- **If every row covers the same grade(s):** they're genuine duplicates — pull
+  `created_at`/`updated_at` and take the most recently updated one; the rest
+  are almost always someone iterating on the trial setup, not scheduled
+  re-runs.
+- **If each row covers a different single grade:** they are not duplicates.
+  Include all of them — they collectively make up the full grade-by-grade
+  picture for that assessment, the same way `result.grade_level` inside one
+  row would if the assessment were district-wide.
+
+**Worked example:** Bellevue School District's i-Ready trial has seven
+`active` rows for `"Math Time on Task"` × `"SmarterBalanced"` (ids
+8076–8082) and seven more for `"ELA Time on Task"` × `"SmarterBalanced"`
+(ids 8083–8089). These looked like classic re-run duplicates (same
+metadata, created 5–40 minutes apart across one afternoon) — but each one
+actually scopes to a single grade: 3, 4, 5, 6, 7, 8, and 10 (never 9, 11, or
+12, because Washington State doesn't test those grades with SmarterBalanced).
+Treating these as duplicates and keeping only the latest (as an earlier
+version of this doc recommended) would have silently discarded six of the
+seven grades. Always confirmed this with someone who knows the assessment's
+administration schedule if the pattern doesn't reconcile on its own.
 
 ## 9. Multiple assessment metrics for the same product/period — check population scope first
 
 A trial can run separate outcome analyses against two different assessments
 for the same product and period (e.g., a state summative test *and* the
-product's own internal diagnostic). Do **not** assume these two rows describe
-the same population just because the product and dates match — **check
-`result.grade_level` (or the school list in `cov1`) before treating them as
-comparable.**
+product's own internal diagnostic). Do **not** assume these describe the same
+population just because the product and dates match — **check
+`result.grade_level` (or the school list in `cov1`) on every row involved,
+including every per-grade row from §8, before treating them as comparable.**
 
-Worked example: Bellevue's i-Ready trial (2025–26) has two outcome rows for
-`"Math Time on Task"`:
+Worked example: Bellevue's i-Ready trial (2025–26) evaluated two outcome
+measures for the same Math/ELA usage data:
 
-| | vs. iReady (internal diagnostic) | vs. SmarterBalanced (WA state test) |
+| | iReady (internal diagnostic) | SmarterBalanced (WA state test) |
 |---|---|---|
-| Population | All of K–12 (13 grade levels) | 10th grade only |
-| `students_count` | 14,081 | 1,684 in scope, but only 52 had a matched score |
-| Effect size | r = +0.095, p = 2.5×10⁻²² | r = +0.182, p = 0.335 (not significant) |
+| Population | All of K–12, one analysis per subject | Grades 3, 4, 5, 6, 7, 8, 10 only — one analysis **per grade** (see §8) |
+| Math effect | Significant positive in every grade K–8; fades by 9th–10th | Significant positive in grades 3, 4, 7, 8; not significant in 5, 6; inconclusive at grade 10 (only 52 of 1,684 students had a matched score) |
+| ELA effect | Significant positive only K–3rd; not significant from 4th on | Significant positive only in grades 3, 4; not significant 5th–10th |
 
-These aren't two readings of one finding — SmarterBalanced is only
-administered in grade 10 in Washington, so that row is structurally confined
-to a single grade with a tiny matched sample, while the internal-diagnostic
-row covers the whole district. **When grade/population scope differs between
-two assessment-metric rows, report them as separate, differently-scoped
-findings.** Never average, blend, or present them as two columns of the same
-table — a reader would reasonably assume they're describing the same
-students, and they aren't.
+These are not two readings of one finding, and once the full SmarterBalanced
+picture is assembled (not just the grade-10 row), the more useful conclusion
+is that **both measures agree**: effects are strongest and most reliable in
+the earliest grades and fade going into middle and high school. Grade 10's
+SmarterBalanced result needs its own caveat beyond "not significant" — its
+matched sample (52) is far smaller than every other grade's (roughly
+1,300–1,900), so it's inconclusive due to data availability, not evidence
+that the effect disappears.
 
-If you're building a brief from a case like this, lead with the row that has
-real statistical power (here, the district-wide iReady result) as the primary
-evidence, and present the narrower row as an explicitly caveated side note
-(sample size, grade restriction, and non-significance stated up front), not
-as a second opinion on the same question.
+**When building a brief from a case like this:** present each outcome
+measure's full population (not a single grade in isolation) and, if both
+measures are available for the same grade, note whether they agree. Never
+average, blend, or present two differently-scoped measures as columns of the
+same table — a reader would reasonably assume they describe the same
+students, and they may not.
 
 ## 10. Caveats
 
