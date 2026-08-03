@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>i-Ready Research Brief — Report | Bellevue School District</title>
+<style>
+:root {
+  --c-bg:          #eef0f2;
+  --c-surface:     #ffffff;
+  --c-surface-alt: #faf9f6;
+  --c-border:      rgba(0,0,0,.10);
+  --c-border-md:   rgba(0,0,0,.18);
+
+  --c-text:        #1a1a18;
+  --c-text-2:      #5a5a56;
+  --c-text-3:      #8a8a84;
+
+  --c-positive:    #1e6e3c;
+  --c-positive-bg: #e8f5ee;
+  --c-neutral:     #7a5c08;
+  --c-neutral-bg:  #fdf3d8;
+  --c-negative:    #b91c1c;
+  --c-negative-bg: #fde8e8;
+
+  --c-brand:       #1d4ed8;
+  --c-brand-light: #eff3ff;
+
+  --c-warn:        #b45309;
+  --c-warn-bg:     #fffbeb;
+  --c-warn-border: #fcd34d;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", "Fira Code", Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--c-bg);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--c-text);
+  -webkit-font-smoothing: antialiased;
+}
+h1,h2,h3,h4 { margin: 0; line-height: 1.28; }
+p { margin: 0 0 .8em; }
+p:last-child { margin-bottom: 0; }
+table { border-collapse: collapse; width: 100%; }
+a { color: var(--c-brand); }
+
+.toolbar {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(238,240,242,.92);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--c-border);
+  padding: 10px 24px;
+  display: flex; justify-content: center;
+}
+.toolbar-inner { width: 100%; max-width: 880px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.toolbar-hint { font-size: 12px; color: var(--c-text-2); }
+.print-btn {
+  background: var(--c-brand); color: #fff; border: none; border-radius: 999px;
+  padding: 8px 18px; font-size: 13px; font-weight: 700; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.print-btn:hover { background: #1741b8; }
+
+.page { max-width: 880px; margin: 0 auto; padding: 30px 24px 90px; }
+.report-card {
+  background: var(--c-surface);
+  border-radius: var(--r-lg);
+  box-shadow: 0 1px 3px rgba(0,0,0,.07), 0 12px 32px rgba(0,0,0,.10);
+  padding: 46px 52px;
+}
+
+.masthead-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--c-brand); margin-bottom: 10px;
+}
+.masthead-title { font-size: 27px; font-weight: 800; letter-spacing: -.01em; margin-bottom: 6px; text-wrap: balance; }
+.masthead-subtitle { font-size: 14px; color: var(--c-text-2); margin-bottom: 20px; }
+.masthead-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+
+.status-badge {
+  display: inline-flex; flex-direction: column; align-items: center;
+  background: var(--c-neutral-bg); border: 1.5px solid var(--c-warn-border); border-radius: var(--r-md);
+  padding: 10px 16px; min-width: 160px; text-align: center; flex-shrink: 0;
+}
+.status-badge .status-level { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--c-neutral); margin-bottom: 2px; }
+.status-badge .status-name { font-size: 13px; font-weight: 700; color: var(--c-neutral); line-height: 1.25; }
+.status-badge .status-sub { font-size: 10.5px; color: var(--c-text-2); margin-top: 2px; }
+
+.meta-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px 24px;
+  margin: 22px 0 26px; padding: 18px 0; border-top: 1px solid var(--c-border); border-bottom: 1px solid var(--c-border);
+}
+.meta-item label { display: block; font-size: 9.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--c-text-3); margin-bottom: 2px; }
+.meta-item span { font-size: 13px; font-weight: 600; color: var(--c-text); }
+
+.section { margin-top: 34px; break-inside: avoid-page; }
+.section:first-of-type { margin-top: 0; }
+.section-kicker { font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c-brand); margin-bottom: 6px; }
+.section-title { font-size: 18px; font-weight: 800; color: var(--c-text); margin-bottom: 12px; text-wrap: balance; }
+.section-title.small { font-size: 15px; }
+.section-note { font-size: 12px; color: var(--c-text-3); margin-bottom: 14px; }
+
+.exec-summary {
+  background: var(--c-surface-alt); border: 1px solid var(--c-border); border-left: 4px solid var(--c-brand);
+  border-radius: var(--r-md); padding: 18px 22px; font-size: 14px; line-height: 1.7;
+}
+.exec-summary strong { color: var(--c-brand); }
+
+.metrics-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.metric-card { background: var(--c-surface-alt); border: 1px solid var(--c-border); border-radius: var(--r-md); padding: 13px 8px 11px; text-align: center; }
+.metric-card .metric-value { font-size: 20px; font-weight: 800; line-height: 1; margin-bottom: 3px; font-variant-numeric: tabular-nums; }
+.metric-card .metric-label { font-size: 9px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--c-text-2); line-height: 1.3; }
+.metric-card .metric-sub { font-size: 9px; color: var(--c-text-3); margin-top: 3px; line-height: 1.3; }
+.metric-positive .metric-value { color: var(--c-positive); }
+.metric-neutral  .metric-value { color: var(--c-neutral); }
+.metric-warn     .metric-value { color: var(--c-warn); }
+.metric-plain    .metric-value { color: var(--c-text); }
+.metric-brand    .metric-value { color: var(--c-brand); font-size: 15px; }
+
+.callout-box { border: 1.5px solid var(--c-warn-border); background: var(--c-warn-bg); border-radius: var(--r-md); padding: 14px 18px; display: flex; gap: 12px; align-items: flex-start; }
+.callout-icon { font-size: 18px; flex-shrink: 0; }
+.callout-title { font-size: 12.5px; font-weight: 700; color: var(--c-warn); margin-bottom: 3px; }
+.callout-body { font-size: 12.5px; color: var(--c-text-2); line-height: 1.55; }
+
+.overview-table th, .overview-table td { padding: 8px 12px; font-size: 12.5px; text-align: left; border-bottom: 1px solid var(--c-border); }
+.overview-table th { width: 46%; color: var(--c-text-2); font-weight: 600; background: var(--c-surface-alt); }
+.overview-table tr:last-child td, .overview-table tr:last-child th { border-bottom: none; }
+
+.chart-wrap { position: relative; width: 100%; }
+.chart-caption { font-size: 11.5px; color: var(--c-text-3); margin-top: 8px; line-height: 1.55; }
+
+.tbl-outer { overflow-x: auto; border-radius: var(--r-md); border: 1px solid var(--c-border); }
+.data-table { font-size: 11.5px; }
+.data-table thead th { background: var(--c-surface-alt); font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--c-text-2); padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--c-border); white-space: nowrap; }
+.data-table tbody td { padding: 6px 10px; border-bottom: 1px solid var(--c-border); vertical-align: middle; }
+.data-table tbody tr:last-child td { border-bottom: none; }
+
+.dir-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 999px; white-space: nowrap; }
+.dir-positive { background: var(--c-positive-bg); color: var(--c-positive); }
+.dir-neutral  { background: var(--c-neutral-bg);  color: var(--c-neutral);  }
+.dir-negative { background: var(--c-negative-bg); color: var(--c-negative); }
+.es-cell { font-weight: 700; font-variant-numeric: tabular-nums; }
+.es-positive { color: var(--c-positive); }
+.es-neutral  { color: var(--c-neutral);  }
+.es-negative { color: var(--c-negative); }
+.ci-text { font-size: 10.5px; color: var(--c-text-3); font-family: var(--font-mono); }
+
+.flag-note-list { list-style: none; padding: 0; margin: 0; }
+.flag-note-list li { font-size: 12px; color: var(--c-text-2); padding: 8px 0 8px 18px; position: relative; border-bottom: 1px solid var(--c-border); line-height: 1.55; }
+.flag-note-list li:last-child { border-bottom: none; }
+.flag-note-list li::before { content: "–"; position: absolute; left: 0; color: var(--c-text-3); }
+
+.report-footer {
+  margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--c-border);
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+  font-size: 10.5px; color: var(--c-text-3); letter-spacing: .03em;
+}
+.report-footer b { color: var(--c-text-2); }
+
+@media print {
+  @page { size: letter; margin: 0.55in; }
+  body { background: #fff; font-size: 12.5px; }
+  .toolbar, .no-print { display: none !important; }
+  .page { max-width: none; padding: 0; }
+  .report-card { box-shadow: none; border-radius: 0; padding: 0; }
+  .section { break-inside: avoid-page; }
+  a { color: var(--c-text); text-decoration: none; }
+}
+
+@media (max-width: 700px) {
+  .report-card { padding: 28px 22px; }
+  .metrics-strip { grid-template-columns: repeat(2, 1fr); }
+  .meta-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <div class="toolbar-inner">
+    <span class="toolbar-hint">Use your browser's print dialog and choose "Save as PDF" for a report-ready file.</span>
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+  </div>
+</div>
+
+<div class="page">
+  <div class="report-card">
+
+    <!-- ══ MASTHEAD ══════════════════════════════════════════════════ -->
+    <div class="masthead-eyebrow">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      Research Brief — Edtech Evaluation
+    </div>
+    <div class="masthead-row">
+      <div>
+        <h1 class="masthead-title">i-Ready: Personalized Learning Platform</h1>
+        <div class="masthead-subtitle">Usage &amp; outcomes — Rapid Cycle Evaluation summary for Bellevue School District</div>
+      </div>
+      <div class="status-badge">
+        <div class="status-level">ESSA tier</div>
+        <div class="status-name">Mixed by grade<br>(see below)</div>
+        <div class="status-sub">Strongest K–4th, fades by high school</div>
+      </div>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-item"><label>District</label><span>Bellevue School District</span></div>
+      <div class="meta-item"><label>Grades covered</label><span>K–12 (iReady) · 3,4,5,6,7,8,10 (SmarterBalanced)</span></div>
+      <div class="meta-item"><label>Report period</label><span>09/02/2025 – 06/23/2026</span></div>
+      <div class="meta-item"><label>Usage metrics</label><span>ELA &amp; Math Time on Task</span></div>
+      <div class="meta-item"><label>Outcome measures</label><span>iReady diagnostic (internal) &amp; SmarterBalanced (WA state test)</span></div>
+      <div class="meta-item"><label>Dosage goal</label><span>Not configured for this trial</span></div>
+    </div>
+
+    <!-- ══ EXEC SUMMARY ═════════════════════════════════════════════ -->
+    <div class="section">
+      <div class="exec-summary">
+        Bellevue School District evaluated i-Ready against <strong>two outcome measures</strong> covering the 2025–26 school year: its own internal diagnostic (scored district-wide, K–12) and Washington State's SmarterBalanced summative test (administered separately in grades 3, 4, 5, 6, 7, and 8, and 10). Both measures tell a <strong>consistent story</strong>: the relationship between time on task and outcomes is strongest and most reliable in the earliest grades, fades through upper elementary and middle school, and is inconclusive by grade 10 due to a data-matching problem specific to that grade, not because the effect disappears. <strong>No dosage/usage goal was configured</strong> for this trial, so this brief reports average usage without a compliance percentage.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="metrics-strip">
+        <div class="metric-card metric-positive"><div class="metric-value">K–8</div><div class="metric-label">Sig. positive (iReady Math)</div><div class="metric-sub">Every grade K through 8th</div></div>
+        <div class="metric-card metric-plain"><div class="metric-value">14,081</div><div class="metric-label">Students (iReady, district-wide)</div><div class="metric-sub">All grades, K–12</div></div>
+        <div class="metric-card metric-neutral"><div class="metric-value">3,4,7,8</div><div class="metric-label">Sig. positive (SmarterBalanced Math)</div><div class="metric-sub">Not 5, 6; inconclusive at 10</div></div>
+        <div class="metric-card metric-warn"><div class="metric-value">52 / 1,684</div><div class="metric-label">Grade 10 matched sample</div><div class="metric-sub">SmarterBalanced — a data gap, not a null effect</div></div>
+        <div class="metric-card metric-brand"><div class="metric-value">30</div><div class="metric-label">Schools in iReady analysis</div><div class="metric-sub">District-wide breakdown below</div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="callout-box">
+        <div class="callout-icon">⚠️</div>
+        <div>
+          <div class="callout-title">Grade 10's SmarterBalanced result needs a different caveat than the rest</div>
+          <div class="callout-body">Grade 10's sample size column looks similar to every other grade (1,684 students in scope), but only 52 actually had a matched SmarterBalanced score to pair with usage data — versus roughly 1,300–1,900 matched students in every other tested grade. That's a data-availability problem, not evidence the relationship disappears at grade 10.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ IREADY GRADE-BY-GRADE ════════════════════════════════════ -->
+    <div class="section">
+      <div class="section-title small">iReady diagnostic — district-wide, by grade</div>
+      <div class="section-note">Partial correlation r · error bars = 95% CI · green = significant positive, gold = not significant, red = negative direction. Math and ELA time on task shown separately per grade.</div>
+      <div class="chart-wrap" style="height:620px;">
+        <canvas id="ireadyChart"></canvas>
+      </div>
+      <div class="chart-caption">Math shows a significant positive effect in every grade from Kindergarten through 8th, fading by 9th–10th (no computed value in 11th–12th). ELA is only significant Kindergarten through 3rd grade.</div>
+    </div>
+
+    <!-- ══ SMARTERBALANCED GRADE-BY-GRADE ═══════════════════════════ -->
+    <div class="section">
+      <div class="section-title small">SmarterBalanced — one analysis per tested grade</div>
+      <div class="section-note">Each grade is its own analysis, run separately because that's how SmarterBalanced is administered (not every grade, and not as one combined model). Grade 10's caveat above applies to both rows shown here.</div>
+      <div class="chart-wrap" style="height:340px;">
+        <canvas id="sbacChart"></canvas>
+      </div>
+      <div class="chart-caption">Significant positive in grades 3, 4, 7, and 8 (Math); only 3 and 4 (ELA). Grades 5 and 6 are genuinely not significant on a full sample. Grade 10 is inconclusive, not negative, despite the point estimates shown.</div>
+    </div>
+
+    <!-- ══ SCHOOL-LEVEL BREAKDOWN ════════════════════════════════════ -->
+    <div class="section">
+      <div class="section-title small">iReady Math — by school</div>
+      <div class="section-note">District-wide analysis broken out by school (all grades combined). Sorted by effect size.</div>
+      <div class="tbl-outer">
+        <table class="data-table" id="schoolTable">
+          <thead><tr><th>School</th><th>Direction</th><th>Effect size</th><th>95% CI</th><th>Significance</th><th>n</th></tr></thead>
+          <tbody id="schoolTbody"></tbody>
+        </table>
+      </div>
+      <div class="chart-caption">Phantom Lake Elementary shows the strongest effect in the district (r = +0.36); Newport High and Bellevue Digital Discovery Elementary show negative (not statistically significant) point estimates. Two schools (Bellevue Digital Discovery Secondary, Bellevue Open Doors) returned no computed effect size despite adequate sample size — flagged below, not guessed at.</div>
+    </div>
+
+    <!-- ══ DATA NOTES ═══════════════════════════════════════════════ -->
+    <div class="section">
+      <div class="section-title">Data notes &amp; flags</div>
+      <ul class="flag-note-list">
+        <li><strong>An assessment run one grade at a time produces one row per grade in the source database — all of them belong in this brief.</strong> SmarterBalanced is only administered in grades 3, 4, 5, 6, 7, 8, and 10 in Washington State (not 9, 11, or 12), and each grade is its own analysis rather than one combined model.</li>
+        <li><strong>Two outcome measures, two different grains.</strong> The iReady diagnostic is one district-wide K–12 analysis; SmarterBalanced is seven separate single-grade analyses. They are presented as separate result sets above, never merged into one table.</li>
+        <li><strong>Grade 10 SmarterBalanced has a data-matching problem, not a null effect.</strong> Only 52 of 1,684 in-scope students had a matched score, versus full-size samples in every other tested grade.</li>
+        <li><strong>No dosage goal configured.</strong> <code>recommended_use</code> / <code>target_usage</code> is <code>0</code> for this trial. Average usage is reported; a compliance percentage is not, since there's no real threshold to compare against.</li>
+        <li><strong>An unusually large effect size on a small sample.</strong> Native Hawaiian or Other Pacific Islander students show r = +0.76 (95% CI: 0.47–0.90) on the iReady Math diagnostic, at n = 29 — right at the edge of the n &lt; 30 stability threshold used elsewhere in this pipeline. Flagging as unstable rather than headlining it.</li>
+        <li><strong>Some rows return no effect size despite adequate sample size.</strong> 11th and 12th grade (iReady Math) and two schools (Bellevue Digital Discovery Secondary, n=276; Bellevue Open Doors, n=91) all show a null effect size with no clear cause visible in the data. Flagging rather than guessing at a reason.</li>
+        <li><strong>Source:</strong> <code>impact_analyses.id = 8073</code> (iReady, ELA) and <code>id = 8075</code> (iReady, Math) for the district-wide diagnostic; <code>id = 8076–8082</code> (SmarterBalanced, Math, grades 3/4/5/6/7/8/10) and <code>id = 8083–8089</code> (SmarterBalanced, ELA, grades 3/4/5/6/7/8/10). Following <code>shared/prompts/db_field_source_map.md</code> §§8–9.</li>
+      </ul>
+    </div>
+
+    <div class="report-footer">
+      <span><b>Instructure</b> · ISEA Research Brief — Edtech Evaluation</span>
+      <span>Source: impact_analyses (Bellevue School District, i-Ready) · db_field_source_map.md playbook</span>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const COLOR = {
+  positive: "#1e6e3c", neutral: "#7a5c08", negative: "#b91c1c", brand: "#1d4ed8",
+  ink: "#1a1a18", ink2: "#5a5a56", ink3: "#8a8a84", grid: "rgba(0,0,0,.07)",
+};
+function statusColor(row) {
+  if (row.sig === "not_plotted") return COLOR.ink3;
+  if (row.direction === "negative") return COLOR.negative;
+  if (row.sig === "significant") return COLOR.positive;
+  return COLOR.neutral;
+}
+function sigFromCI(es, lo, hi) {
+  if (es === null) return "not_plotted";
+  if (lo === null || hi === null) return "not_plotted";
+  return (lo > 0 || hi < 0) ? "significant" : "not_significant";
+}
+function dirFromES(es) {
+  if (es === null) return "not_plotted";
+  return es < 0 ? "negative" : "positive";
+}
+
+// ── iReady district-wide, K-12, Math + ELA ──────────────────────────────
+const IREADY_MATH = [
+  ["Kindergarten", 1292, 0.10374, 0.01223, 0.19352],
+  ["1st grade", 1341, 0.09794, 0.042, 0.15326],
+  ["2nd grade", 1275, 0.0815, 0.02368, 0.13878],
+  ["3rd grade", 1327, 0.16429, 0.10826, 0.21927],
+  ["4th grade", 1382, 0.16653, 0.11234, 0.21974],
+  ["5th grade", 1447, 0.05581, 0.00187, 0.10944],
+  ["6th grade", 1550, 0.11183, 0.05786, 0.16515],
+  ["7th grade", 1543, 0.05872, 0.00439, 0.11271],
+  ["8th grade", 1657, 0.18006, 0.12244, 0.23647],
+  ["9th grade", 663, 0.03929, -0.12625, 0.20271],
+  ["10th grade", 236, -0.05679, -0.39245, 0.29221],
+  ["11th grade", 204, null, null, null],
+  ["12th grade", 164, null, null, null],
+];
+const IREADY_ELA = [
+  ["Kindergarten", 1292, 0.11378, 0.03842, 0.18785],
+  ["1st grade", 1341, 0.07223, 0.01603, 0.12797],
+  ["2nd grade", 1275, 0.13976, 0.08231, 0.19627],
+  ["3rd grade", 1327, 0.12931, 0.07307, 0.18474],
+  ["4th grade", 1382, 0.035, -0.02035, 0.09014],
+  ["5th grade", 1447, 0.00835, -0.04546, 0.06211],
+  ["6th grade", 1550, 0.03265, -0.02139, 0.08649],
+  ["7th grade", 1543, 0.0455, -0.01013, 0.10085],
+  ["8th grade", 1657, 0.01077, -0.05543, 0.07688],
+  ["9th grade", 663, -0.03074, -0.28246, 0.22494],
+  ["10th grade", 236, -0.18275, -0.44921, 0.11358],
+  ["11th grade", 204, 0.20241, -0.14574, 0.50594],
+  ["12th grade", 164, -0.28503, -0.64606, 0.18023],
+];
+
+function buildRows(mathArr, elaArr) {
+  const rows = [];
+  for (let i = 0; i < mathArr.length; i++) {
+    const [grade, n, es, lo, hi] = mathArr[i];
+    rows.push({ label: `${grade} — Math`, n, es, ciLow: lo, ciHigh: hi, direction: dirFromES(es), sig: sigFromCI(es, lo, hi) });
+    const [, en, ees, elo, ehi] = elaArr[i];
+    rows.push({ label: `${grade} — ELA`, n: en, es: ees, ciLow: elo, ciHigh: ehi, direction: dirFromES(ees), sig: sigFromCI(ees, elo, ehi) });
+  }
+  return rows;
+}
+const IREADY_ROWS = buildRows(IREADY_MATH, IREADY_ELA);
+
+// ── SmarterBalanced, one row per tested grade, Math + ELA ───────────────
+const SBAC_MATH = [
+  ["3rd grade", 1330, 0.11767, 0.05679, 0.17769],
+  ["4th grade", 1383, 0.10143, 0.04561, 0.15661],
+  ["5th grade", 1447, 0.0305, -0.02442, 0.08523],
+  ["6th grade", 1550, 0.0317, -0.02238, 0.08559],
+  ["7th grade", 1544, 0.06531, 0.01228, 0.11798],
+  ["8th grade", 1934, 0.05944, 0.00133, 0.11714],
+  ["10th grade*", 1684, 0.1822, -0.18402, 0.504],
+];
+const SBAC_ELA = [
+  ["3rd grade", 1330, 0.14812, 0.08827, 0.2069],
+  ["4th grade", 1383, 0.05695, 0.00095, 0.1126],
+  ["5th grade", 1447, 0.0328, -0.02157, 0.08697],
+  ["6th grade", 1550, -0.0334, -0.08718, 0.02057],
+  ["7th grade", 1544, 0.01958, -0.03527, 0.07431],
+  ["8th grade", 1934, -0.04628, -0.11045, 0.01826],
+  ["10th grade*", 1684, -0.09616, -0.43043, 0.26129],
+];
+const SBAC_ROWS = buildRows(SBAC_MATH, SBAC_ELA);
+
+// ── School-level breakdown, iReady Math ──────────────────────────────────
+const SCHOOL_ROWS_RAW = [
+  ["Phantom Lake Elementary", 322, 0.35699, 0.24558, 0.4591],
+  ["Clyde Hill Elementary", 574, 0.23907, 0.14871, 0.32548],
+  ["Ardmore Elementary", 434, 0.24119, 0.13546, 0.34149],
+  ["Stevenson Elementary", 546, 0.1911, 0.10135, 0.27777],
+  ["Lake Hills Elementary", 452, 0.14011, 0.03685, 0.24041],
+  ["Highland Middle School", 566, 0.13515, 0.04611, 0.22205],
+  ["Somerset Elementary", 794, 0.13062, 0.05939, 0.20052],
+  ["Sherwood Forest Elementary", 341, 0.13282, 0.00762, 0.25392],
+  ["Medina Elementary", 603, 0.12082, 0.03392, 0.2059],
+  ["Tyee Middle School", 1086, 0.10989, 0.03717, 0.18145],
+  ["Newport Heights Elementary", 565, 0.10282, 0.00878, 0.19506],
+  ["Puesta Del Sol Elementary", 472, 0.10092, 0.00529, 0.19473],
+  ["Chinook Middle", 754, 0.09795, 0.0198, 0.17491],
+  ["Jing Mei Elementary", 524, 0.09857, 0.01269, 0.183],
+  ["Bellevue High", 154, 0.08224, -0.15068, 0.30651],
+  ["International School", 300, 0.07278, -0.05462, 0.19785],
+  ["Tillicum Middle", 721, 0.06931, -0.00866, 0.14645],
+  ["Enatai Elementary", 492, 0.064, -0.03905, 0.1657],
+  ["Woodridge Elementary", 524, 0.06089, -0.03235, 0.15309],
+  ["Sammamish High", 237, 0.05372, -0.21976, 0.31938],
+  ["Cherry Crest Elementary", 554, 0.06462, -0.02559, 0.15379],
+  ["Bellevue Big Picture School", 211, 0.01034, -0.14456, 0.16475],
+  ["Bennett Elementary", 488, 0.01359, -0.08849, 0.11538],
+  ["Spiritridge Elementary", 589, -0.00214, -0.09415, 0.0899],
+  ["Odle Middle", 1002, -0.01967, -0.10206, 0.063],
+  ["Interlake High", 179, -0.04909, -0.35144, 0.26252],
+  ["Bellevue Digital Discovery Elementary", 105, -0.09969, -0.35333, 0.1676],
+  ["Newport High", 125, -0.23139, -0.56199, 0.16296],
+  ["Bellevue Digital Discovery Secondary", 276, null, null, null],
+  ["Bellevue Open Doors", 91, null, null, null],
+];
+const SCHOOL_ROWS = SCHOOL_ROWS_RAW.map(([label, n, es, lo, hi]) => ({
+  label, n, es, ciLow: lo, ciHigh: hi, direction: dirFromES(es), sig: sigFromCI(es, lo, hi),
+}));
+
+// ── School table render ──────────────────────────────────────────────────
+function dirPill(dir) {
+  if (dir === "positive") return '<span class="dir-pill dir-positive">● Positive</span>';
+  if (dir === "negative") return '<span class="dir-pill dir-negative">● Negative</span>';
+  return '<span class="dir-pill" style="background:#f3f4f6;color:#4b5563;">○ Not plotted</span>';
+}
+function sigLabel(sig) {
+  if (sig === "significant") return '<span style="color:var(--c-positive); font-weight:700;">✓ Significant</span>';
+  if (sig === "not_significant") return '<span style="color:var(--c-neutral); font-weight:700;">● Not significant</span>';
+  return '<span style="font-size:10.5px;color:var(--c-text-3);font-style:italic;">Not computed</span>';
+}
+function esCell(row) {
+  if (row.es === null) return '<span style="font-size:10.5px;color:var(--c-text-3);font-style:italic;">—</span>';
+  const cls = row.direction === "positive" ? "es-positive" : "es-negative";
+  return `<span class="es-cell ${cls}">${row.es > 0 ? "+" : ""}${row.es.toFixed(2)}</span>`;
+}
+document.getElementById("schoolTbody").innerHTML = SCHOOL_ROWS.map(r => `
+  <tr>
+    <td style="font-weight:600;">${r.label}</td>
+    <td>${dirPill(r.direction)}</td>
+    <td>${esCell(r)}</td>
+    <td><span class="ci-text">${r.ciLow !== null ? `(${r.ciLow.toFixed(2)}, ${r.ciHigh.toFixed(2)})` : "—"}</span></td>
+    <td>${sigLabel(r.sig)}</td>
+    <td style="font-variant-numeric:tabular-nums;color:var(--c-text-2);">${r.n.toLocaleString()}</td>
+  </tr>`).join("");
+
+// ── Canvas dot-plot renderer (shared) ─────────────────────────────────────
+function fitCanvas(canvas) {
+  const dpr = Math.max(window.devicePixelRatio || 1, 2);
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = Math.round(rect.width * dpr);
+  canvas.height = Math.round(rect.height * dpr);
+  canvas.style.width = rect.width + "px";
+  canvas.style.height = rect.height + "px";
+  const ctx = canvas.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, w: rect.width, h: rect.height };
+}
+function makeTooltip() {
+  const el = document.createElement("div");
+  el.style.cssText = "position:fixed;pointer-events:none;background:#1a1a18;color:#fff;font-size:11.5px;line-height:1.5;padding:7px 10px;border-radius:7px;box-shadow:0 8px 20px rgba(0,0,0,.25);opacity:0;transform:translate(-50%,-100%);transition:opacity .1s;z-index:50;white-space:nowrap;";
+  document.body.appendChild(el);
+  return el;
+}
+function drawDotPlot(canvasId, rows, xMin, xMax) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const { ctx, w, h } = fitCanvas(canvas);
+  const plotted = rows.filter(r => r.es !== null);
+  const padL = 150, padR = 24, padT = 10, padB = 30;
+  const plotW = w - padL - padR, plotH = h - padT - padB;
+  const rowH = plotH / plotted.length;
+  const xPix = v => padL + ((v - xMin) / (xMax - xMin)) * plotW;
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.strokeStyle = COLOR.grid; ctx.lineWidth = 1;
+  const step = (xMax - xMin) / 4;
+  for (let t = xMin; t <= xMax + 1e-9; t += step) {
+    const x = xPix(t);
+    ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, h - padB); ctx.stroke();
+    ctx.fillStyle = COLOR.ink3; ctx.font = "10.5px system-ui, sans-serif"; ctx.textAlign = "center";
+    ctx.fillText(Math.abs(t) < 1e-9 ? "0" : (t > 0 ? "+" + t.toFixed(2) : t.toFixed(2)), x, h - padB + 16);
+  }
+  ctx.strokeStyle = "#6b7280"; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(xPix(0), padT); ctx.lineTo(xPix(0), h - padB); ctx.stroke();
+  ctx.setLineDash([]);
+
+  const hitboxes = [];
+  plotted.forEach((row, i) => {
+    const y = padT + rowH * i + rowH / 2;
+    const color = statusColor(row);
+    ctx.fillStyle = COLOR.ink2; ctx.textAlign = "right"; ctx.font = "10.5px system-ui, sans-serif";
+    ctx.fillText(row.label, padL - 14, y + 4);
+    const xLow = xPix(row.ciLow), xHigh = xPix(row.ciHigh), xEs = xPix(row.es);
+    ctx.strokeStyle = "rgba(0,0,0,.45)"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(xLow, y); ctx.lineTo(xHigh, y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xLow, y - 4); ctx.lineTo(xLow, y + 4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xHigh, y - 4); ctx.lineTo(xHigh, y + 4); ctx.stroke();
+    ctx.beginPath(); ctx.arc(xEs, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = color; ctx.fill();
+    ctx.strokeStyle = "#fff"; ctx.lineWidth = 1.5; ctx.stroke();
+    hitboxes.push({ x0: xLow - 6, x1: xHigh + 6, y0: y - 7, y1: y + 7, row });
+  });
+
+  if (!canvas._tooltip) canvas._tooltip = makeTooltip();
+  const tip = canvas._tooltip;
+  canvas.onmousemove = (e) => {
+    const r = canvas.getBoundingClientRect();
+    const mx = e.clientX - r.left, my = e.clientY - r.top;
+    const hit = hitboxes.find(b => mx >= b.x0 && mx <= b.x1 && my >= b.y0 && my <= b.y1);
+    if (hit) {
+      const row = hit.row;
+      tip.innerHTML = `<strong>${row.label}</strong><br>r = ${row.es > 0 ? "+" : ""}${row.es.toFixed(3)} · 95% CI (${row.ciLow.toFixed(2)}, ${row.ciHigh.toFixed(2)})<br>n = ${row.n} · ${row.sig === "significant" ? "Significant" : "Not significant"}`;
+      tip.style.left = e.clientX + "px"; tip.style.top = (e.clientY - 12) + "px"; tip.style.opacity = "1";
+      canvas.style.cursor = "pointer";
+    } else { tip.style.opacity = "0"; canvas.style.cursor = "default"; }
+  };
+  canvas.onmouseleave = () => { tip.style.opacity = "0"; };
+}
+
+drawDotPlot("ireadyChart", IREADY_ROWS, -0.35, 0.55);
+drawDotPlot("sbacChart", SBAC_ROWS, -0.5, 0.55);
+window.addEventListener("resize", () => { drawDotPlot("ireadyChart", IREADY_ROWS, -0.35, 0.55); drawDotPlot("sbacChart", SBAC_ROWS, -0.5, 0.55); });
+window.addEventListener("beforeprint", () => { drawDotPlot("ireadyChart", IREADY_ROWS, -0.35, 0.55); drawDotPlot("sbacChart", SBAC_ROWS, -0.5, 0.55); });
+</script>
+</body>
+</html>
