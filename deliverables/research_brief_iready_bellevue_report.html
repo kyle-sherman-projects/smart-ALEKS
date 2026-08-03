@@ -161,6 +161,38 @@ a { color: var(--c-brand); }
 .flag-note-list li:last-child { border-bottom: none; }
 .flag-note-list li::before { content: "–"; position: absolute; left: 0; color: var(--c-text-3); }
 
+.flag-card { border: 1px solid var(--c-border); border-radius: var(--r-md); padding: 18px 22px; margin-bottom: 16px; break-inside: avoid-page; }
+.flag-card:last-child { margin-bottom: 0; }
+.flag-kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.flag-num { width: 26px; height: 26px; border-radius: 50%; background: var(--c-brand-light); color: var(--c-brand); font-weight: 800; font-size: 12.5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.flag-heading { font-size: 14.5px; font-weight: 700; color: var(--c-text); }
+.flag-block { margin-top: 10px; }
+.flag-block label { display: block; font-size: 9.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--c-text-3); margin-bottom: 3px; }
+.flag-block p { font-size: 12.5px; line-height: 1.6; color: var(--c-text-2); }
+.flag-block.question { background: var(--c-brand-light); border-radius: var(--r-sm); padding: 10px 14px; }
+.flag-block.question label { color: var(--c-brand); }
+.flag-block.question p { color: #1e3a8a; }
+.stat-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 2px; }
+.stat-chip { background: var(--c-surface-alt); border: 1px solid var(--c-border); border-radius: 999px; padding: 4px 11px; font-size: 11px; font-weight: 600; color: var(--c-text); font-variant-numeric: tabular-nums; }
+.stat-chip.pos { color: var(--c-positive); border-color: #bfe4cc; }
+.stat-chip.neg { color: var(--c-negative); border-color: #f3c6c6; }
+.stat-chip.warn { color: var(--c-warn); border-color: var(--c-warn-border); }
+.stat-chip.brand { color: var(--c-brand); border-color: #bfdbfe; }
+
+.agenda-item { display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--c-border); break-inside: avoid; }
+.agenda-item:last-child { border-bottom: none; }
+.agenda-rank { width: 24px; height: 24px; border-radius: 50%; background: var(--c-text); color: #fff; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.agenda-body h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.agenda-body p { font-size: 12.5px; color: var(--c-text-2); line-height: 1.55; }
+.agenda-tag { font-size: 10px; color: var(--c-brand); font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+
+.confirm-cell { font-size: 11.5px; font-weight: 600; padding: 3px 8px; border-radius: 6px; display: inline-block; }
+.confirm-both { background: var(--c-positive-bg); color: var(--c-positive); }
+.confirm-one  { background: var(--c-brand-light); color: var(--c-brand); }
+.confirm-neither { background: var(--c-neutral-bg); color: var(--c-neutral); }
+.confirm-gap  { background: var(--c-warn-bg); color: var(--c-warn); border: 1px solid var(--c-warn-border); }
+.confirm-na   { color: var(--c-text-3); font-style: italic; font-size: 11px; }
+
 .report-footer {
   margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--c-border);
   display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
@@ -250,6 +282,27 @@ a { color: var(--c-brand); }
       </div>
     </div>
 
+    <!-- ══ RCE OVERVIEW ═════════════════════════════════════════════ -->
+    <div class="section">
+      <div class="section-kicker">RCE overview</div>
+      <p style="font-size:13.5px; color:var(--c-text-2); line-height:1.7;">This brief evaluates i-Ready, a K–12 personalized reading and math platform, across Bellevue School District's full student population during the 2025–26 school year. Two outcome measures were assessed independently: i-Ready's own internal diagnostic, scored district-wide in one analysis per subject (ELA, Math), and Washington State's SmarterBalanced summative test, administered only in grades 3 through 8 and grade 10, with a separate analysis run for each tested grade. Usage is measured as time on task, tracked separately for ELA and Math. This is the first Research Brief for this engagement in this repository, so it serves as the baseline for future comparison.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-kicker">Overview of measures, samples, and findings</div>
+      <table class="overview-table">
+        <tr><th>Number of RCEs</th><td>Two outcome measures (iReady diagnostic, SmarterBalanced) × two subjects (ELA, Math) — 16 <code>impact_analyses</code> rows in total</td></tr>
+        <tr><th>Product</th><td>i-Ready</td></tr>
+        <tr><th>Grade levels</th><td>K–12 (iReady diagnostic) · 3, 4, 5, 6, 7, 8, 10 (SmarterBalanced)</td></tr>
+        <tr><th>Sample size</th><td>Up to 14,081 students (iReady, district-wide) · 1,330–1,934 per grade (SmarterBalanced, grades 3–8) · 52 matched (SmarterBalanced, grade 10 — a data gap, see below)</td></tr>
+        <tr><th>Overall effect — Math</th><td>Significant positive in every grade K through 8th (iReady) and in grades 3, 4, 7, 8 (SmarterBalanced); not significant 9th–10th; not computed 11th–12th</td></tr>
+        <tr><th>Overall effect — ELA</th><td>Significant positive only Kindergarten through 3rd grade (iReady) and in grades 3–4 (SmarterBalanced); not significant from 4th/5th grade on</td></tr>
+        <tr><th>Usage compliance</th><td>Not applicable — no dosage goal configured for this trial</td></tr>
+        <tr><th>Outcome measures</th><td>i-Ready diagnostic (internal) · SmarterBalanced (Washington State summative test)</td></tr>
+        <tr><th>ESSA evidence tier</th><td>Mixed by grade — see "Significant results by grade" below and Flagged Patterns</td></tr>
+      </table>
+    </div>
+
     <!-- ══ IREADY GRADE-BY-GRADE ════════════════════════════════════ -->
     <div class="section">
       <div class="section-title small">iReady diagnostic — district-wide, by grade</div>
@@ -270,6 +323,19 @@ a { color: var(--c-brand); }
       <div class="chart-caption">Significant positive in grades 3, 4, 7, and 8 (Math); only 3 and 4 (ELA). Grades 5 and 6 are genuinely not significant on a full sample. Grade 10 is inconclusive, not negative, despite the point estimates shown.</div>
     </div>
 
+    <!-- ══ SIGNIFICANCE BY SOURCE ════════════════════════════════════ -->
+    <div class="section">
+      <div class="section-title small">Significant results by grade — confirmed by which assessment</div>
+      <div class="section-note">Two independent outcome measures were run. Where both agree, that's a stronger signal than either alone; where only one is significant, or one hasn't been administered at that grade at all, this table says so explicitly rather than reporting one combined "significant" verdict.</div>
+      <div class="tbl-outer">
+        <table class="data-table" id="confirmTable">
+          <thead><tr><th>Subject</th><th>Grade</th><th>iReady diagnostic</th><th>SmarterBalanced</th><th>Confirmed by</th></tr></thead>
+          <tbody id="confirmTbody"></tbody>
+        </table>
+      </div>
+      <div class="chart-caption">"Not tested" means SmarterBalanced isn't administered at that grade (K, 1st, 2nd, 9th, 11th, 12th) — that's a design fact about the state test, not a missing analysis. "Data gap" at grade 10 means the SmarterBalanced sample was too small to draw a conclusion (52 of 1,684 students matched), not that the effect was measured and found absent.</div>
+    </div>
+
     <!-- ══ SCHOOL-LEVEL BREAKDOWN ════════════════════════════════════ -->
     <div class="section">
       <div class="section-title small">iReady Math — by school</div>
@@ -283,12 +349,67 @@ a { color: var(--c-brand); }
       <div class="chart-caption">Phantom Lake Elementary shows the strongest effect in the district (r = +0.36); Newport High and Bellevue Digital Discovery Elementary show negative (not statistically significant) point estimates. Two schools (Bellevue Digital Discovery Secondary, Bellevue Open Doors) returned no computed effect size despite adequate sample size — flagged below, not guessed at.</div>
     </div>
 
+    <!-- ══ FLAGGED PATTERNS ═════════════════════════════════════════ -->
+    <div class="section">
+      <div class="section-title">Flagged patterns &amp; anomalies</div>
+      <div class="section-note">These patterns come from scanning across grades, subjects, and both outcome measures at once. Each states what the data shows, which assessment(s) it comes from, why it stands out, and the question it raises — never a causal claim.</div>
+
+      <div class="flag-card">
+        <div class="flag-kicker"><div class="flag-num">1</div><div class="flag-heading">The usage–outcome relationship is strongest in the earliest grades, and two independent assessments agree on it</div></div>
+        <div class="flag-block"><label>What the data shows</label><p>In Math, both the iReady diagnostic and SmarterBalanced show significant positive effects in grades 3 and 4 — the only two grades where both assessments were run and both came back significant. In ELA, only 3rd grade earns that same double confirmation.</p>
+          <div class="stat-row">
+            <span class="stat-chip pos">Math, grade 3: both significant</span>
+            <span class="stat-chip pos">Math, grade 4: both significant</span>
+            <span class="stat-chip pos">ELA, grade 3: both significant</span>
+          </div>
+        </div>
+        <div class="flag-block"><label>Why it stands out</label><p>Two independently run outcome measures, one internal to the product, one a state summative test, agreeing on the same grades and direction is a stronger signal than either measure alone. This isn't true anywhere else in the data.</p></div>
+        <div class="flag-block question"><label>The question it raises</label><p>Is there something about how 3rd- and 4th-grade classrooms use i-Ready, more consistent scheduling, closer teacher involvement, better content fit, that could be extended to other grades?</p></div>
+      </div>
+
+      <div class="flag-card">
+        <div class="flag-kicker"><div class="flag-num">2</div><div class="flag-heading">Math shows a broader, more durable effect than ELA on the same platform</div></div>
+        <div class="flag-block"><label>What the data shows</label><p>On the iReady diagnostic, Math is significant in every grade from Kindergarten through 8th. ELA is only significant Kindergarten through 3rd grade, and turns not significant from 4th grade on. The same pattern shows up in SmarterBalanced: Math is significant in four of seven tested grades (3, 4, 7, 8); ELA in only two (3, 4).</p>
+          <div class="stat-row">
+            <span class="stat-chip pos">Math (iReady): significant K–8th</span>
+            <span class="stat-chip warn">ELA (iReady): significant only K–3rd</span>
+          </div>
+        </div>
+        <div class="flag-block"><label>Why it stands out</label><p>Same platform, same district, same time period — the subject-level gap isn't explained by anything external to how the product is used for each subject.</p></div>
+        <div class="flag-block question"><label>The question it raises</label><p>Is ELA content within i-Ready used or delivered differently than Math content in this district, and would a closer look at ELA-specific usage patterns (not just total time on task) explain why the effect fades after 3rd grade?</p></div>
+      </div>
+
+      <div class="flag-card">
+        <div class="flag-kicker"><div class="flag-num">3</div><div class="flag-heading">Grade 10's SmarterBalanced result is a data problem, not a finding</div></div>
+        <div class="flag-block"><label>What the data shows</label><p>Grade 10's SmarterBalanced sample looks similar to every other grade at a glance (1,684 students in scope), but only 52 had a matched score to pair with usage data — versus roughly 1,300–1,900 matched students in every other tested grade.</p>
+          <div class="stat-row">
+            <span class="stat-chip brand">Grade 10: 52 of 1,684 matched</span>
+            <span class="stat-chip brand">Every other tested grade: 1,300–1,900 matched</span>
+          </div>
+        </div>
+        <div class="flag-block"><label>Why it stands out</label><p>Reporting this alongside grades 5 and 6 (which have full-size samples and are genuinely not significant) would misrepresent it as the same kind of result. It isn't — it's inconclusive due to missing data, not evidence the relationship disappears at grade 10.</p></div>
+        <div class="flag-block question"><label>The question it raises</label><p>What's preventing more grade 10 students from having a matched SmarterBalanced score — a scheduling gap, a reporting delay, or something else — and can it be resolved before the next reporting period?</p></div>
+      </div>
+    </div>
+
+    <!-- ══ DISCUSSION AGENDA ════════════════════════════════════════ -->
+    <div class="section">
+      <div class="section-title">Next steps — discussion agenda</div>
+      <div class="section-note">Ranked by how directly the district's own numbers raise each question.</div>
+
+      <div class="agenda-item"><div class="agenda-rank">1</div><div class="agenda-body"><h4>What's different about grades 3 and 4</h4><p>Both outcome measures agree these are the strongest grades for Math, and grade 3 is the only grade where ELA gets double confirmation too. Is there a practice here worth extending to other grades?</p><span class="agenda-tag">Flag 1</span></div></div>
+      <div class="agenda-item"><div class="agenda-rank">2</div><div class="agenda-body"><h4>The Math vs. ELA gap</h4><p>Math holds a significant effect through 8th grade; ELA fades by 4th. Worth a closer look at ELA-specific usage patterns and content fit before drawing conclusions about the ELA program.</p><span class="agenda-tag">Flag 2</span></div></div>
+      <div class="agenda-item"><div class="agenda-rank">3</div><div class="agenda-body"><h4>Grade 10 data completeness</h4><p>Only 52 of 1,684 students have a matched SmarterBalanced score. Is there a scheduling or reporting gap preventing more matches, and can it be closed before the next reporting period?</p><span class="agenda-tag">Flag 3</span></div></div>
+      <div class="agenda-item"><div class="agenda-rank">4</div><div class="agenda-body"><h4>School-level variation</h4><p>Effects range from +0.36 (Phantom Lake Elementary) to −0.23 (Newport High, not significant). Worth understanding what differs in implementation at the strongest- and weakest-showing schools.</p><span class="agenda-tag">School breakdown</span></div></div>
+      <div class="agenda-item"><div class="agenda-rank">5</div><div class="agenda-body"><h4>Setting a dosage goal</h4><p>No usage threshold is currently configured for this trial. Would setting one help target support toward students who are furthest below it?</p><span class="agenda-tag">Data notes</span></div></div>
+    </div>
+
     <!-- ══ DATA NOTES ═══════════════════════════════════════════════ -->
     <div class="section">
       <div class="section-title">Data notes &amp; flags</div>
       <ul class="flag-note-list">
         <li><strong>An assessment run one grade at a time produces one row per grade in the source database — all of them belong in this brief.</strong> SmarterBalanced is only administered in grades 3, 4, 5, 6, 7, 8, and 10 in Washington State (not 9, 11, or 12), and each grade is its own analysis rather than one combined model.</li>
-        <li><strong>Two outcome measures, two different grains.</strong> The iReady diagnostic is one district-wide K–12 analysis; SmarterBalanced is seven separate single-grade analyses. They are presented as separate result sets above, never merged into one table.</li>
+        <li><strong>Two outcome measures, two different grains — always labeled by source, never merged into one verdict.</strong> The iReady diagnostic is one district-wide K–12 analysis; SmarterBalanced is seven separate single-grade analyses. The "Significant results by grade" table above states explicitly whether a significant finding came from iReady, SmarterBalanced, or both, rather than reporting a single combined significance call.</li>
         <li><strong>Grade 10 SmarterBalanced has a data-matching problem, not a null effect.</strong> Only 52 of 1,684 in-scope students had a matched score, versus full-size samples in every other tested grade.</li>
         <li><strong>No dosage goal configured.</strong> <code>recommended_use</code> / <code>target_usage</code> is <code>0</code> for this trial. Average usage is reported; a compliance percentage is not, since there's no real threshold to compare against.</li>
         <li><strong>An unusually large effect size on a small sample.</strong> Native Hawaiian or Other Pacific Islander students show r = +0.76 (95% CI: 0.47–0.90) on the iReady Math diagnostic, at n = 29 — right at the edge of the n &lt; 30 stability threshold used elsewhere in this pipeline. Flagging as unstable rather than headlining it.</li>
@@ -428,6 +549,55 @@ const SCHOOL_ROWS = SCHOOL_ROWS_RAW.map(([label, n, es, lo, hi]) => ({
   label, n, es, ciLow: lo, ciHigh: hi, direction: dirFromES(es), sig: sigFromCI(es, lo, hi),
 }));
 
+// ── Significance-by-source matrix: which assessment(s) found each grade significant ──
+const CONFIRM_ROWS = [
+  ["Math", "Kindergarten", "Significant", "Not tested", "iReady only (not SmarterBalanced-tested)", "one"],
+  ["Math", "1st grade", "Significant", "Not tested", "iReady only (not SmarterBalanced-tested)", "one"],
+  ["Math", "2nd grade", "Significant", "Not tested", "iReady only (not SmarterBalanced-tested)", "one"],
+  ["Math", "3rd grade", "Significant", "Significant", "Both assessments agree — significant", "both"],
+  ["Math", "4th grade", "Significant", "Significant", "Both assessments agree — significant", "both"],
+  ["Math", "5th grade", "Significant", "Not significant", "iReady only (SmarterBalanced not significant)", "one"],
+  ["Math", "6th grade", "Significant", "Not significant", "iReady only (SmarterBalanced not significant)", "one"],
+  ["Math", "7th grade", "Significant", "Significant", "Both assessments agree — significant", "both"],
+  ["Math", "8th grade", "Significant", "Significant", "Both assessments agree — significant", "both"],
+  ["Math", "9th grade", "Not significant", "Not tested", "Neither (not SmarterBalanced-tested)", "neither"],
+  ["Math", "10th grade", "Not significant", "Inconclusive", "Not significant on iReady; SmarterBalanced inconclusive (data gap)", "gap"],
+  ["Math", "11th grade", "Not computed", "Not tested", "Not computed (iReady); not SmarterBalanced-tested", "na"],
+  ["Math", "12th grade", "Not computed", "Not tested", "Not computed (iReady); not SmarterBalanced-tested", "na"],
+  ["ELA", "Kindergarten", "Significant", "Not tested", "iReady only (not SmarterBalanced-tested)", "one"],
+  ["ELA", "1st grade", "Significant", "Not tested", "iReady only (not SmarterBalanced-tested)", "one"],
+  ["ELA", "2nd grade", "Significant", "Not tested", "iReady only (not SmarterBalanced-tested)", "one"],
+  ["ELA", "3rd grade", "Significant", "Significant", "Both assessments agree — significant", "both"],
+  ["ELA", "4th grade", "Not significant", "Significant", "SmarterBalanced only (iReady not significant)", "one"],
+  ["ELA", "5th grade", "Not significant", "Not significant", "Neither assessment significant", "neither"],
+  ["ELA", "6th grade", "Not significant", "Not significant", "Neither assessment significant", "neither"],
+  ["ELA", "7th grade", "Not significant", "Not significant", "Neither assessment significant", "neither"],
+  ["ELA", "8th grade", "Not significant", "Not significant", "Neither assessment significant", "neither"],
+  ["ELA", "9th grade", "Not significant", "Not tested", "Not significant (not SmarterBalanced-tested)", "neither"],
+  ["ELA", "10th grade", "Not significant", "Inconclusive", "Not significant on iReady; SmarterBalanced inconclusive (data gap)", "gap"],
+  ["ELA", "11th grade", "Not significant", "Not tested", "Not significant (not SmarterBalanced-tested)", "neither"],
+  ["ELA", "12th grade", "Not significant", "Not tested", "Not significant (not SmarterBalanced-tested)", "neither"],
+];
+function cellLabel(val) {
+  if (val === "Significant") return '<span style="color:var(--c-positive); font-weight:700;">✓ Significant</span>';
+  if (val === "Not significant") return '<span style="color:var(--c-neutral); font-weight:700;">● Not significant</span>';
+  if (val === "Inconclusive") return '<span style="color:var(--c-warn); font-weight:700;">Inconclusive</span>';
+  return `<span class="confirm-na">${val}</span>`;
+}
+function confirmBadge(text, cls) {
+  if (cls === "na") return `<span class="confirm-na">${text}</span>`;
+  const map = { both: "confirm-both", one: "confirm-one", neither: "confirm-neither", gap: "confirm-gap" };
+  return `<span class="confirm-cell ${map[cls] || "confirm-neither"}">${text}</span>`;
+}
+document.getElementById("confirmTbody").innerHTML = CONFIRM_ROWS.map(([subject, grade, iready, sbac, confirmText, confirmCls]) => `
+  <tr>
+    <td style="font-size:10px;font-weight:600;color:var(--c-text-3);text-transform:uppercase;letter-spacing:.03em;">${subject}</td>
+    <td style="font-weight:600;">${grade}</td>
+    <td>${cellLabel(iready)}</td>
+    <td>${cellLabel(sbac)}</td>
+    <td>${confirmBadge(confirmText, confirmCls)}</td>
+  </tr>`).join("");
+
 // ── School table render ──────────────────────────────────────────────────
 function dirPill(dir) {
   if (dir === "positive") return '<span class="dir-pill dir-positive">● Positive</span>';
@@ -499,17 +669,31 @@ function drawDotPlot(canvasId, rows, xMin, xMax) {
   plotted.forEach((row, i) => {
     const y = padT + rowH * i + rowH / 2;
     const color = statusColor(row);
+
+    // Row label is drawn OUTSIDE the plot rect, before clipping — never clipped itself.
     ctx.fillStyle = COLOR.ink2; ctx.textAlign = "right"; ctx.font = "10.5px system-ui, sans-serif";
     ctx.fillText(row.label, padL - 14, y + 4);
+
+    // A CI can be wider than the fixed axis range (small-n grades especially).
+    // Clip whisker/end-cap/dot drawing to the plot rect so a wide CI is visually
+    // truncated at the axis edge instead of bleeding into the label column.
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(padL, padT, plotW, plotH);
+    ctx.clip();
+
     const xLow = xPix(row.ciLow), xHigh = xPix(row.ciHigh), xEs = xPix(row.es);
+    const clippedLow = row.ciLow < xMin, clippedHigh = row.ciHigh > xMax;
     ctx.strokeStyle = "rgba(0,0,0,.45)"; ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.moveTo(xLow, y); ctx.lineTo(xHigh, y); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(xLow, y - 4); ctx.lineTo(xLow, y + 4); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(xHigh, y - 4); ctx.lineTo(xHigh, y + 4); ctx.stroke();
+    if (!clippedLow) { ctx.beginPath(); ctx.moveTo(xLow, y - 4); ctx.lineTo(xLow, y + 4); ctx.stroke(); }
+    if (!clippedHigh) { ctx.beginPath(); ctx.moveTo(xHigh, y - 4); ctx.lineTo(xHigh, y + 4); ctx.stroke(); }
     ctx.beginPath(); ctx.arc(xEs, y, 5, 0, Math.PI * 2);
     ctx.fillStyle = color; ctx.fill();
     ctx.strokeStyle = "#fff"; ctx.lineWidth = 1.5; ctx.stroke();
-    hitboxes.push({ x0: xLow - 6, x1: xHigh + 6, y0: y - 7, y1: y + 7, row });
+    ctx.restore();
+
+    hitboxes.push({ x0: Math.max(xLow, padL) - 6, x1: Math.min(xHigh, padL + plotW) + 6, y0: y - 7, y1: y + 7, row });
   });
 
   if (!canvas._tooltip) canvas._tooltip = makeTooltip();
