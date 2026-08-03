@@ -54,7 +54,8 @@ smart-ALEKS/
 ├── shared/
 │   └── prompts/
 │       ├── SKILL.md              # Gemini extraction skill + spatial-drift protocol
-│       └── field_source_map.md   # Maps schema fields to PDF source locations
+│       ├── field_source_map.md   # Maps schema fields to PDF source locations
+│       └── db_field_source_map.md # Maps schema fields to the impact_analyses DB table (alt. to PDF extraction)
 ├── .env.example
 ├── .gitignore
 ├── CLAUDE.md
@@ -92,6 +93,7 @@ cp .env.example .env
 | `docs/Research_Brief_Agent_Instructions.md` | Instruction template for the Client-Specific Agent |
 | `shared/prompts/SKILL.md` | Gemini extraction skill and spatial-drift protocol |
 | `shared/prompts/field_source_map.md` | Maps every extracted field to its location in the PDF |
+| `shared/prompts/db_field_source_map.md` | Maps every field to the `impact_analyses` DB table, when a district's RCE is already computed there |
 
 ---
 

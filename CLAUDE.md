@@ -56,6 +56,7 @@ Open `deliverables/pipeline_flowchart.html` in any browser. Click any node for a
 |---|---|
 | Gemini extraction skill + spatial-drift protocol | `shared/prompts/SKILL.md` |
 | PDF field → source mapping | `shared/prompts/field_source_map.md` |
+| DB field → source mapping (alternative to PDF extraction, when `impact_analyses` already has the RCE) | `shared/prompts/db_field_source_map.md` |
 | Research Brief Agent instruction template | `docs/Research_Brief_Agent_Instructions.md` |
 | Interactive pipeline flowchart | `deliverables/pipeline_flowchart.html` |
 | Sample PDFs (gitignored) | `data/sample_reports/` |
