@@ -277,6 +277,10 @@ a { color: var(--c-brand); }
 /* ── Example-data disclaimer ──────────────────────────────────────── */
 .example-print-footer { display: none; }
 
+/* The subgroup table has 9 columns — too many to fit a portrait page without
+   crushing the text. Print landscape so the table's natural width fits. */
+@page { size: landscape; }
+
 @media print {
   body { background: #fff; }
   .page { padding-bottom: 40px; }
@@ -285,7 +289,29 @@ a { color: var(--c-brand); }
 
   /* Interactive-only affordances are meaningless on paper */
   .tbl-controls, .tbl-hint, .sort-arrow { display: none !important; }
-  .data-table { font-size: 10px; }
+  /* .tbl-outer scrolls on screen; a printed page can't scroll. Landscape
+     orientation gives the table's auto-sized columns enough room to fit
+     without clipping at the right edge. */
+  .tbl-outer { overflow-x: visible; }
+  .data-table { font-size: 9px; table-layout: fixed; width: 100%; }
+  .data-table thead th { white-space: normal !important; padding: 5px 6px; }
+  .data-table tbody td { padding: 5px 6px; }
+  #subgroupTable tbody td:nth-child(1) span { font-size: 8px !important; word-break: break-word; }
+  /* Pills/badges are a screen affordance; their fixed shape resists wrapping
+     and was the biggest source of table overflow. Print them as plain text. */
+  .dir-pill, .sig-badge, .flag-note {
+    display: inline !important; background: none !important; border: none !important;
+    padding: 0 !important; border-radius: 0 !important; white-space: normal !important;
+  }
+  #subgroupTable th:nth-child(1), #subgroupTable td:nth-child(1) { width: 9%; }
+  #subgroupTable th:nth-child(2), #subgroupTable td:nth-child(2) { width: 13%; }
+  #subgroupTable th:nth-child(3), #subgroupTable td:nth-child(3) { width: 11%; }
+  #subgroupTable th:nth-child(4), #subgroupTable td:nth-child(4) { width: 14%; }
+  #subgroupTable th:nth-child(5), #subgroupTable td:nth-child(5) { width: 9%; }
+  #subgroupTable th:nth-child(6), #subgroupTable td:nth-child(6) { width: 11%; }
+  #subgroupTable th:nth-child(7), #subgroupTable td:nth-child(7) { width: 8%; }
+  #subgroupTable th:nth-child(8), #subgroupTable td:nth-child(8) { width: 13%; }
+  #subgroupTable th:nth-child(9), #subgroupTable td:nth-child(9) { width: 12%; }
   .fn { color: #000; }
   a { color: inherit; text-decoration: none; }
   .glossary-cta a { text-decoration: underline; }
