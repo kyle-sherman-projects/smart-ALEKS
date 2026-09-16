@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>i-Ready Outcomes Analysis — Sample Research Brief | LearnPlatform by Instructure</title>
+<style>
+:root {
+  --lp-green:  #7ac142;
+  --lp-teal:   #00a99d;
+  --lp-blue:   #1e5fa8;
+  --lp-blue-dk:#17497f;
+  --lp-gray-bar: #ececec;
+  --lp-ink:    #232323;
+  --lp-ink-2:  #55585c;
+  --lp-ink-3:  #8a8d91;
+  --lp-border: #dfe1e3;
+  --lp-surface: #ffffff;
+  --lp-bg: #eef0f2;
+  --font: "Segoe UI", system-ui, -apple-system, Helvetica, Arial, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--lp-bg); font-family: var(--font);
+  font-size: 14px; line-height: 1.6; color: var(--lp-ink); -webkit-font-smoothing: antialiased;
+}
+h1,h2,h3,h4 { margin: 0; }
+p { margin: 0 0 .85em; }
+p:last-child { margin-bottom: 0; }
+table { border-collapse: collapse; width: 100%; }
+a { color: var(--lp-blue); }
+
+.toolbar {
+  position: sticky; top: 0; z-index: 30; background: rgba(238,240,242,.94); backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--lp-border); padding: 10px 24px; display: flex; justify-content: center;
+}
+.toolbar-inner { width: 100%; max-width: 900px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.toolbar-hint { font-size: 12px; color: var(--lp-ink-2); }
+.print-btn { background: var(--lp-blue); color: #fff; border: none; border-radius: 999px; padding: 8px 18px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.print-btn:hover { background: var(--lp-blue-dk); }
+
+.page { max-width: 900px; margin: 0 auto; padding: 28px 24px 90px; }
+.sheet {
+  background: var(--lp-surface); border-radius: 10px; overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,.07), 0 12px 32px rgba(0,0,0,.10);
+}
+
+/* gradient masthead banner, matches the LearnPlatform brief cover */
+.masthead {
+  background: linear-gradient(90deg, var(--lp-green) 0%, var(--lp-teal) 55%, var(--lp-blue) 100%);
+  padding: 22px 44px; color: #fff;
+}
+.wordmark { display: flex; align-items: baseline; gap: 10px; }
+.wordmark-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .18em; opacity: .9; }
+.wordmark-mark { font-size: 24px; font-weight: 800; letter-spacing: .04em; display: flex; align-items: center; gap: 4px; }
+.wordmark-mark .ring { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border: 2.5px solid #fff; border-radius: 50%; font-size: 15px; }
+.wordmark-sub { font-size: 9.5px; font-weight: 600; letter-spacing: .1em; opacity: .9; margin-top: 1px; }
+
+/* thin gradient rule reused above every major page-section, echoing the repeating top strip on every page of the source PDF */
+.gradient-rule { height: 6px; background: linear-gradient(90deg, var(--lp-green) 0%, var(--lp-teal) 55%, var(--lp-blue) 100%); }
+
+.body-pad { padding: 40px 44px 46px; }
+
+.doc-title { font-style: italic; font-weight: 700; font-size: 26px; color: var(--lp-blue); margin-bottom: 14px; letter-spacing: -.01em; }
+.doc-subtitle { font-size: 18px; font-weight: 600; color: var(--lp-blue); line-height: 1.35; margin-bottom: 10px; }
+.doc-author { font-size: 13px; color: var(--lp-ink-2); margin-bottom: 22px; }
+
+.bar-heading {
+  background: var(--lp-blue); color: #fff; text-align: center; font-weight: 700; font-size: 13.5px;
+  padding: 9px 14px; border-radius: 3px; margin: 26px 0 16px;
+}
+.bar-heading.gray { background: var(--lp-gray-bar); color: var(--lp-ink); }
+
+.plain-heading {
+  color: var(--lp-blue); font-weight: 700; font-size: 15.5px; margin: 30px 0 12px;
+}
+
+.finding-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+.finding-row:last-child { margin-bottom: 0; }
+.plus-icon {
+  flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: var(--lp-green);
+  color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; margin-top: 1px;
+}
+.finding-row p { font-size: 13.5px; color: var(--lp-ink); line-height: 1.6; }
+.finding-row em { font-style: italic; }
+
+.lp-table { font-size: 12.5px; margin: 4px 0 8px; }
+.lp-table th {
+  background: var(--lp-blue); color: #fff; font-weight: 700; font-size: 11.5px;
+  padding: 10px 12px; text-align: left; border: 1px solid #ffffff33;
+}
+.lp-table td { padding: 9px 12px; border: 1px solid var(--lp-border); color: var(--lp-ink); vertical-align: top; }
+.lp-table tr:nth-child(even) td { background: #fafbfc; }
+
+.table-caption { font-size: 12px; color: var(--lp-ink-2); margin-bottom: 8px; }
+.essa-statement {
+  font-size: 13px; color: var(--lp-ink); background: #f4f7fb; border-left: 3px solid var(--lp-blue);
+  padding: 10px 14px; margin: 14px 0 20px; line-height: 1.6;
+}
+.essa-statement b { color: var(--lp-blue); }
+
+.chart-wrap { position: relative; width: 100%; margin: 10px 0 6px; }
+.chart-caption { font-size: 11.5px; color: var(--lp-ink-3); margin-top: 6px; font-style: italic; }
+
+.corroboration-box {
+  background: #f4f7fb; border: 1px solid #d6e2f0; border-radius: 6px; padding: 14px 18px; margin: 18px 0;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.corroboration-box .ring-sm {
+  flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--lp-teal);
+  display: flex; align-items: center; justify-content: center; color: var(--lp-teal); font-weight: 800; font-size: 13px; margin-top: 1px;
+}
+.corroboration-box p { font-size: 13px; color: var(--lp-ink); line-height: 1.6; }
+.corroboration-box b { color: var(--lp-blue); }
+
+.footnote { font-size: 10.5px; color: var(--lp-ink-3); border-top: 1px solid var(--lp-border); padding-top: 8px; margin-top: 22px; }
+
+.doc-footer {
+  display: flex; justify-content: space-between; align-items: flex-end; padding: 18px 44px 22px;
+  font-size: 10.5px; color: var(--lp-ink-3); border-top: 1px solid var(--lp-border);
+}
+
+.essa-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 18px 0; }
+.essa-card { background: #f7f7f7; border-radius: 8px; padding: 16px 14px; text-align: center; }
+.essa-badge {
+  width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center;
+  justify-content: center; font-weight: 800; font-size: 20px; color: #fff;
+}
+.essa-badge.l4 { background: #4fb8b0; }
+.essa-badge.l3 { background: var(--lp-blue); }
+.essa-badge.l2 { background: #3fae7a; }
+.essa-badge.l1 { background: #5cb85c; }
+.essa-card .essa-name { font-weight: 800; font-size: 13px; margin-bottom: 2px; }
+.essa-card .essa-name.l4 { color: #4fb8b0; }
+.essa-card .essa-name.l3 { color: var(--lp-blue); }
+.essa-card .essa-name.l2 { color: #3fae7a; }
+.essa-card .essa-name.l1 { color: #5cb85c; }
+.essa-card .essa-sub { font-size: 11px; font-weight: 700; color: var(--lp-ink-2); margin-bottom: 10px; }
+.essa-card ul { text-align: left; font-size: 10.5px; color: var(--lp-ink-2); padding-left: 16px; margin: 0; line-height: 1.5; }
+.essa-card ul li { margin-bottom: 5px; }
+
+.qa-list { padding-left: 20px; font-size: 13px; color: var(--lp-ink); line-height: 1.7; }
+.qa-list > li { margin-bottom: 12px; }
+.qa-list ol, .qa-list ul { margin-top: 6px; }
+
+@media print {
+  @page { size: letter; margin: 0; }
+  body { background: #fff; }
+  .toolbar, .no-print { display: none !important; }
+  .page { max-width: none; padding: 0; }
+  .sheet { box-shadow: none; border-radius: 0; }
+  .body-pad, .doc-footer { padding-left: 0.6in; padding-right: 0.6in; }
+  .masthead { padding-left: 0.6in; padding-right: 0.6in; }
+}
+@media (max-width: 760px) {
+  .essa-grid { grid-template-columns: repeat(2, 1fr); }
+  .body-pad { padding: 30px 22px; }
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <div class="toolbar-inner">
+    <span class="toolbar-hint">Sample Research Brief for format feedback · illustrative example built from real (anonymized) analysis data.</span>
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+  </div>
+</div>
+
+<div class="page">
+  <div class="sheet">
+
+    <!-- ══ MASTHEAD / COVER ══════════════════════════════════════════ -->
+    <div class="masthead">
+      <div class="wordmark">
+        <div>
+          <div class="wordmark-eyebrow">PLATFORM</div>
+          <div class="wordmark-mark">LEA<span class="ring">R</span>N</div>
+          <div class="wordmark-sub">BY INSTRUCTURE</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="body-pad">
+      <div class="doc-title">i-Ready Outcomes Analysis</div>
+      <div class="doc-subtitle">Rapid Cycle Evaluation Summary for<br>Sample School District</div>
+      <div class="doc-author">Amanda Cadran</div>
+
+      <!-- ══ RCE OVERVIEW (bar) ══════════════════════════════════════ -->
+      <div class="bar-heading">Rapid Cycle Evaluation Overview</div>
+      <p style="font-size:13.5px;">LearnPlatform's Research team prepared and ran rapid cycle evaluations on <em>i-Ready</em> using the following research designs:</p>
+      <ol style="font-size:13.5px; padding-left:20px; line-height:1.7;">
+        <li>Association of time on task with i-Ready's internal diagnostic scores, Kindergarten through 12th grade, for the 2025–2026 academic year</li>
+        <li>Association of time on task with SmarterBalanced state summative scores, run separately for each tested grade (3, 4, 5, 6, 7, 8, and 10)</li>
+      </ol>
+
+      <!-- ══ SUMMARY RESULTS (gray bar) ═══════════════════════════════ -->
+      <div class="bar-heading gray">Summary Results</div>
+      <div class="finding-row">
+        <div class="plus-icon">+</div>
+        <p>Students in grades <strong>Kindergarten through 8th</strong> who spent more time on task in <em>i-Ready</em> Math had higher diagnostic scores. This same relationship held up on the state summative test in grades 3, 4, 7, and 8 — two independent measures agreeing is a stronger signal than either alone.</p>
+      </div>
+      <div class="finding-row">
+        <div class="plus-icon">+</div>
+        <p>The relationship was strongest in grades 3 and 4, where <strong>both</strong> the internal diagnostic and the state test agreed, in both Math and ELA. It faded through the middle grades and was not significant by high school.</p>
+      </div>
+      <div class="finding-row">
+        <div class="plus-icon">+</div>
+        <p>Across all grades, <strong>14,081 students</strong> were included in the district-wide diagnostic analysis. No usage/dosage goal was configured for this trial, so this brief reports average time on task rather than a compliance rate.</p>
+      </div>
+
+      <!-- ══ RCE OVERVIEW (plain) ══════════════════════════════════════ -->
+      <div class="plain-heading">Rapid Cycle Evaluation Overview</div>
+      <p style="font-size:13.5px;">LearnPlatform by Instructure (LearnPlatform), in collaboration with Sample School District, conducted a total of <strong>16 Rapid Cycle Evaluations (RCEs)</strong> to examine the relationship between <em>i-Ready</em> usage and both its internal diagnostic and SmarterBalanced state summative scores.<sup>1</sup> The diagnostic-based RCEs were designed to satisfy Level III requirements (Promising Evidence) according to the Every Student Succeeds Act (ESSA) (see Appendix A for more information on ESSA), and results from both outcome measures were compared for agreement wherever both were available at the same grade.</p>
+
+      <div class="footnote"><sup>1</sup> LearnPlatform by Instructure's RCE reports are generated using IMPACT 2.0. This software supports a range of research designs and methods that enable systematic examinations of product usage and outcomes within diverse educational contexts.</div>
+    </div>
+
+    <div class="gradient-rule"></div>
+
+    <!-- ══ PAGE 2: OVERVIEW TABLE + SUMMARY OF IMPACTS ═════════════════ -->
+    <div class="body-pad">
+      <div class="plain-heading" style="margin-top:0;">Overview of Measures, Samples, and Findings across RCEs</div>
+      <p style="font-size:13.5px;">The RCEs used data from 09/02/2025–06/23/2026 to provide Sample School District with insights into the implementation of <em>i-Ready</em> and the relationship with student outcomes. Sample School District provided LearnPlatform with data on product usage and student demographics and outcomes (see Table 1) (see Appendix B for subgroup-level findings).</p>
+
+      <div class="table-caption">Table 1. Descriptions of the RCE sample, usage, and outcomes included in the <em>i-Ready</em> analyses.</div>
+      <table class="lp-table">
+        <thead><tr><th>Number of RCEs</th><th>Overall Effectiveness (Math, K–8)</th><th>Overall Statistical Significance</th><th>Grade Level(s)</th><th>Sample Size Range</th><th>Usage Metric(s)</th><th>Outcome(s)</th></tr></thead>
+        <tbody><tr>
+          <td>16</td>
+          <td>+.06 to +.18</td>
+          <td>Positive</td>
+          <td>K–8 (diagnostic) · 3, 4, 5, 6, 7, 8, 10 (state test)</td>
+          <td>1,275–1,934</td>
+          <td>Time on Task (ELA &amp; Math)</td>
+          <td>i-Ready Diagnostic · SmarterBalanced</td>
+        </tr></tbody>
+      </table>
+
+      <div class="plain-heading">Summary of Impacts</div>
+      <p style="font-size:13.5px;">The RCEs used descriptive statistics to support usage analyses and partial correlations<sup>2</sup> to examine how time on task relates to outcomes. Findings indicate that students in grades Kindergarten through 8th who spent more time on task in <em>i-Ready</em> Math had higher diagnostic scores. The same relationship faded by grade 9 and was not statistically significant in grades 9 or 10.</p>
+
+      <div class="essa-statement"><b>Table 2.</b> RCEs on <em>i-Ready</em> Math in Sample School District satisfy ESSA evidence requirements for <b>Level III (Promising Evidence)</b> for students' math outcomes in grades K–8 when looking at the internal diagnostic assessment.</div>
+
+      <div class="chart-wrap" style="height:280px;">
+        <canvas id="dotChart"></canvas>
+      </div>
+      <div class="chart-caption">Partial correlation effect sizes by grade — i-Ready diagnostic, Math. Green = statistically significant; gray = not significant.</div>
+
+      <div class="corroboration-box">
+        <div class="ring-sm">✓</div>
+        <p><b>A second, independent outcome measure agrees.</b> Washington's SmarterBalanced summative test — run as a separate analysis for each tested grade — also shows significant positive effects in grades 3, 4, 7, and 8, the same direction as the internal diagnostic. Two independently run measures agreeing is stronger evidence than either alone.</p>
+      </div>
+
+      <div class="footnote"><sup>2</sup> Partial correlations measure the degree of association between <em>i-Ready</em> usage and the outcome of interest. The analyses included two covariates to control for potential selection bias: school and grade level. Results specific to school-level effects are in Appendix B.</div>
+    </div>
+
+    <div class="gradient-rule"></div>
+
+    <!-- ══ PAGE 3: NEXT STEPS ══════════════════════════════════════════ -->
+    <div class="body-pad">
+      <div class="plain-heading" style="margin-top:0;">Next Steps</div>
+      <p style="font-size:13.5px;">LearnPlatform recommends finding time to discuss these results with members of your district team (see Appendix C for sample discussion questions). Sample School District can consider additional RCEs on <em>i-Ready</em> by utilizing updated usage data and end-of-year scores for the 2026–2027 school year. Setting a usage/dosage goal for this trial, and adding demographic data from your student information system (SIS), would add additional value and validity to future results.</p>
+    </div>
+
+    <div class="gradient-rule"></div>
+
+    <!-- ══ PAGE 4: APPENDIX A — ESSA TIERS ══════════════════════════════ -->
+    <div class="body-pad">
+      <div class="plain-heading" style="margin-top:0; text-align:center; font-size:17px;">Appendix A</div>
+      <p style="font-size:13px; text-align:center; max-width:680px; margin:0 auto 8px;">The Every Student Succeeds Act (ESSA) provides schools and districts with a framework for determining which products are evidence-based and have been shown to improve student or other relevant outcomes. LearnPlatform classifies the research of interventions into one of four ESSA evidence tiers.</p>
+
+      <div class="essa-grid">
+        <div class="essa-card">
+          <div class="essa-badge l4">IV</div>
+          <div class="essa-name l4">ESSA LEVEL IV</div>
+          <div class="essa-sub">Demonstrates Rationale</div>
+          <ul>
+            <li>Research-based logic model for why this product should work</li>
+            <li>Blueprint for implementation with fidelity</li>
+            <li>Not empirical research — a rationale, not a finding</li>
+          </ul>
+        </div>
+        <div class="essa-card">
+          <div class="essa-badge l3">III</div>
+          <div class="essa-name l3">ESSA LEVEL III</div>
+          <div class="essa-sub">Promising Evidence</div>
+          <ul>
+            <li>Correlational study showing a positive relationship between usage and outcomes</li>
+            <li>No comparison group, random assignment, or baseline equivalence</li>
+            <li>Most meaningful for districts with similar context</li>
+          </ul>
+        </div>
+        <div class="essa-card">
+          <div class="essa-badge l2">II</div>
+          <div class="essa-name l2">ESSA LEVEL II</div>
+          <div class="essa-sub">Moderate Evidence</div>
+          <ul>
+            <li>Quasi-experimental study showing users outperformed non-users</li>
+            <li>Demographically similar comparison group, not randomly assigned</li>
+            <li>District context should be strongly considered</li>
+          </ul>
+        </div>
+        <div class="essa-card">
+          <div class="essa-badge l1">I</div>
+          <div class="essa-name l1">ESSA LEVEL I</div>
+          <div class="essa-sub">Strong Evidence</div>
+          <ul>
+            <li>Experimental study proving users outperformed non-users</li>
+            <li>Randomized comparison group for highly generalizable evidence</li>
+            <li>Establishes eligibility for all types of federal funding</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="gradient-rule"></div>
+
+    <!-- ══ PAGE 5: APPENDIX B — SUBGROUP FINDINGS ════════════════════════ -->
+    <div class="body-pad">
+      <div class="plain-heading" style="margin-top:0; text-align:center; font-size:17px;">Appendix B</div>
+      <div class="table-caption" style="text-align:center;">Table B1. Subgroups with a clear positive or negative finding in the <em>i-Ready</em> Math RCEs (diagnostic assessment). Subgroups without a statistically significant result are omitted from this table but are discussed in the main findings above.</div>
+      <table class="lp-table">
+        <thead><tr><th>Effectiveness</th><th>ESSA Level</th><th>Subgroup</th><th>Grade Level(s)</th><th>Usage Metric</th><th>Outcome(s)</th></tr></thead>
+        <tbody id="subgroupTbody"></tbody>
+      </table>
+    </div>
+
+    <div class="gradient-rule"></div>
+
+    <!-- ══ PAGE 6: APPENDIX C — DISCUSSION QUESTIONS ═════════════════════ -->
+    <div class="body-pad">
+      <div class="plain-heading" style="margin-top:0; text-align:center; font-size:17px;">Appendix C</div>
+      <ol class="qa-list">
+        <li>What could be the reason certain grades or school sites have higher usage or more positive effectiveness?
+          <ol type="a" style="padding-left:18px;">
+            <li>Are there best practices in the strongest-showing schools or grades (3rd and 4th) that could be replicated elsewhere?</li>
+            <li>Are there barriers to implementation that could explain lower usage in grades 9–10?</li>
+            <li>Did some sites receive different professional learning opportunities?</li>
+          </ol>
+        </li>
+        <li>What does success look like for this product's implementation?
+          <ol type="a" style="padding-left:18px;">
+            <li>Right now, is usage the most important part of implementation, or should the focus shift to effectiveness once a dosage goal is set?</li>
+          </ol>
+        </li>
+        <li>How can we use these results within our district?
+          <ol type="a" style="padding-left:18px;">
+            <li>Should a usage/dosage goal be defined and communicated to teachers, since none is currently configured?</li>
+            <li>Can implementation leaders from the strongest-showing grades support other grades?</li>
+          </ol>
+        </li>
+        <li>Can we work with LearnPlatform to iterate on these results — for example, closing the SmarterBalanced grade 10 data-matching gap, or running more specific reports by school or classroom?</li>
+      </ol>
+    </div>
+
+    <div class="doc-footer">
+      <span>LearnPlatform by Instructure © 2026<br>Prepared for Sample School District</span>
+      <span>Sample Research Brief — for format feedback only</span>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// Real, validated i-Ready Math diagnostic effect sizes by grade (K-12), anonymized district.
+const GRADE_DATA = [
+  ["K", 0.10374, true],
+  ["1st", 0.09794, true],
+  ["2nd", 0.0815, true],
+  ["3rd", 0.16429, true],
+  ["4th", 0.16653, true],
+  ["5th", 0.05581, true],
+  ["6th", 0.11183, true],
+  ["7th", 0.05872, true],
+  ["8th", 0.18006, true],
+  ["9th", 0.03929, false],
+  ["10th", -0.05679, false],
+];
+
+function fitCanvas(canvas) {
+  const dpr = Math.max(window.devicePixelRatio || 1, 2);
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = Math.round(rect.width * dpr);
+  canvas.height = Math.round(rect.height * dpr);
+  canvas.style.width = rect.width + "px";
+  canvas.style.height = rect.height + "px";
+  const ctx = canvas.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, w: rect.width, h: rect.height };
+}
+
+function drawChart() {
+  const canvas = document.getElementById("dotChart");
+  if (!canvas) return;
+  const { ctx, w, h } = fitCanvas(canvas);
+  const padL = 46, padR = 20, padT = 20, padB = 34;
+  const plotW = w - padL - padR, plotH = h - padT - padB;
+  const yMin = -1, yMax = 1;
+  const yPix = v => padT + (1 - (v - yMin) / (yMax - yMin)) * plotH;
+  const colW = plotW / GRADE_DATA.length;
+  const xPix = i => padL + colW * i + colW / 2;
+
+  ctx.clearRect(0, 0, w, h);
+
+  // y-axis
+  ctx.strokeStyle = "#c7cbce"; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.stroke();
+  [1, 0, -1].forEach(v => {
+    const y = yPix(v);
+    ctx.fillStyle = "#8a8d91"; ctx.font = "italic 10.5px Segoe UI, sans-serif"; ctx.textAlign = "right";
+    ctx.fillText(v, padL - 8, y + 4);
+    ctx.strokeStyle = v === 0 ? "#c7cbce" : "#e8eaec"; ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(w - padR, y); ctx.stroke();
+  });
+  ctx.save();
+  ctx.translate(14, padT + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = "#8a8d91"; ctx.font = "italic 10px Segoe UI, sans-serif"; ctx.textAlign = "center";
+  ctx.fillText("Partial Correlation Effect Sizes (r)", 0, 0);
+  ctx.restore();
+
+  GRADE_DATA.forEach(([label, es, sig], i) => {
+    const x = xPix(i), y = yPix(es);
+    ctx.fillStyle = "#8a8d91"; ctx.font = "italic 10.5px Segoe UI, sans-serif"; ctx.textAlign = "center";
+    ctx.fillText(label + " Grade", x, h - padB + 18);
+
+    ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2);
+    ctx.fillStyle = sig ? "#3fae7a" : "#b7bbbe"; ctx.fill();
+
+    ctx.fillStyle = "#232323"; ctx.font = "bold 13px Segoe UI, sans-serif"; ctx.textAlign = "center";
+    ctx.fillText((es >= 0 ? "" : "−") + Math.abs(es).toFixed(2), x, y - 14);
+  });
+}
+drawChart();
+window.addEventListener("resize", drawChart);
+window.addEventListener("beforeprint", drawChart);
+
+// Real, validated positive/negative subgroup findings (i-Ready Math diagnostic) — non-significant subgroups omitted, matching this template's convention.
+const SUBGROUP_ROWS = [
+  ["Positive", "III", "Gender = Male", "K–8", "Time on Task", "i-Ready Diagnostic"],
+  ["Positive", "III", "Gender = Female", "K–8", "Time on Task", "i-Ready Diagnostic"],
+  ["Positive", "III", "Ethnicity = White", "K–8", "Time on Task", "i-Ready Diagnostic"],
+  ["Positive", "III", "Ethnicity = Black or African-American", "K–8", "Time on Task", "i-Ready Diagnostic"],
+  ["Positive", "III", "Ethnicity = Two or More Races", "K–8", "Time on Task", "i-Ready Diagnostic"],
+  ["Positive", "III", "Ethnicity = Native Hawaiian or Other Pacific Islander*", "K–8", "Time on Task", "i-Ready Diagnostic"],
+  ["Positive", "III", "Free/Reduced Lunch = Yes", "K–8", "Time on Task", "i-Ready Diagnostic"],
+  ["Positive", "III", "School = School 1 (highest-showing)", "K–8", "Time on Task", "i-Ready Diagnostic"],
+  ["Positive", "III", "School = School 2", "K–8", "Time on Task", "i-Ready Diagnostic"],
+  ["Positive", "III", "School = School 3", "K–8", "Time on Task", "i-Ready Diagnostic"],
+];
+document.getElementById("subgroupTbody").innerHTML = SUBGROUP_ROWS.map(r => `
+  <tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")
+  + `<tr><td colspan="6" style="font-size:10.5px; color:#8a8d91; font-style:italic; background:#fff;">* n = 29, right at the edge of the stability threshold used elsewhere in this pipeline — flagged as a small-sample result, not a headline finding. No subgroup in this analysis showed a statistically significant negative effect.</td></tr>`;
+</script>
+</body>
+</html>
