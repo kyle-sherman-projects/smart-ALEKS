@@ -8,7 +8,7 @@
 <style>
 /* ── Design tokens ──────────────────────────────────────────────────── */
 :root {
-  --c-bg:          #f5f4f0;
+  --c-bg:          #eef0f2;
   --c-surface:     #ffffff;
   --c-surface-alt: #faf9f6;
   --c-border:      rgba(0,0,0,.10);
@@ -27,10 +27,13 @@
   --c-not-reported:#4b5563;
   --c-not-reported-bg:#f3f4f6;
 
-  --c-brand:       #1d4ed8;
+  --c-brand:       #1e5fa8;
   --c-brand-light: #eff3ff;
+  --lp-green:      #7ac142;
+  --lp-teal:       #00a99d;
+  --lp-gradient:   linear-gradient(90deg, var(--lp-green) 0%, var(--lp-teal) 55%, var(--c-brand) 100%);
 
-  --c-essa:        #1d4ed8;
+  --c-essa:        #1e5fa8;
   --c-essa-bg:     #eff3ff;
 
   --c-accent:      #0f766e;
@@ -70,7 +73,21 @@ button { font-family: inherit; cursor: pointer; }
 a { color: var(--c-brand); }
 
 /* ── Layout ───────────────────────────────────────────────────────── */
-.page { max-width: 960px; margin: 0 auto; padding: 28px 20px 80px; }
+.page { max-width: 960px; margin: 0 auto; padding: 0 20px 80px; }
+
+/* ── LP masthead banner ───────────────────────────────────────────── */
+.lp-masthead {
+  background: var(--lp-gradient);
+  padding: 20px 32px;
+  margin: 0 -20px 24px;
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+  color: #fff;
+}
+.lp-wordmark-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .18em; opacity: .9; }
+.lp-wordmark-mark { font-size: 22px; font-weight: 800; letter-spacing: .04em; display: flex; align-items: center; gap: 3px; margin-top: 2px; }
+.lp-wordmark-mark .ring { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border: 2.5px solid #fff; border-radius: 50%; font-size: 13px; }
+.lp-wordmark-sub { font-size: 9px; font-weight: 600; letter-spacing: .1em; opacity: .9; margin-top: 2px; }
+.lp-gradient-rule { height: 5px; background: var(--lp-gradient); margin: 0 -20px 24px; border-radius: 3px; }
 
 /* ── Header ───────────────────────────────────────────────────────── */
 .header-band {
@@ -106,12 +123,14 @@ a { color: var(--c-brand); }
 .header-title {
   font-size: 22px;
   font-weight: 700;
-  color: var(--c-text);
+  font-style: italic;
+  color: var(--c-brand);
   margin-bottom: 6px;
 }
 .header-subtitle {
-  font-size: 13px;
-  color: var(--c-text-2);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-brand);
 }
 .header-meta-grid {
   display: flex;
@@ -164,11 +183,18 @@ a { color: var(--c-brand); }
   line-height: 1.2;
 }
 .essa-badge .essa-tier-num {
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 800;
-  color: var(--c-brand);
+  color: #fff;
+  background: var(--c-brand);
   line-height: 1;
-  margin-bottom: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 6px;
 }
 
 /* ── Executive summary ────────────────────────────────────────────── */
@@ -245,7 +271,7 @@ a { color: var(--c-brand); }
 .section-title {
   font-size: 16px;
   font-weight: 700;
-  color: var(--c-text);
+  color: var(--c-brand);
 }
 .section-subtitle {
   font-size: 12px;
@@ -507,12 +533,12 @@ a { color: var(--c-brand); }
   font-size: 13px;
 }
 .data-table thead th {
-  background: var(--c-surface-alt);
+  background: var(--c-brand);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: .05em;
   text-transform: uppercase;
-  color: var(--c-text-2);
+  color: #fff;
   padding: 10px 14px;
   text-align: left;
   border-bottom: 1px solid var(--c-border);
@@ -520,9 +546,9 @@ a { color: var(--c-brand); }
   cursor: pointer;
   user-select: none;
 }
-.data-table thead th:hover { color: var(--c-brand); }
-.data-table thead th .sort-arrow { margin-left: 4px; opacity: .4; }
-.data-table thead th.sorted .sort-arrow { opacity: 1; color: var(--c-brand); }
+.data-table thead th:hover { color: #d6e6f7; }
+.data-table thead th .sort-arrow { margin-left: 4px; opacity: .6; color: #fff; }
+.data-table thead th.sorted .sort-arrow { opacity: 1; color: #ffe37a; }
 .data-table tbody tr:last-child td { border-bottom: none; }
 .data-table tbody td {
   padding: 10px 14px;
@@ -772,6 +798,13 @@ a { color: var(--c-brand); }
 </head>
 <body>
 <div class="page">
+
+  <!-- ── LP MASTHEAD ────────────────────────────────────────────────── -->
+  <div class="lp-masthead">
+    <div class="lp-wordmark-eyebrow">PLATFORM</div>
+    <div class="lp-wordmark-mark">LEA<span class="ring">R</span>N</div>
+    <div class="lp-wordmark-sub">BY INSTRUCTURE</div>
+  </div>
 
   <!-- ── HEADER ─────────────────────────────────────────────────────── -->
   <div class="header-band">
