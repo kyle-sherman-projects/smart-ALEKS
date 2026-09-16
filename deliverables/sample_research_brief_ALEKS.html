@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Smart Math — Research Brief | Example School District, 2025-26 BOY-MOY</title>
+<title>Smart Math 1,2,3 — Example Rapid-Cycle Evaluation Research Brief | Example School District</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 /* ── Design tokens ──────────────────────────────────────────────────── */
@@ -75,6 +75,237 @@ a { color: var(--c-brand); }
 /* ── Layout ───────────────────────────────────────────────────────── */
 .page { max-width: 960px; margin: 0 auto; padding: 0 20px 80px; }
 
+/* ── Major part divider ───────────────────────────────────────────── */
+.part-divider {
+  margin: 34px 0 22px;
+  padding-top: 20px;
+  border-top: 2px solid var(--c-border-md);
+}
+.part-divider-label {
+  font-size: 11px; font-weight: 800; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--c-brand);
+  margin-bottom: 4px;
+}
+.part-divider-desc { font-size: 13px; color: var(--c-text-2); line-height: 1.55; }
+
+/* ── Summary: what works / for whom / under what conditions ───────── */
+.summary-lead {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--c-text);
+  font-weight: 500;
+  margin-bottom: 18px;
+}
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--c-border);
+}
+.summary-item {
+  padding: 14px 18px 14px 0;
+  border-right: 1px solid var(--c-border);
+}
+.summary-item:last-child { border-right: none; }
+.summary-item + .summary-item { padding-left: 18px; }
+.summary-q {
+  font-size: 10.5px; font-weight: 800; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--c-brand);
+  margin-bottom: 6px;
+}
+.summary-a { font-size: 13px; line-height: 1.55; color: var(--c-text-2); }
+.summary-a strong { color: var(--c-text); }
+
+/* ── Footnote markers & glossary ──────────────────────────────────── */
+.fn {
+  font-size: 9.5px;
+  font-weight: 800;
+  vertical-align: super;
+  line-height: 0;
+  color: var(--c-brand);
+  text-decoration: none;
+  padding: 0 1px;
+  cursor: help;
+}
+.fn:hover { text-decoration: underline; }
+.glossary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 16px 24px;
+}
+.glossary-item {
+  border-left: 3px solid var(--c-brand-light);
+  padding-left: 12px;
+}
+.glossary-term {
+  font-size: 12.5px; font-weight: 800; color: var(--c-text);
+  margin-bottom: 4px;
+}
+.glossary-num {
+  display: inline-block;
+  font-size: 9.5px; font-weight: 800;
+  color: var(--c-brand); background: var(--c-brand-light);
+  border-radius: 3px; padding: 1px 5px; margin-right: 5px;
+  vertical-align: middle;
+}
+.glossary-def { font-size: 12px; line-height: 1.55; color: var(--c-text-2); }
+.glossary-cta {
+  margin-top: 18px; padding: 13px 16px;
+  background: var(--c-brand-light);
+  border-radius: var(--r-md);
+  font-size: 12.5px; line-height: 1.6; color: var(--c-text-2);
+}
+
+/* ── Primer callout (inline explainer) ────────────────────────────── */
+.primer {
+  background: var(--c-surface-alt);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding: 13px 16px;
+  margin-bottom: 16px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--c-text-2);
+}
+.primer-title {
+  font-size: 10.5px; font-weight: 800; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--c-text-3);
+  margin-bottom: 5px;
+}
+
+/* ── Interactive affordance for table controls ────────────────────── */
+.tbl-hint {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 11.5px; font-weight: 600; color: var(--c-brand);
+  background: var(--c-brand-light);
+  border-radius: var(--r-sm);
+  padding: 7px 11px;
+  margin-bottom: 10px;
+}
+.tbl-filter-label {
+  font-size: 10.5px; font-weight: 800; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--c-text-3);
+  margin-bottom: 6px;
+}
+
+/* ── Flagged patterns & discussion agenda ─────────────────────────── */
+.flag-card {
+  border: 1px solid var(--c-border);
+  border-left: 4px solid var(--c-warn);
+  border-radius: var(--r-md);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  background: var(--c-surface);
+}
+.flag-card.flag-positive { border-left-color: var(--c-positive); }
+.flag-card.flag-negative { border-left-color: var(--c-negative); }
+.flag-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+.flag-num {
+  flex: none;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--c-warn); color: #fff;
+  font-size: 11px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+.flag-card.flag-positive .flag-num { background: var(--c-positive); }
+.flag-card.flag-negative .flag-num { background: var(--c-negative); }
+.flag-title { font-size: 14px; font-weight: 700; color: var(--c-text); line-height: 1.35; }
+.flag-row { margin-bottom: 9px; }
+.flag-row:last-child { margin-bottom: 0; }
+.flag-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--c-text-3);
+  display: block; margin-bottom: 2px;
+}
+.flag-body { font-size: 12.5px; color: var(--c-text-2); line-height: 1.6; }
+.flag-evidence {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px;
+}
+.flag-question {
+  margin-top: 12px;
+  background: var(--c-brand-light);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+}
+.flag-question .flag-label { color: var(--c-brand); }
+.agenda-flagref {
+  display: inline-block;
+  font-size: 9.5px; font-weight: 800; letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--c-brand); background: var(--c-brand-light);
+  border-radius: 3px; padding: 2px 6px;
+}
+.flag-chip {
+  font-size: 10.5px; font-weight: 600;
+  background: var(--c-surface-alt);
+  border: 1px solid var(--c-border);
+  border-radius: 20px; padding: 3px 9px;
+  color: var(--c-text-2);
+}
+.flag-chip.chip-sig { background: var(--c-positive-bg); border-color: transparent; color: var(--c-positive); }
+.flag-chip.chip-ns  { background: var(--c-neutral-bg);  border-color: transparent; color: var(--c-neutral); }
+.flag-chip.chip-neg { background: var(--c-negative-bg); border-color: transparent; color: var(--c-negative); }
+
+.agenda-item { display: flex; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--c-border); }
+.agenda-item:last-child { border-bottom: none; }
+.agenda-rank {
+  flex: none; width: 24px; height: 24px; border-radius: var(--r-sm);
+  background: var(--c-brand-light); color: var(--c-brand);
+  font-size: 12px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+.agenda-q { font-size: 13px; font-weight: 700; color: var(--c-text); margin-bottom: 3px; }
+.agenda-why { font-size: 12px; color: var(--c-text-2); line-height: 1.55; }
+.agenda-src {
+  font-size: 10px; font-weight: 700; color: var(--c-text-3);
+  white-space: nowrap; align-self: center;
+}
+.notes-list { list-style: none; padding: 0; margin: 0; }
+.notes-list li {
+  font-size: 12.5px; color: var(--c-text-2); line-height: 1.6;
+  padding: 9px 0 9px 18px; position: relative;
+  border-bottom: 1px solid var(--c-border);
+}
+.notes-list li:last-child { border-bottom: none; }
+.notes-list li::before {
+  content: "▸"; position: absolute; left: 0; top: 9px;
+  color: var(--c-text-3); font-size: 11px;
+}
+.notes-list strong { color: var(--c-text); }
+
+/* ── Example-data disclaimer ──────────────────────────────────────── */
+.example-print-footer { display: none; }
+
+@media print {
+  body { background: #fff; }
+  .page { padding-bottom: 40px; }
+  .section, .callout-box, .flag-card, .equity-card { break-inside: avoid; }
+  .glossary-item, .agenda-item, .summary-item { break-inside: avoid; }
+
+  /* Interactive-only affordances are meaningless on paper */
+  .tbl-controls, .tbl-hint, .sort-arrow { display: none !important; }
+  .data-table { font-size: 10px; }
+  .fn { color: #000; }
+  a { color: inherit; text-decoration: none; }
+  .glossary-cta a { text-decoration: underline; }
+  /* Repeats on every printed page */
+  .example-print-footer {
+    display: block;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    text-align: center;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--c-warn);
+    background: var(--c-warn-bg);
+    border-top: 1px solid var(--c-warn-border);
+    padding: 4px 0;
+  }
+}
+
 /* ── LP masthead banner ───────────────────────────────────────────── */
 .lp-masthead {
   background: var(--lp-gradient);
@@ -121,11 +352,22 @@ a { color: var(--c-brand); }
   margin-bottom: 10px;
 }
 .header-title {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 40px;
+  font-weight: 800;
   font-style: italic;
   color: var(--c-brand);
-  margin-bottom: 6px;
+  line-height: 1.12;
+  letter-spacing: -.01em;
+  margin: 4px 0 8px;
+}
+.header-title .title-descriptor {
+  display: block;
+  font-size: 17px;
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: 0;
+  color: var(--c-text-2);
+  margin-top: 6px;
 }
 .header-subtitle {
   font-size: 14px;
@@ -500,23 +742,35 @@ a { color: var(--c-brand); }
 }
 .tbl-filter {
   display: flex;
-  border: 1px solid var(--c-border-md);
-  border-radius: 999px;
-  overflow: hidden;
+  flex-wrap: wrap;
+  gap: 7px;
 }
 .tbl-filter button {
-  border: 0;
-  background: transparent;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 11px;
-  color: var(--c-text-2);
-  transition: background .15s, color .15s;
+  border: 1px solid var(--c-brand);
+  background: var(--c-surface);
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 6px 14px;
+  color: var(--c-brand);
+  cursor: pointer;
+  transition: background .15s, color .15s, box-shadow .15s;
+}
+.tbl-filter button:hover {
+  background: var(--c-brand-light);
+  box-shadow: 0 1px 4px rgba(30,95,168,.18);
+}
+.tbl-filter button:focus-visible {
+  outline: 2px solid var(--c-brand);
+  outline-offset: 2px;
 }
 .tbl-filter button.active {
-  background: var(--c-text);
+  background: var(--c-brand);
   color: #fff;
+  border-color: var(--c-brand);
 }
+.data-table th[onclick] { cursor: pointer; }
+.data-table th[onclick]:hover { background: var(--c-brand-light) !important; color: var(--c-brand); }
 .sort-label {
   font-size: 11px;
   color: var(--c-text-3);
@@ -624,7 +878,7 @@ a { color: var(--c-brand); }
   height: 100%;
   border-radius: 999px;
 }
-.bar-above-goal { background: var(--c-accent); }
+.bar-above-goal { background: #93c5fd; }
 .bar-below-goal { background: #93c5fd; }
 .avg-min-val {
   font-size: 12px;
@@ -674,36 +928,6 @@ a { color: var(--c-brand); }
   font-size: 11px;
   margin-top: 4px;
 }
-
-/* ── Collapsible ─────────────────────────────────────────────────── */
-.collapsible-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  background: none;
-  border: none;
-  padding: 0;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--c-text-2);
-  cursor: pointer;
-  text-align: left;
-  gap: 8px;
-}
-.collapsible-btn:hover { color: var(--c-text); }
-.collapsible-btn .chev {
-  font-size: 14px;
-  transition: transform .2s;
-  flex-shrink: 0;
-}
-.collapsible-btn.open .chev { transform: rotate(180deg); }
-.collapsible-body {
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height .3s ease;
-}
-.collapsible-body.open { max-height: 2000px; }
 
 /* ── Evidence callout ────────────────────────────────────────────── */
 .evidence-grid {
@@ -812,12 +1036,12 @@ a { color: var(--c-brand); }
       <div>
         <div class="header-product-badge">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-          Research Brief — Edtech Evaluation
+          Example Rapid-Cycle Evaluation Research Brief<a href="#fn-example" class="fn" title="This is an example document and does not contain real data.">1</a>
         </div>
-        <h1 class="header-title">Smart Math: Adaptive Math Software</h1>
-        <div class="header-subtitle">
-          View Usage &amp; Outcomes — Rapid Cycle Evaluation Summary for Example School District
-        </div>
+        <h1 class="header-title">
+          Smart Math 1,2,3
+          <span class="title-descriptor">Adaptive Math Software &middot; Usage and Outcomes for Example School District</span>
+        </h1>
       </div>
       <div class="essa-badge">
         <div class="essa-level">ESSA Tier</div>
@@ -827,54 +1051,78 @@ a { color: var(--c-brand); }
     </div>
     <div class="header-meta-grid">
       <div class="meta-item"><label>District</label><span>Example School District</span></div>
-      <div class="meta-item"><label>Report Period</label><span>08/25/2025 – 02/20/2026 (BOY-MOY)</span></div>
+      <div class="meta-item"><label>Report Period</label><span>08/25/2025 – 02/20/2026 (Beginning to Middle of Year)</span></div>
       <div class="meta-item"><label>Grade</label><span>Grade 6</span></div>
-      <div class="meta-item"><label>Outcome Measure</label><span>FastBridge aMath (MOY)</span></div>
+      <div class="meta-item"><label>Outcome Measure</label><span>FastBridge aMath (Middle of Year)</span></div>
       <div class="meta-item"><label>Author</label><span>Amanda Cadran, PhD</span></div>
     </div>
-  </div>
-
-  <!-- ── EXECUTIVE SUMMARY ────────────────────────────────────────── -->
-  <div class="exec-summary">
-    <strong>Grade 6 students who spent more time on Smart Math tended to score higher on the mid-year FastBridge aMath assessment</strong> — an effect size of <strong>+0.20</strong> (partial correlation, 95% CI: 0.12–0.28), which is statistically significant and consistent with ESSA Level III Promising Evidence. This positive relationship held across most student subgroups, with the strongest associations among students in the highest prior-performance tier (ES +0.32) and White students (ES +0.25). However, only <strong>27% of students met the recommended dosage</strong> of 665 minutes (≈30 min/week) over the 25-week window — a low-usage, high-impact pattern that suggests expanding access to the recommended dosage could meaningfully amplify outcomes across the student population.
   </div>
 
   <!-- ── KEY METRICS STRIP ─────────────────────────────────────────── -->
   <div class="metrics-strip">
     <div class="metric-card metric-positive">
-      <div class="metric-value">+0.20</div>
-      <div class="metric-label">Overall Effect Size</div>
-      <div class="metric-sub">Partial correlation r<br>Statistically significant</div>
+      <div class="metric-value" style="font-size:26px;">Positive</div>
+      <div class="metric-label">Overall Finding</div>
+      <div class="metric-sub">Statistically significant<a href="#fn-sig" class="fn">2</a><br>Effect size +0.20<a href="#fn-es" class="fn">3</a></div>
     </div>
     <div class="metric-card metric-neutral">
       <div class="metric-value" style="font-size:26px;">572</div>
-      <div class="metric-label">Students in Analysis</div>
-      <div class="metric-sub">Grade 6, BOY-MOY 2025-26</div>
+      <div class="metric-label">Students in Analysis<a href="#fn-n" class="fn">4</a></div>
+      <div class="metric-sub">Grade 6, Beginning to Middle of Year</div>
     </div>
-    <div class="metric-card metric-warn">
+    <div class="metric-card metric-neutral">
       <div class="metric-value">27%</div>
-      <div class="metric-label">Met Recommended Dosage</div>
-      <div class="metric-sub">156 of 552 active users<br>Goal: ≥665 min over 25 weeks</div>
+      <div class="metric-label">Met Recommended Usage<a href="#fn-dosage" class="fn">7</a></div>
+      <div class="metric-sub">156 of 552 students who used the product</div>
     </div>
     <div class="metric-card metric-neutral">
       <div class="metric-value" style="font-size:26px;">486</div>
-      <div class="metric-label">Avg Minutes on System</div>
-      <div class="metric-sub">179 min below dosage goal<br>97% of students used Smart Math</div>
-    </div>
-    <div class="metric-card metric-brand">
-      <div class="metric-value" style="font-size:22px;">Level III</div>
-      <div class="metric-label">ESSA Evidence Tier</div>
-      <div class="metric-sub">Promising Evidence<br>1 RCE, partial correlation</div>
+      <div class="metric-label">Average Minutes Used</div>
+      <div class="metric-sub">Against a goal of 665 minutes</div>
     </div>
   </div>
 
-  <!-- ── LOW-USAGE / HIGH-IMPACT CALLOUT ──────────────────────────── -->
-  <div class="callout-box" style="margin-bottom:20px;">
-    <div class="callout-icon">&#9888;&#65039;</div>
-    <div>
-      <div class="callout-title">Low Usage, High Impact — A Key Equity Opportunity</div>
-      <div class="callout-body">
-        Despite 97% of students logging into Smart Math at least once, only <strong>27% met the recommended dosage</strong> of 665 minutes. Yet the product shows a <strong>statistically significant positive relationship with math outcomes</strong> at this partial usage level. This pattern suggests that the product has real instructional value — and that increasing the share of students reaching dosage recommendations could substantially expand benefits, particularly for students currently using the platform below threshold. Special Education students met the dosage goal at less than half the rate of General Education students (14% vs. 30%), a gap that warrants focused attention.
+  <!-- ── SUMMARY ──────────────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Summary</div>
+      <span class="section-subtitle">What works, for whom, and under what conditions</span>
+    </div>
+
+    <div class="summary-lead">
+      Grade 6 students who spent more time using Smart Math 1,2,3 tended to score higher on the
+      mid-year math assessment. Across all 572 students, that relationship was
+      <strong>positive and statistically significant</strong><a href="#fn-sig" class="fn">2</a> —
+      but it was <strong>not the same for every group of students</strong>, and the single
+      district-wide result hides most of what matters.
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="summary-q">What works</div>
+        <div class="summary-a">
+          Overall, more time using the product was associated with higher math scores, and that
+          relationship is <strong>statistically significant</strong> — meaning it is unlikely to be
+          a chance result. It meets the ESSA Level III "Promising Evidence" standard.<a href="#fn-essa" class="fn">5</a>
+          This is an association, not proof that the product caused the higher scores.<a href="#fn-causal" class="fn">6</a>
+        </div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-q">For whom</div>
+        <div class="summary-a">
+          The relationship was <strong>statistically significant for students in the lowest 40% of
+          prior performance</strong><a href="#fn-prior" class="fn">9</a>. For the highest-performing students it was <strong>not</strong>
+          statistically significant, so no effect can be claimed in either direction. For Special
+          Education students, no relationship was measurable at all.
+        </div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-q">Under what conditions</div>
+        <div class="summary-a">
+          <strong>97% of students used the product at least once, but only 27% reached the recommended
+          665 minutes.</strong> Nearly all findings therefore describe outcomes at
+          <em>below-recommended</em> usage. What happens at full recommended usage is not yet known.
+        </div>
       </div>
     </div>
   </div>
@@ -898,32 +1146,289 @@ a { color: var(--c-brand); }
       </div>
 
       <div class="es-detail">
-        <h3>Small-to-Moderate Positive Effect</h3>
+        <h3>A statistically significant positive relationship</h3>
         <p class="text-muted text-small">
-          A partial correlation of <strong>r = +0.20</strong> means that, after accounting for school and grade level, students who used Smart Math more had higher mid-year math scores. In education research, a correlation of +0.20 is considered a meaningful, practically relevant effect.
+          After accounting for school and grade level, students who used Smart Math 1,2,3 more tended to
+          have higher mid-year math scores. The finding is <strong>statistically significant</strong>,
+          which is the part that matters most: it means this relationship is unlikely to have appeared
+          by chance.<a href="#fn-sig" class="fn">2</a> The effect size of +0.20 describes
+          <em>how large</em> that relationship is<a href="#fn-es" class="fn">3</a> — useful context, but
+          on its own it would not tell a reader whether the result is real.
         </p>
         <div class="ci-bar">
-          <div class="ci-bar-label">95% Confidence Interval (0.12, 0.28)</div>
+          <div class="ci-bar-label">Range of likely true values<a href="#fn-ci" class="fn">8</a></div>
           <div class="ci-bar-track" style="margin-bottom:6px;">
             <div class="ci-bar-zero" title="Zero line (no effect)"></div>
             <div class="ci-bar-fill"></div>
-            <div class="ci-bar-dot" title="Effect size point estimate: +0.20"></div>
+            <div class="ci-bar-dot" title="Effect size estimate: +0.20"></div>
           </div>
           <div class="ci-bar-values">
-            <span>–0.50 (negative)</span>
-            <span>0 (no effect)</span>
-            <span>+0.50 (positive)</span>
+            <span>Negative</span>
+            <span>0 (no relationship)</span>
+            <span>Positive</span>
           </div>
         </div>
         <p class="text-small text-muted">
-          The confidence interval (0.12 to 0.28) excludes zero, confirming the result is unlikely to be due to chance. Covariates controlled: school and grade level.
+          This range sits entirely above zero and does not cross it. That is what makes the finding
+          statistically significant — the evidence points to a positive relationship rather than to no
+          relationship at all.
         </p>
         <div class="row-gap-8 mt-8">
-          <span class="sig-badge sig-significant">&#10003; 95% CI excludes zero</span>
-          <span class="sig-badge" style="background:#f3f4f6;color:#374151;">n = 572 Grade 6 students</span>
-          <span class="sig-badge" style="background:#f3f4f6;color:#374151;">BOY-MOY 2025-26</span>
+          <span class="sig-badge sig-significant">&#10003; Statistically significant</span>
+          <span class="sig-badge" style="background:#f3f4f6;color:#374151;">572 Grade 6 students<a href="#fn-n" class="fn">4</a></span>
+          <span class="sig-badge" style="background:#f3f4f6;color:#374151;">Beginning to Middle of Year, 2025–26</span>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ── FLAGGED PATTERNS & ANOMALIES ─────────────────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Flagged Patterns &amp; Anomalies</div>
+      <span class="section-subtitle">Patterns visible only when subgroups are read together</span>
+    </div>
+    <div class="text-small text-muted" style="line-height:1.6;margin-bottom:16px;">
+      These patterns come from looking across subgroups rather than reading each table on its own. Each
+      one states what the results show and the questions they raise for discussion. <strong>These are not
+      causal claims</strong> — this evaluation can identify relationships, but it cannot establish that
+      the product caused them.<a href="#fn-causal" class="fn">6</a>
+    </div>
+
+    <!-- Flag 1 -->
+    <div class="flag-card flag-positive">
+      <div class="flag-head">
+        <div class="flag-num">1</div>
+        <div class="flag-title">The average hides the pattern: the clearest results are among students with the lowest prior performance</div>
+      </div>
+      <div class="flag-row">
+        <span class="flag-label">What the data shows</span>
+        <div class="flag-body">
+          A summary report would show one district-wide result: a statistically significant positive
+          relationship. Read by prior-performance group, that single result separates into a much more
+          uneven picture. The relationship is <strong>statistically significant only for the two lowest
+          groups</strong><a href="#fn-prior" class="fn">9</a> — roughly the bottom 40% of students by prior performance. For the middle two
+          groups it is not statistically significant. For the highest group the estimate points slightly
+          negative, but it is <strong>also not statistically significant</strong>, which means this
+          evaluation cannot distinguish it from no relationship at all.
+          <div class="flag-evidence">
+            <span class="flag-chip chip-sig">Group 1 (lowest) &middot; statistically significant</span>
+            <span class="flag-chip chip-sig">Group 2 &middot; statistically significant</span>
+            <span class="flag-chip">Group 3 &middot; not significant</span>
+            <span class="flag-chip">Group 4 &middot; not significant</span>
+            <span class="flag-chip">Group 5 (highest) &middot; not significant</span>
+          </div>
+        </div>
+      </div>
+      <div class="flag-row">
+        <span class="flag-label">Why it stands out</span>
+        <div class="flag-body">
+          This runs opposite to what is often expected of an adaptive product. The clearest results sit
+          with the students furthest behind, and they disappear entirely at the top of the prior-performance
+          range. Reporting only the district-wide result would show none of this. Importantly, the absence
+          of a significant result for higher-performing students is <strong>not evidence that the product
+          harmed them</strong> — it means no relationship could be measured in either direction.
+        </div>
+      </div>
+      <div class="flag-question">
+        <span class="flag-label">Questions for discussion</span>
+        <div class="flag-body">
+          Is the product's adaptive difficulty better matched to students who are working to catch up? For
+          students who have already mastered grade-level content, is there enough challenge available in
+          the product for a relationship to be detectable at all? Would a separate look at what
+          higher-performing students actually encounter in the product help explain the difference?
+        </div>
+      </div>
+    </div>
+
+    <!-- Flag 2 -->
+    <div class="flag-card flag-negative">
+      <div class="flag-head">
+        <div class="flag-num">2</div>
+        <div class="flag-title">Special Education: two gaps compound, leaving the result impossible to interpret</div>
+      </div>
+      <div class="flag-row">
+        <span class="flag-label">What the data shows</span>
+        <div class="flag-body">
+          Students with a Special Education designation averaged <strong>332 minutes</strong> of use,
+          compared with <strong>507 minutes</strong> for General Education students, and
+          <strong>13.6%</strong> reached the recommended usage compared with <strong>30.3%</strong> of
+          General Education students. Their result shows <strong>no statistically significant
+          relationship</strong> between usage and outcomes, while the General Education result is
+          statistically significant and positive.
+          <div class="flag-evidence">
+            <span class="flag-chip">Special Education &middot; not statistically significant</span>
+            <span class="flag-chip chip-sig">General Education &middot; statistically significant</span>
+            <span class="flag-chip">332 minutes compared with 507</span>
+            <span class="flag-chip">13.6% compared with 30.3% reaching recommended usage</span>
+          </div>
+        </div>
+      </div>
+      <div class="flag-row">
+        <span class="flag-label">Why it stands out</span>
+        <div class="flag-body">
+          Usage and outcomes are normally reported separately, and on its own each of these looks like a
+          minor difference. Together they compound. The group with the least exposure to the product is
+          also the group with no measurable relationship — and because those two things occur together,
+          <strong>this evaluation design cannot separate them</strong>. The result should be read as
+          <strong>unanswered</strong>, not as evidence that the product does not work for these students.
+        </div>
+      </div>
+      <div class="flag-question">
+        <span class="flag-label">Questions for discussion</span>
+        <div class="flag-body">
+          What is contributing to the difference in usage — scheduling, required accommodations, device
+          access, or how the product is introduced in specialized settings? Would a future evaluation be
+          able to answer the effectiveness question for this group only after usage is more comparable?
+        </div>
+      </div>
+    </div>
+
+    <!-- Flag 3 -->
+    <div class="flag-card">
+      <div class="flag-head">
+        <div class="flag-num">3</div>
+        <div class="flag-title">More usage did not correspond to a stronger result: a reverse pattern</div>
+      </div>
+      <div class="flag-row">
+        <span class="flag-label">What the data shows</span>
+        <div class="flag-body">
+          Black or African American students were the only group to clearly exceed the recommended usage,
+          averaging <strong>690 minutes</strong> against a 665-minute recommendation — and their result was
+          <strong>not statistically significant</strong>. Meanwhile White students and students of Two or
+          More Races both averaged <em>below</em> the recommendation, around 490 minutes, and both results
+          were statistically significant.
+          <div class="flag-evidence">
+            <span class="flag-chip">Black or African American &middot; 690 minutes &middot; not significant</span>
+            <span class="flag-chip chip-sig">White &middot; 491 minutes &middot; statistically significant</span>
+            <span class="flag-chip chip-sig">Two or More Races &middot; 494 minutes &middot; statistically significant</span>
+          </div>
+        </div>
+      </div>
+      <div class="flag-row">
+        <span class="flag-label">Why it stands out</span>
+        <div class="flag-body">
+          The rest of this brief rests on the idea that more time using the product is associated with
+          better outcomes. That pattern does not hold here. It suggests <strong>total minutes may not
+          capture what matters about how that time is spent</strong>. One caution: this group's sample
+          (73 students) is considerably smaller than the White student group's (374), so the estimate is
+          less precise — a smaller sample makes a relationship harder to detect even when one exists.
+        </div>
+      </div>
+      <div class="flag-question">
+        <span class="flag-label">Questions for discussion</span>
+        <div class="flag-body">
+          Is time being spent differently — on different lesson difficulty, different completion rates, or
+          with different levels of adult support? Would a measure of how the product is used, rather than
+          only how long, give a clearer picture for every group?
+        </div>
+      </div>
+    </div>
+
+    <!-- Flag 4 -->
+    <div class="flag-card">
+      <div class="flag-head">
+        <div class="flag-num">4</div>
+        <div class="flag-title">Small sample sizes create blind spots for the smallest student groups</div>
+      </div>
+      <div class="flag-row">
+        <span class="flag-label">What the data shows</span>
+        <div class="flag-body">
+          The largest single effect size in this brief belongs to students of Two or More Races. It is
+          based on <strong>41 students</strong> — close to the 30-student threshold below which results are
+          considered too unstable to report.<a href="#fn-n" class="fn">4</a> Three further groups —
+          American Indian or Alaska Native, Asian, and Native Hawaiian or Other Pacific Islander — fell
+          below that threshold and produced no result at all.
+          <div class="flag-evidence">
+            <span class="flag-chip chip-sig">Two or More Races &middot; 41 students</span>
+            <span class="flag-chip">Three groups below the reporting threshold</span>
+          </div>
+        </div>
+      </div>
+      <div class="flag-row">
+        <span class="flag-label">Why it stands out</span>
+        <div class="flag-body">
+          It would be easy to lead with the largest number in the brief. Doing so would overstate what 41
+          students can support: as LearnPlatform's own guidance puts it, a moderate result with a narrow
+          range of uncertainty is more trustworthy than a large one with a wide range. More importantly,
+          this brief is <strong>quietest about the smallest student populations</strong> — which is
+          precisely where an equity review needs the most visibility.
+        </div>
+      </div>
+      <div class="flag-question">
+        <span class="flag-label">Questions for discussion</span>
+        <div class="flag-body">
+          Could data be combined across a longer time window or additional grade levels so these groups
+          rise above the reporting threshold? What would it take for a future brief to report on these
+          students rather than suppress their results?
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DISCUSSION AGENDA (ranked index into the flags above) ────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Discussion Agenda</div>
+      <span class="section-subtitle">The questions above, ranked by how directly this evaluation's results raise them</span>
+    </div>
+    <div class="text-small text-muted" style="line-height:1.6;margin-bottom:4px;">
+      Each item links back to the flagged pattern that raised it. These are offered for discussion, not as
+      recommendations — decisions about instruction, scheduling, and purchasing rest with the district.
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-rank">1</div>
+      <div style="flex:1;">
+        <div class="agenda-q">Why are the clearest results among our lowest prior-performing students, and what does that mean for everyone else?</div>
+        <div class="agenda-why">The only statistically significant subgroup results by prior performance sit in the bottom two groups. For the highest group, no relationship could be measured in either direction.</div>
+      </div>
+      <div class="agenda-src"><span class="agenda-flagref">Flag 1</span></div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-rank">2</div>
+      <div style="flex:1;">
+        <div class="agenda-q">What is contributing to the usage gap for Special Education students?</div>
+        <div class="agenda-why">Until usage is more comparable, the effectiveness question for this group cannot be answered by an evaluation of this design — the result is unanswered rather than negative.</div>
+      </div>
+      <div class="agenda-src"><span class="agenda-flagref">Flag 2</span></div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-rank">3</div>
+      <div style="flex:1;">
+        <div class="agenda-q">Is total minutes the right way to measure meaningful use?</div>
+        <div class="agenda-why">The one group that exceeded the recommended usage showed no statistically significant result, while two groups below the recommendation did.</div>
+      </div>
+      <div class="agenda-src"><span class="agenda-flagref">Flag 3</span></div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-rank">4</div>
+      <div style="flex:1;">
+        <div class="agenda-q">What would it take to raise the share of students reaching recommended usage?</div>
+        <div class="agenda-why">97% of students used the product at least once, but only 27% reached 665 minutes. Every finding in this brief therefore describes outcomes at below-recommended usage.</div>
+      </div>
+      <div class="agenda-src"><span class="agenda-flagref">Usage</span></div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-rank">5</div>
+      <div style="flex:1;">
+        <div class="agenda-q">How can future evaluations report on our smallest student groups?</div>
+        <div class="agenda-why">Three groups fell below the reporting threshold entirely and a fourth sits just above it, leaving the least visibility exactly where an equity review needs the most.</div>
+      </div>
+      <div class="agenda-src"><span class="agenda-flagref">Flag 4</span></div>
+    </div>
+  </div>
+
+  <!-- ── PART DIVIDER: SUPPORTING EVIDENCE ────────────────────────── -->
+  <div class="part-divider">
+    <div class="part-divider-label">Supporting Evidence</div>
+    <div class="part-divider-desc">
+      The full results behind the findings above — how much each group used the product, and what the
+      outcome analysis found for every student group.
     </div>
   </div>
 
@@ -931,49 +1436,57 @@ a { color: var(--c-brand); }
   <div class="section">
     <div class="section-header">
       <div class="section-title">Usage Analysis</div>
-      <span class="section-subtitle">Goal: 665 minutes total (≈30 min/week over 25 weeks)</span>
+      <span class="section-subtitle">Recommended usage: 665 minutes total, about 30 minutes per week over 25 weeks<a href="#fn-dosage" class="fn">7</a></span>
+    </div>
+
+    <div class="primer">
+      <div class="primer-title">How to read this section</div>
+      This section reports <strong>how much each group used the product</strong>, not whether it worked
+      for them. Usage figures are descriptive only. A lower percentage is not presented here as a good
+      or bad outcome — it describes the conditions under which this evaluation's results were produced,
+      which matters when interpreting the findings that follow.
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;flex-wrap:wrap;">
       <div>
-        <div class="text-small text-muted mb-8" style="font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:10px;">FIDELITY TO DOSAGE GOAL BY SUBGROUP</div>
+        <div class="text-small text-muted mb-8" style="font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:10px;">PERCENTAGE REACHING RECOMMENDED USAGE, BY GROUP</div>
 
         <!-- Grade -->
         <div class="compliance-row">
-          <div class="compliance-label">6th Grade (overall)</div>
+          <div class="compliance-label">Grade 6 (overall)</div>
           <div class="compliance-track">
             <div class="compliance-fill met" style="width:28.26%"></div>
           </div>
-          <div class="compliance-pct" style="color:var(--c-warn);">28%</div>
+          <div class="compliance-pct">28%</div>
         </div>
         <!-- Gender -->
         <div class="text-small" style="color:var(--c-text-3);margin:8px 0 4px;font-weight:600;font-size:11px;">Gender</div>
         <div class="compliance-row">
           <div class="compliance-label">Female</div>
           <div class="compliance-track"><div class="compliance-fill met" style="width:30.15%"></div></div>
-          <div class="compliance-pct" style="color:var(--c-warn);">30%</div>
+          <div class="compliance-pct">30%</div>
         </div>
         <div class="compliance-row">
           <div class="compliance-label">Male</div>
           <div class="compliance-track"><div class="compliance-fill met" style="width:26.43%"></div></div>
-          <div class="compliance-pct" style="color:var(--c-warn);">26%</div>
+          <div class="compliance-pct">26%</div>
         </div>
-        <!-- SpEd -->
+        <!-- Special Education status -->
         <div class="text-small" style="color:var(--c-text-3);margin:8px 0 4px;font-weight:600;font-size:11px;">Special Education Status</div>
         <div class="compliance-row">
-          <div class="compliance-label">General Ed (No)</div>
+          <div class="compliance-label">General Education</div>
           <div class="compliance-track"><div class="compliance-fill met" style="width:30.25%"></div></div>
-          <div class="compliance-pct" style="color:var(--c-warn);">30%</div>
+          <div class="compliance-pct">30%</div>
         </div>
         <div class="compliance-row">
-          <div class="compliance-label" style="color:var(--c-negative);font-weight:700;">Special Ed (Yes)</div>
-          <div class="compliance-track"><div class="compliance-fill met" style="width:13.64%;background:var(--c-negative);"></div></div>
-          <div class="compliance-pct" style="color:var(--c-negative);">14%</div>
+          <div class="compliance-label">Special Education</div>
+          <div class="compliance-track"><div class="compliance-fill met" style="width:13.64%;"></div></div>
+          <div class="compliance-pct">14%</div>
         </div>
       </div>
 
       <div>
-        <div class="text-small text-muted mb-8" style="font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:10px;">AVERAGE MINUTES ON SYSTEM vs. GOAL (665 min)</div>
+        <div class="text-small text-muted mb-8" style="font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:10px;">AVERAGE MINUTES USED, AGAINST THE 665-MINUTE RECOMMENDATION</div>
         <div class="chart-wrap" style="height:220px;">
           <canvas id="usageChart"></canvas>
         </div>
@@ -1009,19 +1522,44 @@ a { color: var(--c-brand); }
   <div class="section">
     <div class="section-header">
       <div class="section-title">Subgroup Effectiveness Findings</div>
-      <span class="section-subtitle">Click column headers to sort &middot; Use filter to focus by category</span>
+      <span class="section-subtitle">Results broken out by student group</span>
+    </div>
+
+    <div class="primer">
+      <div class="primer-title">What this section shows, and how to read it</div>
+      A <strong>subgroup</strong> is a defined group of students — by grade, gender, race or ethnicity,
+      Special Education status, or prior performance. Looking at results one subgroup at a time answers
+      a question the district-wide number cannot: <strong>did this product show the same relationship
+      for every group of students, or only for some?</strong>
+      <div style="margin-top:8px;">
+        Read the <strong>Significance</strong> column first. It tells you whether a result is
+        distinguishable from no relationship at all.<a href="#fn-sig" class="fn">2</a> Only then does
+        the effect size tell you how large that relationship is.<a href="#fn-es" class="fn">3</a> A
+        result marked "not statistically significant" means this evaluation could not detect a
+        relationship in either direction — it is <em>not</em> evidence that the product failed for
+        that group. Where a group's sample was too small to produce a stable estimate, the row reads
+        "Not plotted" rather than showing an unreliable number.<a href="#fn-n" class="fn">4</a>
+      </div>
     </div>
 
     <div class="tbl-controls">
-      <div class="tbl-filter" id="catFilter">
-        <button class="active" data-cat="all" onclick="filterTable('all',this)">All</button>
-        <button data-cat="Grade Level" onclick="filterTable('Grade Level',this)">Grade</button>
-        <button data-cat="Gender" onclick="filterTable('Gender',this)">Gender</button>
-        <button data-cat="Ethnicity" onclick="filterTable('Ethnicity',this)">Ethnicity</button>
-        <button data-cat="SpEd Status" onclick="filterTable('SpEd Status',this)">SpEd Status</button>
-        <button data-cat="Prior Performance" onclick="filterTable('Prior Performance',this)">Prior Performance</button>
-        <button data-cat="School" onclick="filterTable('School',this)">School</button>
+      <div>
+        <div class="tbl-filter-label">Filter by category — select one</div>
+        <div class="tbl-filter" id="catFilter">
+          <button class="active" data-cat="all" onclick="filterTable('all',this)">All</button>
+          <button data-cat="Grade Level" onclick="filterTable('Grade Level',this)">Grade</button>
+          <button data-cat="Gender" onclick="filterTable('Gender',this)">Gender</button>
+          <button data-cat="Ethnicity" onclick="filterTable('Ethnicity',this)">Race / Ethnicity</button>
+          <button data-cat="Special Education Status" onclick="filterTable('Special Education Status',this)">Special Education Status</button>
+          <button data-cat="Prior Performance" onclick="filterTable('Prior Performance',this)">Prior Performance</button>
+          <button data-cat="School" onclick="filterTable('School',this)">School</button>
+        </div>
       </div>
+    </div>
+
+    <div class="tbl-hint">
+      <span style="font-size:14px;line-height:1;">&#128070;</span>
+      <span>This table is interactive: select a category above to filter it, or select any column heading to sort by that column.</span>
     </div>
 
     <div class="tbl-outer">
@@ -1031,12 +1569,12 @@ a { color: var(--c-brand); }
             <th onclick="sortTable(0)" data-col="0">Category <span class="sort-arrow">&#8597;</span></th>
             <th onclick="sortTable(1)" data-col="1">Subgroup <span class="sort-arrow">&#8597;</span></th>
             <th onclick="sortTable(2)" data-col="2">Direction <span class="sort-arrow">&#8597;</span></th>
-            <th onclick="sortTable(3)" data-col="3" title="Partial correlation r">Effect Size <span class="sort-arrow">&#8597;</span></th>
-            <th onclick="sortTable(4)" data-col="4">95% CI <span class="sort-arrow">&#8597;</span></th>
-            <th onclick="sortTable(5)" data-col="5">Significance <span class="sort-arrow">&#8597;</span></th>
-            <th onclick="sortTable(6)" data-col="6">n <span class="sort-arrow">&#8597;</span></th>
-            <th onclick="sortTable(7)" data-col="7">Avg Minutes <span class="sort-arrow">&#8597;</span></th>
-            <th>% Met Goal</th>
+            <th onclick="sortTable(5)" data-col="5">Statistical Significance<a href="#fn-sig" class="fn">2</a> <span class="sort-arrow">&#8597;</span></th>
+            <th onclick="sortTable(3)" data-col="3">Effect Size<a href="#fn-es" class="fn">3</a> <span class="sort-arrow">&#8597;</span></th>
+            <th onclick="sortTable(4)" data-col="4">Likely Range<a href="#fn-ci" class="fn">8</a> <span class="sort-arrow">&#8597;</span></th>
+            <th onclick="sortTable(6)" data-col="6">Students<a href="#fn-n" class="fn">4</a> <span class="sort-arrow">&#8597;</span></th>
+            <th onclick="sortTable(7)" data-col="7">Average Minutes <span class="sort-arrow">&#8597;</span></th>
+            <th>Reached Recommended Usage</th>
           </tr>
         </thead>
         <tbody id="subgroupTbody">
@@ -1045,15 +1583,15 @@ a { color: var(--c-brand); }
       </table>
     </div>
     <div class="mt-8 text-small text-muted" style="line-height:1.5;">
-      Effect size = partial correlation r. "Not plotted" indicates n &lt; 30 (below the threshold for a stable effect size estimate). Visual ambiguity flags indicate data that could not be cleanly read from charts and requires human review.
+      Read the Statistical Significance column first: it indicates whether a relationship could be detected at all. "Not plotted" means the group had fewer than 30 students, below the threshold for a stable estimate.
     </div>
   </div>
 
   <!-- ── EFFECTIVENESS BY SUBGROUP CHART ──────────────────────────── -->
   <div class="section">
     <div class="section-header">
-      <div class="section-title">Effect Size Dot Plot — Subgroups with Estimates</div>
-      <span class="section-subtitle">Partial correlation r &middot; Error bars = 95% CI &middot; Green = significant positive, Yellow = not significant</span>
+      <div class="section-title">Results by Student Group, Side by Side</div>
+      <span class="section-subtitle">Each point is one student group, with its likely range<a href="#fn-ci" class="fn">8</a> &middot; Green = statistically significant positive &middot; Red = statistically significant negative &middot; Gray = not statistically significant</span>
     </div>
     <div class="chart-wrap" style="height:420px;">
       <canvas id="dotPlotChart"></canvas>
@@ -1063,14 +1601,23 @@ a { color: var(--c-brand); }
   <!-- ── ETHNICITY USAGE DEEP-DIVE ────────────────────────────────── -->
   <div class="section">
     <div class="section-header">
-      <div class="section-title">Usage by Ethnicity — Average Minutes vs. Dosage Goal</div>
-      <span class="section-subtitle">Goal line at 665 minutes &middot; Bars above goal shown in teal</span>
+      <div class="section-title">Average Usage by Race and Ethnicity</div>
+      <span class="section-subtitle">The dashed line marks the 665-minute recommendation</span>
     </div>
     <div class="chart-wrap" style="height:260px;">
       <canvas id="ethnicityUsageChart"></canvas>
     </div>
     <div class="mt-8 text-small text-muted">
-      Native Hawaiian/Pacific Islander and Black or African American students averaged above the 665-minute dosage goal. Hispanic/Latino and American Indian/Alaska Native students averaged the fewest minutes. These usage differences may contribute to the variation in effect size estimates across ethnicity subgroups.
+      Native Hawaiian or Other Pacific Islander and Black or African American students averaged above the 665-minute recommendation. Hispanic/Latino and American Indian/Alaska Native students averaged the fewest minutes. These usage differences may contribute to the variation in effect size estimates across ethnicity subgroups.
+    </div>
+  </div>
+
+  <!-- ── PART DIVIDER: METHODOLOGY & NOTES ───────────────────────── -->
+  <div class="part-divider">
+    <div class="part-divider-label">Methodology &amp; Notes</div>
+    <div class="part-divider-desc">
+      How this evaluation was conducted, what it can and cannot show, and definitions for every term
+      used above.
     </div>
   </div>
 
@@ -1089,17 +1636,17 @@ a { color: var(--c-brand); }
       <div class="evidence-item">
         <label>Analysis Method</label>
         <div class="ev-value">Partial Correlation</div>
-        <div class="ev-note">Total time on Smart Math correlated with MOY aMath scores</div>
+        <div class="ev-note">Total time on Smart Math 1,2,3 compared with Middle-of-Year aMath scores</div>
       </div>
       <div class="evidence-item">
         <label>Effect Size Metric</label>
         <div class="ev-value">Pearson r (partial correlation)</div>
-        <div class="ev-note">Not Cohen's d — LearnPlatform platform standard</div>
+        <div class="ev-note">The standard measure used in LearnPlatform evaluations</div>
       </div>
       <div class="evidence-item">
         <label>Confidence Level</label>
         <div class="ev-value">95% (two-tailed)</div>
-        <div class="ev-note">Significance = CI excludes zero</div>
+        <div class="ev-note">A result is significant when its likely range does not cross zero</div>
       </div>
       <div class="evidence-item">
         <label>Statistical Controls</label>
@@ -1109,36 +1656,155 @@ a { color: var(--c-brand); }
       <div class="evidence-item">
         <label>Number of RCEs</label>
         <div class="ev-value">1 RCE</div>
-        <div class="ev-note">Single rapid cycle evaluation, BOY-MOY window</div>
+        <div class="ev-note">One Rapid-Cycle Evaluation, Beginning to Middle of Year</div>
       </div>
     </div>
 
-    <hr class="section-divider">
-    <div style="font-size:12px;font-weight:700;color:var(--c-text-2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Study Limitations</div>
-    <ul class="limitation-list">
-      <li>Correlational design — cannot establish that Smart Math caused the score gains; other factors may explain the relationship</li>
-      <li>Only Grade 6 analyzed — insufficient data for other grade levels, limiting generalizability</li>
-      <li>Low dosage compliance (27%) means most effect size estimates reflect below-recommended usage; outcomes at full dosage may differ</li>
-      <li>Several ethnicity subgroups (Asian, Native Hawaiian/Pacific Islander, American Indian/Alaska Native) had n &lt; 30 and could not generate stable effect size estimates</li>
-      <li>Single school (Example School District) — results reflect one local context</li>
-    </ul>
+  </div>
 
-    <div class="mt-16">
-      <div class="collapsible-btn" id="nextStepsBtn" onclick="toggleCollapsible('nextSteps','nextStepsBtn')">
-        <span>&#128204; Recommended Next Steps</span>
-        <span class="chev">&#9660;</span>
-      </div>
-      <div class="collapsible-body" id="nextSteps">
-        <div style="padding-top:14px;font-size:13px;color:var(--c-text-2);line-height:1.6;">
-          <p>Discuss results with the district team (see Appendix C of the full report). Consider the following actions:</p>
-          <ul style="padding-left:18px;line-height:1.8;">
-            <li>Review barriers to dosage compliance, particularly for Special Education students (14% met goal vs. 30% General Ed)</li>
-            <li>Implement usage monitoring and nudge systems to support students approaching — but not yet meeting — the 665-minute threshold</li>
-            <li>Consider additional EOY RCEs using updated 2025-2026 usage and outcomes data to track trajectory</li>
-            <li>Investigate why Hispanic/Latino and American Indian/Alaska Native students logged fewer average minutes and whether scheduling or access factors are contributing</li>
-          </ul>
+  <!-- ── DATA NOTES & FLAGS ───────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Data Notes &amp; Flags</div>
+      <span class="section-subtitle">Known gaps and interpretation cautions &middot; Flagged, not silently resolved</span>
+    </div>
+    <ul class="notes-list">
+      <li>
+        <strong>Two different sample sizes appear in this brief, and both are correct.</strong>
+        Effect-size tables use students with <em>both</em> usage data and an outcome score (n = 572 overall);
+        dosage and fidelity tables use all active users (552). These are different populations for different
+        questions and are not reconciled into a single figure.
+      </li>
+      <li>
+        <strong>Four race and ethnicity groups are under-reported because of small samples.</strong>
+        Three fell below the 30-student threshold and produced no estimate; a fourth sits just above it.
+        Flag 4 covers what this means for reading the brief. Usage data is still reported for all of them.
+      </li>
+      <li>
+        <strong>Prior-performance bands do not carry usage figures.</strong>
+        Average minutes and dosage attainment are not broken out by prior-performance band in the source data,
+        so the equity finding in Flag 1 cannot yet be checked against whether those students also used the
+        product more. This is a gap to close in the next reporting window.
+      </li>
+      <li>
+        <strong>One visual-ambiguity flag from extraction remains on record.</strong>
+        A combined ethnicity row in the original worked-example export was flagged because effect-size dot-plot
+        leader lines could not be cleanly resolved. This brief uses the reconciled subgroup table, which
+        separates those groups and marks small-n subgroups as "Not Plotted" instead of inferring values.
+      </li>
+      <li>
+        <strong>Correlational design — no causal claim is made or supported.</strong>
+        Every finding in this brief describes an association between usage and outcomes. Alternative
+        explanations, including that more motivated or better-supported students both use the product more and
+        score higher, are not ruled out by this design.
+      </li>
+    </ul>
+  </div>
+
+  <!-- ── NOTES & DEFINITIONS ──────────────────────────────────────── -->
+  <div class="section" id="notes">
+    <div class="section-header">
+      <div class="section-title">Notes &amp; Definitions</div>
+      <span class="section-subtitle">Every numbered reference in this brief, in plain language</span>
+    </div>
+
+    <div class="glossary-grid">
+      <div class="glossary-item" id="fn-example">
+        <div class="glossary-term"><span class="glossary-num">1</span>This is an example document</div>
+        <div class="glossary-def">
+          This brief is an illustrative sample created to demonstrate report format and structure. The
+          district, school, product, and every figure shown are for demonstration only and do not
+          represent any real district, student population, or product evaluation.
         </div>
       </div>
+
+      <div class="glossary-item" id="fn-sig">
+        <div class="glossary-term"><span class="glossary-num">2</span>Statistical significance</div>
+        <div class="glossary-def">
+          Whether a result is likely real rather than a product of chance. This is the first thing to
+          check — before asking how large a relationship is, it is necessary to be confident there is one
+          at all. "Not statistically significant" means no relationship could be detected in
+          <em>either</em> direction. It does not mean the product failed.
+        </div>
+      </div>
+
+      <div class="glossary-item" id="fn-es">
+        <div class="glossary-term"><span class="glossary-num">3</span>Effect size</div>
+        <div class="glossary-def">
+          A measure of <em>how large</em> a relationship is, once significance has established that there
+          is one. Effect size is useful context, but it cannot stand alone: a moderate effect size with
+          strong significance and a narrow range of uncertainty is more trustworthy than a large one with
+          a wide range. Effect sizes in this brief are partial correlations, the standard measure used in
+          LearnPlatform evaluations.
+        </div>
+      </div>
+
+      <div class="glossary-item" id="fn-n">
+        <div class="glossary-term"><span class="glossary-num">4</span>Number of students (sample size)</div>
+        <div class="glossary-def">
+          How many students a result is based on. Larger groups produce more reliable estimates. Results
+          based on fewer than 30 students are not reported in this brief — they are marked "Not plotted"
+          rather than shown as an unstable number. A small group makes a relationship harder to detect
+          even when one exists.
+        </div>
+      </div>
+
+      <div class="glossary-item" id="fn-essa">
+        <div class="glossary-term"><span class="glossary-num">5</span>ESSA evidence tiers</div>
+        <div class="glossary-def">
+          A four-level federal framework under the Every Student Succeeds Act describing how strong the
+          evidence behind an intervention is: Level I (Strong), Level II (Moderate), Level III (Promising),
+          and Level IV (Demonstrates a Rationale). The tier reflects the <em>study design</em>, not how
+          well the product performed.
+        </div>
+      </div>
+
+      <div class="glossary-item" id="fn-causal">
+        <div class="glossary-term"><span class="glossary-num">6</span>Association, not cause</div>
+        <div class="glossary-def">
+          This evaluation observed students using a product in real classrooms; it did not assign students
+          to use it. So it can show that greater usage and higher scores occurred together, but not that
+          one caused the other. Other explanations — for example, that more engaged or better-supported
+          students both use the product more and score higher — are not ruled out.
+        </div>
+      </div>
+
+      <div class="glossary-item" id="fn-dosage">
+        <div class="glossary-term"><span class="glossary-num">7</span>Recommended usage</div>
+        <div class="glossary-def">
+          The amount of use the product's publisher recommends for the results they describe — here, 665
+          minutes over 25 weeks, roughly 30 minutes per week. It is a benchmark for interpreting results,
+          not a district requirement or a performance target.
+        </div>
+      </div>
+
+      <div class="glossary-item" id="fn-ci">
+        <div class="glossary-term"><span class="glossary-num">8</span>Likely range (confidence interval)</div>
+        <div class="glossary-def">
+          Rather than a single pinpoint, a range of values likely to contain the true result — a target
+          zone rather than a dot. A narrow range means more precision. If the range crosses zero, the
+          result is not statistically significant, because the true value could be positive, negative, or
+          nothing at all.
+        </div>
+      </div>
+      <div class="glossary-item" id="fn-prior">
+        <div class="glossary-term"><span class="glossary-num">9</span>Prior performance groups</div>
+        <div class="glossary-def">
+          For this analysis, students were ranked by their math scores <em>before</em> the evaluation
+          period and divided into five equally sized groups. Group 1 contains the fifth of students with
+          the lowest prior scores; Group 5 contains the fifth with the highest. The groups describe where
+          students started, not how they performed on the outcome assessment.
+        </div>
+      </div>
+    </div>
+
+    <div class="glossary-cta">
+      <strong>Questions about what these results mean?</strong> Interpreting educational data can be
+      complex, and no one needs to navigate it alone. LearnPlatform's research team includes researchers,
+      data scientists, and former classroom educators who can walk through what these findings do and do
+      not show for a specific school community — and can share additional guidance on effect sizes,
+      statistical significance, and confidence intervals where it would help. Reach out to a LearnPlatform
+      research team member or contact <a href="mailto:rce@instructure.com">rce@instructure.com</a>.
     </div>
   </div>
 
@@ -1148,7 +1814,7 @@ a { color: var(--c-brand); }
       <div class="section-title" style="font-size:13px;">Data Provenance &amp; QA Record</div>
     </div>
     <div class="footer">
-      <div class="footer-item"><label>Source Document</label><span>Smart Math 1–5.pdf (Full Report, Example School District)</span></div>
+      <div class="footer-item"><label>Source Document</label><span>Smart Math 1,2,3 — Full Report.pdf (Full Report, Example School District)</span></div>
       <div class="footer-item"><label>Extraction Model</label><span>claude-opus-4-8</span></div>
       <div class="footer-item"><label>Extraction Date</label><span>2026-06-23</span></div>
       <div class="footer-item"><label>Schema Version</label><span>rce_schema.py v0.1</span></div>
@@ -1164,6 +1830,9 @@ a { color: var(--c-brand); }
 
 </div><!-- end .page -->
 
+<!-- Repeats on every printed page -->
+<div class="example-print-footer">Example document — not real data — for format demonstration only</div>
+
 <script>
 /* ── DATA ─────────────────────────────────────────────────────────────────────
    All values sourced from verified JSON files (aleks_worked_example.json,
@@ -1174,7 +1843,7 @@ a { color: var(--c-brand); }
 const SUBGROUP_DATA = [
   {
     cat: "Grade Level",
-    subgroup: "6th Grade",
+    subgroup: "Grade 6",
     direction: "positive",
     es: 0.20,
     ci: "(0.12, 0.28)",
@@ -1236,7 +1905,7 @@ const SUBGROUP_DATA = [
     avgMin: 453,
     metGoalPct: 50.0,
     sortEs: null,
-    note: "n < 30 — below threshold for stable effect size estimate"
+    note: "Fewer than 30 students — below the threshold for a reliable estimate"
   },
   {
     cat: "Ethnicity",
@@ -1250,7 +1919,7 @@ const SUBGROUP_DATA = [
     avgMin: 585,
     metGoalPct: 42.86,
     sortEs: null,
-    note: "n < 30 — below threshold for stable effect size estimate"
+    note: "Fewer than 30 students — below the threshold for a reliable estimate"
   },
   {
     cat: "Ethnicity",
@@ -1267,7 +1936,7 @@ const SUBGROUP_DATA = [
   },
   {
     cat: "Ethnicity",
-    subgroup: "Native Hawaiian/Pacific Islander",
+    subgroup: "Native Hawaiian or Other Pacific Islander",
     direction: "not_plotted",
     es: null,
     ci: "Not Plotted",
@@ -1277,7 +1946,7 @@ const SUBGROUP_DATA = [
     avgMin: 740,
     metGoalPct: 50.0,
     sortEs: null,
-    note: "n < 30 — below threshold for stable effect size estimate"
+    note: "Fewer than 30 students — below the threshold for a reliable estimate"
   },
   {
     cat: "Ethnicity",
@@ -1319,8 +1988,8 @@ const SUBGROUP_DATA = [
     sortEs: 0.20
   },
   {
-    cat: "SpEd Status",
-    subgroup: "No (General Ed)",
+    cat: "Special Education Status",
+    subgroup: "General Education",
     direction: "positive",
     es: 0.21,
     ci: "(0.12, 0.30)",
@@ -1332,8 +2001,8 @@ const SUBGROUP_DATA = [
     sortEs: 0.21
   },
   {
-    cat: "SpEd Status",
-    subgroup: "Yes (Special Ed)",
+    cat: "Special Education Status",
+    subgroup: "Special Education",
     direction: "neutral",
     es: 0.00,
     ci: "(-0.25, 0.25)",
@@ -1416,24 +2085,28 @@ let currentFilter = "all";
 let sortCol = null;
 let sortAsc = true;
 
-function dirPill(dir) {
-  if (dir === "positive")     return '<span class="dir-pill dir-positive">&#9679; Positive</span>';
-  if (dir === "neutral")      return '<span class="dir-pill dir-neutral">&#9679; Neutral</span>';
-  if (dir === "negative")     return '<span class="dir-pill dir-negative">&#9679; Negative</span>';
-  if (dir === "not_plotted")  return '<span class="dir-pill dir-not-reported">&#9675; Not Plotted</span>';
-  return '<span class="dir-pill dir-not-reported">&#8212;</span>';
+/* Color is reserved for statistically significant results only. A direction that is not
+   statistically significant renders neutral — coloring it would imply a finding the
+   evidence does not support. */
+function dirPill(row) {
+  if (row.sig === "not_plotted") return '<span class="dir-pill dir-not-reported">&#9675; Not plotted</span>';
+  if (row.sig !== "significant") return '<span class="dir-pill dir-not-reported">&#9679; No measurable difference</span>';
+  if (row.direction === "positive") return '<span class="dir-pill dir-positive">&#9679; Positive</span>';
+  if (row.direction === "negative") return '<span class="dir-pill dir-negative">&#9679; Negative</span>';
+  return '<span class="dir-pill dir-not-reported">&#9679; Neutral</span>';
 }
 
 function sigLabel(sig) {
-  if (sig === "significant")     return '<span class="sig-badge sig-significant" style="font-size:11px;">&#10003; Significant</span>';
-  if (sig === "not_significant") return '<span class="sig-badge sig-not-significant" style="font-size:11px;">&#9679; Not Significant</span>';
-  if (sig === "not_plotted")     return '<span class="not-plotted">n &lt; 30</span>';
+  if (sig === "significant")     return '<span class="sig-badge sig-significant" style="font-size:11px;">&#10003; Statistically significant</span>';
+  if (sig === "not_significant") return '<span class="sig-badge sig-not-significant" style="font-size:11px;">Not statistically significant</span>';
+  if (sig === "not_plotted")     return '<span class="not-plotted">Sample too small to report</span>';
   return '<span class="not-plotted">—</span>';
 }
 
 function esDisplay(row) {
-  if (row.es === null) return '<span class="not-plotted">Not Plotted</span>';
-  const cls = row.direction === "positive" ? "es-positive" : row.direction === "negative" ? "es-negative" : "es-neutral";
+  if (row.es === null) return '<span class="not-plotted">Not plotted</span>';
+  const cls = row.sig !== "significant" ? "es-neutral"
+            : row.direction === "negative" ? "es-negative" : "es-positive";
   const sign = row.es > 0 ? "+" : "";
   return `<span class="es-cell ${cls}">${sign}${row.es.toFixed(2)}</span>`;
 }
@@ -1491,10 +2164,10 @@ function renderTable() {
     return `<tr>
       <td><span style="font-size:11px;font-weight:600;color:var(--c-text-3);text-transform:uppercase;letter-spacing:.04em;">${r.cat}</span></td>
       <td style="font-weight:600;">${r.subgroup}${noteHtml}</td>
-      <td>${dirPill(r.direction)}</td>
+      <td>${dirPill(r)}</td>
+      <td>${sigLabel(r.sig)}</td>
       <td>${esDisplay(r)}</td>
       <td><span class="ci-text">${r.ci}</span></td>
-      <td>${sigLabel(r.sig)}</td>
       <td class="n-count">${r.n !== null ? r.n.toLocaleString() : '<span class="not-plotted">—</span>'}</td>
       <td>${avgMinDisplay(r)}</td>
       <td>${metGoalDisplay(r)}</td>
@@ -1504,8 +2177,12 @@ function renderTable() {
 
 function filterTable(cat, btn) {
   currentFilter = cat;
-  document.querySelectorAll("#catFilter button").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll("#catFilter button").forEach(b => {
+    b.classList.remove("active");
+    b.setAttribute("aria-pressed", "false");
+  });
   btn.classList.add("active");
+  btn.setAttribute("aria-pressed", "true");
   renderTable();
 }
 
@@ -1516,42 +2193,61 @@ function sortTable(col) {
     sortCol = col;
     sortAsc = true;
   }
-  document.querySelectorAll(".data-table thead th").forEach((th, i) => {
-    th.classList.toggle("sorted", i === col);
+  // Match on data-col, not DOM position: the displayed column order differs
+  // from the underlying sort indices (significance is shown before effect size).
+  document.querySelectorAll(".data-table thead th").forEach(th => {
+    const isActive = th.dataset.col !== undefined && Number(th.dataset.col) === col;
+    th.classList.toggle("sorted", isActive);
     const arrow = th.querySelector(".sort-arrow");
-    if (arrow) arrow.textContent = i === col ? (sortAsc ? " ▲" : " ▼") : " ⇅";
+    if (arrow) arrow.textContent = isActive ? (sortAsc ? " ▲" : " ▼") : " ⇅";
+    if (th.hasAttribute("aria-sort")) {
+      th.setAttribute("aria-sort", isActive ? (sortAsc ? "ascending" : "descending") : "none");
+    }
   });
   renderTable();
 }
 
 renderTable();
 
-/* ── COLLAPSIBLE ───────────────────────────────────────────────────────── */
-function toggleCollapsible(bodyId, btnId) {
-  const body = document.getElementById(bodyId);
-  const btn  = document.getElementById(btnId);
-  body.classList.toggle("open");
-  btn.classList.toggle("open");
-}
+/* Accessibility: sortable headers were mouse-only. Make them reachable and
+   operable by keyboard, and announce sort state to assistive technology. */
+document.querySelectorAll('#subgroupTable thead th[onclick]').forEach(th => {
+  th.setAttribute('tabindex', '0');
+  th.setAttribute('role', 'button');
+  th.setAttribute('aria-sort', 'none');
+  th.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); th.click(); }
+  });
+});
+document.querySelectorAll('#catFilter button').forEach(b => {
+  b.setAttribute('aria-pressed', b.classList.contains('active') ? 'true' : 'false');
+});
+
+/* A category filter removes rows from the DOM, so printing while a filter is
+   active would silently omit them. Restore the full table before printing. */
+window.addEventListener('beforeprint', () => {
+  if (currentFilter !== 'all') {
+    const allBtn = document.querySelector('#catFilter button[data-cat="all"]');
+    if (allBtn) filterTable('all', allBtn);
+  }
+});
 
 /* ── CHARTS ────────────────────────────────────────────────────────────── */
 
 // Chart 1: Usage by ethnicity (bar chart)
 const ETHNICITY_USAGE = [
-  { label: "NH/Pacific Islander", min: 740 },
-  { label: "Black/African Amer.", min: 690 },
+  { label: "Native Hawaiian or Other Pacific Islander", min: 740 },
+  { label: "Black or African American", min: 690 },
   { label: "Asian",               min: 585 },
   { label: "Two or More Races",   min: 494 },
   { label: "White",               min: 491 },
-  { label: "6th Grade Avg",       min: 486 },
-  { label: "Amer. Indian/AK Nat.",min: 453 },
+  { label: "Grade 6 Average",       min: 486 },
+  { label: "American Indian or Alaska Native",min: 453 },
   { label: "Hispanic/Latino",     min: 440 },
 ];
 
 const GOAL = 665;
-const ethnicityColors = ETHNICITY_USAGE.map(d =>
-  d.min >= GOAL ? "rgba(15,118,110,0.8)" : "rgba(96,165,250,0.75)"
-);
+const ethnicityColors = ETHNICITY_USAGE.map(() => "rgba(96,165,250,0.75)");
 
 new Chart(document.getElementById("ethnicityUsageChart"), {
   type: "bar",
@@ -1582,7 +2278,7 @@ new Chart(document.getElementById("ethnicityUsageChart"), {
       x: {
         min: 0,
         max: 800,
-        title: { display: true, text: "Average minutes on Smart Math (BOY-MOY 2025-26)", font: { size: 11 }, color: "#6b7280" },
+        title: { display: true, text: "Average minutes on Smart Math 1,2,3 (Beginning to Middle of Year, 2025-26)", font: { size: 11 }, color: "#6b7280" },
         grid: { color: "rgba(0,0,0,.06)" },
         ticks: { font: { size: 11 } }
       },
@@ -1614,11 +2310,11 @@ new Chart(document.getElementById("ethnicityUsageChart"), {
   }]
 });
 
-// Chart 2: Usage overview bar chart (by subgroup category: Gender, SpEd)
+// Chart 2: Usage overview bar chart (by subgroup category: Gender, Special Education status)
 const USAGE_CAT_DATA = {
-  labels: ["Female", "Male", "Gen. Ed (No)", "Spec. Ed (Yes)"],
+  labels: ["Female", "Male", "General Education", "Special Education"],
   minutes: [502, 471, 507, 332],
-  colors: ["rgba(96,165,250,.75)", "rgba(96,165,250,.75)", "rgba(96,165,250,.75)", "rgba(239,68,68,.65)"]
+  colors: ["rgba(96,165,250,.75)", "rgba(96,165,250,.75)", "rgba(96,165,250,.75)", "rgba(96,165,250,.75)"]
 };
 
 new Chart(document.getElementById("usageChart"), {
@@ -1686,11 +2382,10 @@ const DOT_PLOT_DATA = SUBGROUP_DATA.filter(d => d.es !== null);
 // Build display labels with category prefix for clarity
 const dotLabels = DOT_PLOT_DATA.map(d => `${d.cat}: ${d.subgroup}`);
 const dotValues = DOT_PLOT_DATA.map(d => d.es);
+// Green/red only for statistically significant results; everything else neutral gray.
 const dotColors = DOT_PLOT_DATA.map(d => {
-  if (d.direction === "positive" && d.sig === "significant") return "rgba(30,110,60,0.85)";
-  if (d.direction === "positive" && d.sig === "not_significant") return "rgba(202,160,8,0.85)";
-  if (d.direction === "negative") return "rgba(185,28,28,0.8)";
-  return "rgba(202,160,8,0.85)";
+  if (d.sig !== "significant") return "rgba(122,122,116,0.75)";
+  return d.direction === "negative" ? "rgba(185,28,28,0.8)" : "rgba(30,110,60,0.85)";
 });
 const dotErrorLow  = DOT_PLOT_DATA.map(d => d.es - d.ciLow);   // distance from point to low
 const dotErrorHigh = DOT_PLOT_DATA.map(d => d.ciHigh - d.es);  // distance from point to high
