@@ -8,7 +8,7 @@ description: >-
   dashboard and asked to extract metrics — effect sizes, sample sizes, usage
   compliance, ESSA tier, or per-subgroup findings — even if the user just says
   "harvest the numbers from this report" or "turn this brief into data." This is
-  Phase 3 (Data Harvesting) of the  meta-analysis pipeline. The reports are
+  Phase 3 (Data Harvesting) of the meta-analysis pipeline. The reports are
   chart-heavy dashboards, so this skill exists primarily to stop the model from
   misreading bar charts and effect-size dot plots (the "spatial drift" failure).
   Reach for it any time an RCE/LearnPlatform PDF needs to become structured data.

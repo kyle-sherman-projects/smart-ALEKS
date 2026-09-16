@@ -5,10 +5,11 @@ RCE has already run inside LearnPlatform, its computed results live in the
 `impact_analyses` table of the read-only Rails app database
 (`learn_trials_production`) — no PDF, no screenshotting, no spatial-drift risk.
 
-**Validated against a real row:** `impact_analyses.id = <redacted>`, ALEKS ×
-Example School District, 2025–26 BOY–MOY. Every number in
-`deliverables/sample_research_brief_ALEKS.html` traces to this row. Treat it as
-the reference worked example the way `SKILL.md` §6 treats the spatial-drift PDF.
+**Validated against a real row:** ALEKS × a real district, 2025–26 BOY–MOY.
+Every number in `deliverables/sample_research_brief_ALEKS.html` traces to this
+row (district and school names in that deliverable are anonymized as "Example
+School District"). Treat it as the reference worked example the way
+`SKILL.md` §6 treats the spatial-drift PDF.
 
 ## Table of contents
 1. Locating the right row
@@ -56,7 +57,7 @@ WHERE id = <id>;
 
 ## 2. `impact_analyses` column reference
 
-| Column | Holds | ALEKS/Example School District value (<redacted>) |
+| Column | Holds | Example value (from the validated worked-example row) |
 |---|---|---|
 | `use_metric` | Usage metric label | `"Minutes on system"` |
 | `recommended_use` | Dosage goal | `665` |
@@ -130,7 +131,7 @@ are correct — they're different populations:
   overall, regardless of whether they have an outcome score. This is the
   denominator for dosage/fidelity.
 
-Worked example, White students, <redacted>: `result.ethnicity` reports
+Worked example, White students: `result.ethnicity` reports
 `students_count: 374` (used in the effect-size table); the demographic JSON
 reports `treatment: 367` (used in the fidelity table). Both are right for their
 own table — this is exactly why the original `contributors/amanda/*.json` files
@@ -142,10 +143,10 @@ A trial can have multiple `impact_analyses` rows. Check `rce_type` before
 trusting `effect_size`:
 
 - `["usage_analysis"]` only → usage-tracking row. `effect_size` will be `null`
-  throughout `result`. (the worked-example row for Example School District is this — same period,
-  same dosage goal, no outcome tie-in.)
+  throughout `result` (the validated worked-example district has a row like
+  this — same period, same dosage goal, no outcome tie-in).
 - `["usage_analysis","outcome_analysis"]` → the real RCE result row with
-  effect sizes populated. (the worked-example row.)
+  effect sizes populated.
 
 If step 1's query returns several rows for the same district/period, prefer
 the one tagged `outcome_analysis`.
@@ -177,13 +178,13 @@ WHERE id IN (<candidate ids>);
   picture for that assessment, the same way `result.grade_level` inside one
   row would if the assessment were district-wide.
 
-**Worked example:** Example School District's i-Ready trial has seven
-`active` rows for `"Math Time on Task"` × `"SmarterBalanced"` (ids
-<redacted-id>–<redacted-id>) and seven more for `"ELA Time on Task"` × `"SmarterBalanced"`
-(redacted per-grade ids). These looked like classic re-run duplicates (same
-metadata, created 5–40 minutes apart across one afternoon) — but each one
-actually scopes to a single grade: 3, 4, 5, 6, 7, 8, and 10 (never 9, 11, or
-12, because Washington State doesn't test those grades with SmarterBalanced).
+**Worked example:** a real district's i-Ready trial has seven `active` rows
+for `"Math Time on Task"` × `"SmarterBalanced"` and seven more for `"ELA Time
+on Task"` × `"SmarterBalanced"`. These looked like classic re-run duplicates
+(same metadata, created 5–40 minutes apart across one afternoon) — but each
+one actually scopes to a single grade: 3, 4, 5, 6, 7, 8, and 10 (never 9, 11,
+or 12, because Washington State doesn't test those grades with
+SmarterBalanced).
 Treating these as duplicates and keeping only the latest (as an earlier
 version of this doc recommended) would have silently discarded six of the
 seven grades. Always confirmed this with someone who knows the assessment's
@@ -198,7 +199,7 @@ population just because the product and dates match — **check
 `result.grade_level` (or the school list in `cov1`) on every row involved,
 including every per-grade row from §8, before treating them as comparable.**
 
-Worked example: The district's i-Ready trial (2025–26) evaluated two outcome
+Worked example: the same district's i-Ready trial (2025–26) evaluated two outcome
 measures for the same Math/ELA usage data:
 
 | | iReady (internal diagnostic) | SmarterBalanced (WA state test) |
@@ -226,10 +227,9 @@ students, and they may not.
 ## 10. Caveats
 
 - **This is real production data, not de-identified.** `organization_id` /
-  `organizations.name` will be the actual district (e.g. "Example School District
-  Community School District"). Keep using an anonymized district label (as the
-  existing deliverables already do) in anything shared outside the immediate
-  RCE team.
+  `organizations.name` will be the actual district name. Keep using an
+  anonymized district label (as the existing deliverables already do) in
+  anything shared outside the immediate RCE team.
 - **Not every trial has an `impact_analyses` row.** The `trials` table itself
   is sparse and mostly historical (see the six ALEKS trials found 2015–2018);
   a current engagement may have no row here yet, in which case the PDF/Gemini
@@ -237,9 +237,10 @@ students, and they may not.
 - **`impact_errors` is the data-quality flag column** — check it before
   trusting a row; it maps directly to the brief's Appendix D notes.
 - **`recommended_use` of `0` or blank means no dosage goal was configured,
-  not that a goal existed and was missed.** On The district's i-Ready rows,
+  not that a goal existed and was missed.** On the worked-example district's i-Ready rows,
   `target_usage: 0` makes every user with any usage trivially "meet" the
   (nonexistent) goal — the `fidelity_group` breakdown is meaningless here.
   Check for a real, positive `recommended_use` before reporting a usage-
   compliance percentage; if there isn't one, report raw average usage only
-  and say plainly that no dosage goal was set for this trial.
+  and say plainly that no dosage goal was set for this trial. (The worked
+  example above is drawn from a real i-Ready trial with `target_usage: 0`.)

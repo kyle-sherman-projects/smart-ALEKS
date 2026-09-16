@@ -413,7 +413,7 @@ a { color: var(--c-brand); }
             <span class="stat-chip warn">Groups 1–4: not significant</span>
           </div>
         </div>
-        <div class="flag-block"><label>Why it stands out</label><p>In the Example School District ALEKS brief, the strongest, clearest effects were concentrated in the lowest prior-performance bands. Here it's reversed. With p = 0.042 and a fairly wide interval, this is a real but not a strongly robust finding, and it doesn't tell the same "helps students furthest behind" story seen elsewhere.</p></div>
+        <div class="flag-block"><label>Why it stands out</label><p>In another ALEKS brief we've produced, the strongest, clearest effects were concentrated in the lowest prior-performance bands. Here it's reversed. With p = 0.042 and a fairly wide interval, this is a real but not a strongly robust finding, and it doesn't tell the same "helps students furthest behind" story seen elsewhere.</p></div>
         <div class="flag-block question"><label>The question it raises</label><p>Is there something about how higher-performing students in this district use ALEKS differently, and should this change how we frame this product's evidence story for this district versus others?</p></div>
       </div>
 
@@ -445,13 +445,13 @@ a { color: var(--c-brand); }
         <li><strong>Cosmetic label quirk in the source system.</strong> Grade-level labels in the raw data read "4rd_grade," "6rd_grade," etc. (should be "4th," "6th"). This doesn't affect any number, just the label text.</li>
         <li><strong>Small-n subgroups not plotted.</strong> Asian (n=3), Black or African American (n=2), and the "BGC HA" team category (n=6) are all below the n=30 threshold for a stable effect-size estimate.</li>
         <li><strong>Two different sample sizes appear across tables, and that's expected.</strong> The effect-size table uses the population with both usage and an outcome score (e.g., 617 district-wide). The usage-compliance figures use the broader active-user population (e.g., 575 district-wide). See <code>shared/prompts/db_field_source_map.md</code> §6 for why these legitimately differ.</li>
-        <li><strong>Source:</strong> <code>impact_analyses.id = <redacted></code> in the production read-only replica, following the query playbook in <code>shared/prompts/db_field_source_map.md</code>. District and school names have been replaced with generic labels in this brief, consistent with how the Example School District brief anonymizes its source district.</li>
+        <li><strong>Source:</strong> a single <code>impact_analyses</code> row in the production read-only replica, following the query playbook in <code>shared/prompts/db_field_source_map.md</code>. District and school names have been replaced with generic labels in this brief.</li>
       </ul>
     </div>
 
     <div class="report-footer">
       <span><b>Instructure</b> · Research Brief — Edtech Evaluation</span>
-      <span>Source: impact_analyses.<redacted> · db_field_source_map.md playbook, dry-run #2</span>
+      <span>Source: impact_analyses · db_field_source_map.md playbook, dry-run #2</span>
     </div>
 
   </div>

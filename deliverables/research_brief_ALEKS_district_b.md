@@ -58,7 +58,7 @@ Usage compliance was low: only about 31% of actively-using students reached the 
 
 **What the data shows:** of the five prior-performance bands, only the highest (Group 5) shows a statistically significant positive effect (r = +0.20, 95% CI: 0.01–0.38, p = 0.042, n = 113). The four lower bands are all non-significant, with two trending slightly negative.
 
-**Why it stands out:** in the Example School District ALEKS brief, the strongest, clearest effects were concentrated in the *lowest* prior-performance bands. Here it's reversed. Worth being cautious about this one: with p = 0.042 and a fairly wide interval, it's a real but not a strongly robust finding, and it doesn't tell the same "helps students furthest behind" story we've seen elsewhere.
+**Why it stands out:** in another ALEKS brief we've produced, the strongest, clearest effects were concentrated in the *lowest* prior-performance bands. Here it's reversed. Worth being cautious about this one: with p = 0.042 and a fairly wide interval, it's a real but not a strongly robust finding, and it doesn't tell the same "helps students furthest behind" story we've seen elsewhere.
 
 **The question it raises:** is there something about how higher-performing students in this district use ALEKS differently, and should this change how we frame this product's evidence story for this specific district versus others?
 
@@ -125,4 +125,4 @@ Usage compliance was low: only about 31% of actively-using students reached the 
 - **Cosmetic label quirk in the source system.** Grade-level labels in the raw data read `"4rd_grade"`, `"6rd_grade"`, etc. (should be "4th," "6th"). This doesn't affect any number, just the label text.
 - **Small-n subgroups not plotted.** Asian (n=3), Black or African American (n=2), and the "BGC HA" team category (n=6) are all below the n=30 threshold for a stable effect-size estimate.
 - **Two different sample sizes appear across tables, and that's expected.** The effect-size table uses the population with both usage and an outcome score (e.g., 617 district-wide, 410 for White students). The usage-compliance table uses the broader active-user population (e.g., 575 district-wide, 383 for White students). See `shared/prompts/db_field_source_map.md` §6 for why these legitimately differ.
-- **Source:** `impact_analyses.id = <redacted>` in the production read-only replica, following the query playbook in `shared/prompts/db_field_source_map.md`. District and school names have been replaced with generic labels in this brief, consistent with how the Example School District brief anonymizes its source district.
+- **Source:** a single `impact_analyses` row in the production read-only replica, following the query playbook in `shared/prompts/db_field_source_map.md`. District and school names have been replaced with generic labels in this brief.
