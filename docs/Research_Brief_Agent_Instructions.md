@@ -34,13 +34,65 @@ You serve **two goals at once**:
 ## 2. Audience and voice
 
 - **Reader:** district decision-makers, not researchers. Assume statistical literacy is
-  mixed.
+  mixed, and assume some readers are actively skeptical of edtech. The brief must feel
+  validated and complete to a superintendent and stay readable to a school board member,
+  teacher, or parent — the same document serves all of them.
 - **Tone:** plain, confident, neutral. Explain effect sizes and significance in one clause
   of everyday language the first time they appear.
 - **Length:** {{TARGET_LENGTH, e.g. "2–4 pages"}}. Lead with conclusions; put methodology
-  and tables in appendices.
+  and tables in appendices. If a brief keeps coming back "too wordy," the fix is usually not
+  shorter sentences — check for **structural repetition** first (the same finding restated
+  in multiple sections) and favor progressive disclosure: plain-language finding first,
+  statistical detail second, definitions in footnotes.
 - **Stance:** describe evidence; do not prescribe purchasing or staffing decisions. Offer
   questions and considerations, not directives. Never overstate certainty.
+
+### 2.1 Document identity
+
+- Full name: **"{{PRODUCT}} Rapid-Cycle Evaluation Research Brief."** "Rapid-Cycle
+  Evaluation" is always hyphenated in full form; "RCE" is the accepted abbreviation.
+- Company name: **LearnPlatform**, formally **"LearnPlatform by Instructure"** on first
+  mention in any customer-facing document.
+
+### 2.2 Stance — agnosticism is load-bearing
+
+LearnPlatform and this team are **agnostic to results.** They do not support or promote any
+edtech product; they report complete but clear results as a third-party reviewer.
+
+- **Overstating a negative finding breaks agnosticism exactly as much as overstating a
+  positive one.** Treat both directions with the same scrutiny.
+- **No causal language on correlational findings.** Not "gains," "growth," "produced,"
+  "yields," "holding students back." Use association language instead.
+- **Never assert an effect when the confidence interval includes zero.** Say the effect
+  cannot be distinguished from no effect. "Not statistically significant" is not evidence
+  the product failed — say that plainly rather than implying it through omission or tone.
+- **Statistical significance leads; effect-size magnitude is secondary supporting detail.**
+  Write "a statistically significant positive relationship," not "an effect size of +0.20."
+  Never let a bare effect-size number carry a headline.
+
+### 2.3 Voice
+
+- **Third-party neutral, always, for customer-facing results** — "the district's students,"
+  "this evaluation cannot determine." Never district first person ("our students," "we
+  must"). Customer-facing *informational* text (cover notes, contact blocks) is different
+  since it comes from the team of humans, and may use "we."
+- **Write out all abbreviations in full, every time.** "Special Education," never
+  "Special Ed." "General Education," never "Gen Ed." "Beginning to Middle of Year," never
+  "BOY-MOY." "Not statistically significant," never "n.s." Technical terms get a
+  plain-language footnote rather than an inline explanation.
+
+### 2.4 Visual conventions
+
+- **Green and red are reserved for statistically significant results only.** Everything
+  else — a non-significant negative point estimate, a low usage percentage, an
+  under-target compliance rate — is visually neutral (use the neutral/warning palette, not
+  red). Coloring a low usage percentage red is a value judgment and is not allowed. Any
+  color-coding function must gate on significance first, before looking at effect
+  direction — a common bug is coloring by direction alone and only checking significance
+  for the text label next to it.
+- Every section is labeled.
+- Interactive affordances (filter pills, sortable headers) must be obviously clickable and
+  keyboard-operable (`aria-sort` on sortable headers, `aria-pressed` on filter buttons).
 
 ---
 
@@ -245,5 +297,29 @@ add the anomalies section as the value-add. Use these sections:
 | `{{PERIOD}}` | Reporting window / academic year |
 | `{{ASSESSMENT}}` | Outcome assessment(s) used |
 | Bracketed `[ ... ]` rules | District-specific conventions to confirm |
+
+---
+
+## 11. Public example / demo deliverables (not a live district engagement)
+
+Some deliverables in this repo are public-facing examples meant to show the *format*
+itself to a prospective customer, not a specific district's real evidence (e.g.
+`deliverables/sample_research_brief_ALEKS.html`, `research_brief_showcase_sample.html`).
+These carry rules beyond Sections 1–10, precisely because anyone — including a skeptical
+prospective customer — may see them with no other context:
+
+- **Anonymize completely.** Every district name becomes **"Example School District."**
+  This supersedes any older convention in this repo that used a district's real name or a
+  different placeholder (e.g. "Sample School District").
+- **Anonymize the product name** consistently with the placeholder convention already in
+  use for that deliverable (e.g. "Smart Math 1,2,3" in place of "ALEKS").
+- **Every page must carry a visible notice that it is an example and contains no real
+  data.**
+- **Standing exception:** an internal code comment naming the real source data file (e.g.
+  `aleks_worked_example.json`) may be left alone — it isn't customer-visible, and renaming
+  it would misrepresent data provenance.
+- **Study Limitations may be omitted** from a pure format example — there is no real study
+  to limit. This exception does **not** apply to a real district brief: limitations (e.g.
+  "only Grade 6 was analyzed") are required there, per Appendix D.
 
 *Template v1 · adapt per engagement before use.*

@@ -127,9 +127,9 @@ a { color: var(--c-brand); }
 .metric-plain    .metric-value { color: var(--c-text); }
 .metric-brand    .metric-value { color: var(--c-brand); font-size: 16px; }
 
-.callout-box { border: 1.5px solid var(--c-negative); background: var(--c-negative-bg); border-radius: var(--r-md); padding: 14px 18px; display: flex; gap: 12px; align-items: flex-start; }
+.callout-box { border: 1.5px solid var(--c-warn-border); background: var(--c-neutral-bg); border-radius: var(--r-md); padding: 14px 18px; display: flex; gap: 12px; align-items: flex-start; }
 .callout-icon { font-size: 18px; flex-shrink: 0; }
-.callout-title { font-size: 12.5px; font-weight: 700; color: var(--c-negative); margin-bottom: 3px; }
+.callout-title { font-size: 12.5px; font-weight: 700; color: var(--c-warn); margin-bottom: 3px; }
 .callout-body { font-size: 12.5px; color: var(--c-text-2); line-height: 1.55; }
 
 .overview-table th, .overview-table td { padding: 8px 12px; font-size: 12.5px; text-align: left; border-bottom: 1px solid var(--c-border); }
@@ -350,7 +350,7 @@ a { color: var(--c-brand); }
           <div class="compliance-row"><div class="compliance-label">Male</div><div class="compliance-track"><div class="compliance-fill" style="width:27.2%; background:var(--c-warn);"></div></div><div class="compliance-pct" style="color:var(--c-warn);">27%</div></div>
           <div class="compliance-row"><div class="compliance-label">Female</div><div class="compliance-track"><div class="compliance-fill" style="width:32.6%; background:var(--c-warn);"></div></div><div class="compliance-pct" style="color:var(--c-warn);">33%</div></div>
           <div class="compliance-row"><div class="compliance-label">Non-Title I</div><div class="compliance-track"><div class="compliance-fill" style="width:34.2%; background:var(--c-warn);"></div></div><div class="compliance-pct" style="color:var(--c-warn);">34%</div></div>
-          <div class="compliance-row"><div class="compliance-label" style="color:var(--c-negative); font-weight:700;">Title I</div><div class="compliance-track"><div class="compliance-fill" style="width:2.1%; background:var(--c-negative);"></div></div><div class="compliance-pct" style="color:var(--c-negative);">2%</div></div>
+          <div class="compliance-row"><div class="compliance-label" style="font-weight:700;">Title I</div><div class="compliance-track"><div class="compliance-fill" style="width:2.1%; background:var(--c-warn);"></div></div><div class="compliance-pct" style="color:var(--c-warn);">2%</div></div>
           <p style="font-size:10.5px; color:var(--c-text-3); margin-top:8px;">210 avg topics attempted · 8-month reporting window</p>
         </div>
       </div>
@@ -359,7 +359,7 @@ a { color: var(--c-brand); }
     <!-- ══ DOT PLOT ═════════════════════════════════════════════════ -->
     <div class="section">
       <div class="section-title small">Effect size by subgroup</div>
-      <div class="section-note">Partial correlation r · error bars = 95% CI · green = significant positive, gold = not significant, red = negative direction.</div>
+      <div class="section-note">Partial correlation r · error bars = 95% CI · green = statistically significant positive, gold = not statistically significant, red = statistically significant negative.</div>
       <div class="chart-wrap" style="height:440px;">
         <canvas id="dotPlotChart"></canvas>
       </div>
@@ -497,16 +497,15 @@ const COLOR = {
 };
 function statusColor(row) {
   if (row.sig === "not_plotted") return COLOR.ink3;
-  if (row.direction === "negative") return COLOR.negative;
-  if (row.sig === "significant") return COLOR.positive;
-  return COLOR.neutral;
+  if (row.sig !== "significant") return COLOR.neutral;
+  return row.direction === "negative" ? COLOR.negative : COLOR.positive;
 }
 
-function dirPill(dir) {
-  if (dir === "positive") return '<span class="dir-pill dir-positive">● Positive</span>';
-  if (dir === "neutral")  return '<span class="dir-pill dir-neutral">● Neutral</span>';
-  if (dir === "negative") return '<span class="dir-pill dir-negative">● Negative</span>';
-  return '<span class="dir-pill" style="background:#f3f4f6;color:#4b5563;">○ Not plotted</span>';
+function dirPill(row) {
+  if (row.sig === "not_plotted") return '<span class="dir-pill" style="background:#f3f4f6;color:#4b5563;">○ Not plotted</span>';
+  if (row.sig !== "significant") return '<span class="dir-pill dir-neutral">● No measurable difference</span>';
+  if (row.direction === "negative") return '<span class="dir-pill dir-negative">● Negative</span>';
+  return '<span class="dir-pill dir-positive">● Positive</span>';
 }
 function sigLabel(sig) {
   if (sig === "significant") return '<span style="color:var(--c-positive); font-weight:700;">✓ Significant</span>';
@@ -515,14 +514,14 @@ function sigLabel(sig) {
 }
 function esCell(row) {
   if (row.es === null) return '<span style="font-size:10.5px;color:var(--c-text-3);font-style:italic;">Not plotted</span>';
-  const cls = row.direction === "positive" ? "es-positive" : row.direction === "negative" ? "es-negative" : "es-neutral";
+  const cls = row.sig !== "significant" ? "es-neutral" : (row.direction === "negative" ? "es-negative" : "es-positive");
   return `<span class="es-cell ${cls}">${row.es > 0 ? "+" : ""}${row.es.toFixed(2)}</span>`;
 }
 document.getElementById("subgroupTbody").innerHTML = SUBGROUP_DATA.map(r => `
   <tr>
     <td style="font-size:10px;font-weight:600;color:var(--c-text-3);text-transform:uppercase;letter-spacing:.03em;">${r.cat}</td>
     <td style="font-weight:600;">${r.subgroup}</td>
-    <td>${dirPill(r.direction)}</td>
+    <td>${dirPill(r)}</td>
     <td>${esCell(r)}</td>
     <td><span class="ci-text">${r.ciLow !== null ? `(${r.ciLow.toFixed(2)}, ${r.ciHigh.toFixed(2)})` : "—"}</span></td>
     <td>${sigLabel(r.sig)}</td>
